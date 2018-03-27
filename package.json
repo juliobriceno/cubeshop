@@ -1,0 +1,26 @@
+{
+  "name": "Cube Shop",
+  "version": "1.0.0",
+  "description": "One app",
+  "main": "app.js",
+  "scripts": {
+    "test": "na",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.13.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juliobriceno/cubeshop"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "julio briceno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juliobriceno/cubeshop/issues"
+  },
+  "homepage": "https://github.com/juliobriceno/cubeshop#readme"
+}
