@@ -35,6 +35,9 @@ footer {
     font-size: 0.85rem;
 }
 
+.green{
+  color:#00BCD4;
+}
 
 .btn-green {
   background-color:#00BCD4;
@@ -110,10 +113,9 @@ ol, ul {
 }
 
 .wrap {
-  width: 75%;
-  max-width: 960px;
+ 
   margin: 0 auto;
-  padding: 5% 0;
+  padding: 3% 0;
   margin-bottom: 5em;
 }
 
@@ -335,4 +337,51 @@ a.remove:hover {
 .nav-tabs .nav-link{
   border-top-left-radius:0;
   border-top-right-radius:0;
+}
+
+
+.badge-cuadrado{
+  display: inline-block;
+padding: 10px 15px;
+margin-left:10px;
+margin-top:0; 
+margin-bottom: 0;  
+font-size: 75%;
+font-weight: 700;
+line-height: 1;
+text-align: center;
+white-space: nowrap;
+vertical-align: baseline;
+
+}
+
+.card:hover {
+    box-shadow: 5px 5px rgba(234, 234, 234, 0.9);
+}
+.card:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+    line-height:0;
+}
+.card .btn:hover {
+    background: #e84d1c;
+    border-color: #c8c8c8;
+}
+
+
+.sticker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 63px;
+    height: 63px;
+}
+.sticker-new {
+    background: url(http://keenthemes.com/assets/bootsnipp/new.png) no-repeat;
+    left: auto;
+    right: 0;
 }
