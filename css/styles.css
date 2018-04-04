@@ -6,7 +6,7 @@ body, h1, h2, h3, h4, h5, h6,p {
 }
 
 footer {
-    background: #343a40;
+    background: #373737;
     padding: 40px;
 }
 
@@ -36,7 +36,7 @@ footer {
 }
 
 .green{
-  color:#00BCD4;
+  color:#C5C7C6;
 }
 
 .btn-green {
@@ -45,7 +45,7 @@ footer {
 }
 
 .badge-green {
-   background-color:#00BCD4;
+   background-color:#0171BC;
    color: white;
 }
 
@@ -54,7 +54,7 @@ footer {
 }
 
 .breadcrumb li a{
-  color: #00BCD4;
+  color: #6C757D;
 }
 
 .bg-green{
@@ -72,9 +72,9 @@ footer {
 
 /****Top menu*******/
 
-.top-menu{background-color:black;min-height:40px;padding-top:5px;padding-bottom: 0px;}
+.top-menu{background-color:#006837;min-height:40px;padding-top:5px;padding-bottom: 0px;}
 .top-menu .nav-text {
-    color: #00BCD4;
+    color: #fff;
     display: block;
     margin-top: 5px;
 }
@@ -92,8 +92,8 @@ footer {
 
 /****Top menu principal*******/
 .navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
-	 border-top:solid 2px #00BCD4;
-   color: #00BCD4;
+	 border-top:solid 2px #006837;
+   color:#006837;
 }
 
 
@@ -113,7 +113,7 @@ ol, ul {
 }
 
 .wrap {
- 
+
   margin: 0 auto;
   padding: 3% 0;
   margin-bottom: 5em;
@@ -237,12 +237,12 @@ a.remove:hover {
 }
 
 .page-link{
-  color: #00BCD4;
+  color: #6C757D;
 }
 
 .page-item.active .page-link{
-  background-color: #00BCD4;
-  border-color: #00BCD4;
+  background-color: #006837;
+  border-color: #006837;
 }
 
 
@@ -341,11 +341,11 @@ a.remove:hover {
 
 
 .badge-cuadrado{
-  display: inline-block;
+display: inline-block;
 padding: 10px 15px;
 margin-left:10px;
-margin-top:0; 
-margin-bottom: 0;  
+margin-top:0;
+margin-bottom: 0;
 font-size: 75%;
 font-weight: 700;
 line-height: 1;
@@ -367,10 +367,6 @@ vertical-align: baseline;
     font-size: 0;
     line-height:0;
 }
-.card .btn:hover {
-    background: #e84d1c;
-    border-color: #c8c8c8;
-}
 
 
 .sticker {
@@ -384,4 +380,44 @@ vertical-align: baseline;
     background: url(http://keenthemes.com/assets/bootsnipp/new.png) no-repeat;
     left: auto;
     right: 0;
+}
+
+
+.btn-green{
+  background-color: #006837;
+  border-color: #006837;
+}
+
+
+.badge-cart{
+  display: inline-block;
+padding: .50em .50em;
+font-size: 90%;
+font-weight: 700;
+line-height: 1;
+text-align: center;
+white-space: nowrap;
+vertical-align: baseline;
+width: 2rem;
+height: 2rem;
+line-height: inherit;
+margin-top: -5px;
+background-color: #085430;
+
+}
+
+.badge{
+  border-radius: 0;
+}
+
+ .green:hover{
+  color:#5A6268;
+}
+
+.list-unstyled li a{
+  color: white;
+}
+
+.form-check-label{
+  color:#006837;
 }
