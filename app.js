@@ -16,6 +16,23 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+app.get('/CubeFlexIntegration.ashx', function (req, res) {
+
+  var Data = {"responseCode":"100-1n3vt54cayosg0nxl4nkaqsr","CubeFlexIntegration":
+  {"DATA":
+  [
+  {"ID":"2","NAME":"Electronics","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/electronics.jpg"},
+  {"ID":"3","NAME":"Clothing","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/clothing.jpg"},
+  {"ID":"4","NAME":"Sports","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/sports.jpg"},
+  {"ID":"5","NAME":"Automotive","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/auto.jpg"},
+  {"ID":"6","NAME":"Beauty & Health","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/beuaty.jpg"}
+  ]
+  }
+  }
+
+  res.end(JSON.stringify(Data))
+});
+
 const port = process.env.PORT || 9097
 
 app.listen(port);
