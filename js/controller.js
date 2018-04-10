@@ -67,7 +67,27 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
                 lContador = lContador + 1;
               })
 
-              console.log($scope.ProductCards);
+            })
+            .catch(function (data) {
+              console.log('Error 16');
+              console.log(data);
+              swal("Cube Service", "Unexpected error. Check console Error 16.");
+            });
+
+            $http.get(connServiceString + 'CubeFlexIntegration2.ashx?obj={"method":"Get_Services_History_Customer","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+              $scope.MasterInfo = response.data.CubeFlexIntegration.DATA;
+
+            })
+            .catch(function (data) {
+              console.log('Error 16');
+              console.log(data);
+              swal("Cube Service", "Unexpected error. Check console Error 16.");
+            });
+
+            $http.get(connServiceString + 'CubeFlexIntegration4.ashx?obj={"method":"Get_Services_History_Customer","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+              $scope.slides = response.data.CubeFlexIntegration.DATA;
 
             })
             .catch(function (data) {
@@ -80,5 +100,20 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           else{
             window.location = 'index.html';
           }
+
+          // Cosas de carousel
+          $scope.myInterval = 5000;
+          $scope.noWrapSlides = false;
+          $scope.active = 0;
+          var slides = $scope.slides = [];
+          var currIndex = 0;
+          //
+          // $scope.slides = [
+          //   {Image: "img/cameras1100x700.png", Title: "Nice image", Message: "AAAAAAA", ButtonText: "READ MORE", ID: 0},
+          //   {Image: "img/cameras1100x700.png", Title: "Nice super", Message: "BBBBBB", ButtonText: "READ MORE", ID: 1},
+          //   {Image: "img/cameras1100x700.png", Title: "Nice macdonal", Message: "CCCCCC", ButtonText: "READ MORE", ID: 2},
+          //   {Image: "img/cameras1100x700.png", Title: "Nice thing", Message: "DDDDD", ButtonText: "READ MORE", ID: 3}
+          // ]
+          // Fin de cosas de carousel
 
         }])

@@ -4,7 +4,9 @@
   	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>ConBox::..</title>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     <link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
@@ -26,7 +28,7 @@
     <script src="js/angular-sanitize.js"></script>
     <script src="js/angular-filter.min.js"></script>
     <!-- *****************************************Boostrap Angular Librerías***************************************** -->
-    <script src="js/ui-bootstrap-tpls-2.5.0.js"></script>
+    <script src="js/ui-bootstrap-tpls.js"></script>
     <!-- *****************************************Código de Select Boostrap Angular***************************************** -->
     <script src="./select.js"></script>
     <link rel="stylesheet" href="./select.css">
@@ -56,7 +58,7 @@
         <div class="row">
           <div class="col-sm-4 hidden-xs">
             <span class="nav-text">
-              <i class="fas fa-phone" aria-hidden="true"></i>   + 786-293-3272
+              <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}
             </div>
             <div class="col-sm-3 text-center">
             </div>
@@ -81,7 +83,7 @@
     <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
       <div class="container">
         <!--logo -->
-        <a class="navbar-brand" href="#"><img src="img/logo-cube-mia.png" style="max-width:130px;" /></a>
+        <a class="navbar-brand" href="#"><img ng-src="{{'/'+ MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -102,16 +104,16 @@
             <!-- Links -->
             <ul class="navbar-nav m-auto" >
               <li class="nav-item">
-                <a class="nav-link  active" href="index.html">HOME <span class="sr-only">(current)</span></a>
+                <a ng-show="MasterInfo[0].Home" class="nav-link  active" href="index.html">HOME <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link " href="products.html">PRODUCTS</a>
+                <a ng-show="MasterInfo[0].Products" class="nav-link " href="products.html">PRODUCTS</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">SERVICES </a>
+                <a ng-show="MasterInfo[0].Service" class="nav-link" href="#">SERVICES </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">APPLICATIONS</a>
+                <a ng-show="MasterInfo[0].Apps" class="nav-link" href="#">APPLICATIONS</a>
               </li>
             </ul>
           </form>
@@ -121,6 +123,20 @@
       </div>
     </nav>
     <main>
+
+      <div style="height: 305px">
+        <div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
+          <div uib-slide ng-repeat="slide in slides track by slide.ID" index="slide.ID">
+            <img ng-src="{{'/'+ slide.Image}}"  style="margin:auto;">
+            <div class="carousel-caption">
+              <h4>{{slide.Title}}</h4>
+              <p>{{slide.Message}}</p>
+              <button class="btn btn-secondary btn-info">{{slide.ButtonText}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <section >
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
           <ol class="carousel-indicators">
@@ -129,7 +145,23 @@
             <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
             <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
           </ol>
-          <div class="carousel-inner" style="max-height: 600px !important;">
+
+
+
+
+          <!-- <div class="carousel-inner" style="max-height: 600px !important;">
+
+            <whatever ng-repeat="CarouselItem in Carousel">
+              <div ng-class="CarouselItem.Class">
+                <img class="d-block w-100 img-responsive" ng-src="{{'/'+ CarouselItem.Image}}" alt="First slide"  height="700">
+                <div class="carousel-caption" style="padding: -15px;">
+                  <h3>{{CarouselItem.Title}}</h3>
+                  <p>{{CarouselItem.Message}}</p>
+                   <button class="btn btn-secondary btn-info">{{CarouselItem.ButtonText}}</button>
+                </div>
+              </div>
+            </whatever>
+
             <div class="carousel-item active">
               <img class="d-block w-100 img-responsive" src="img/mac.jpg" alt="First slide"  height="700">
               <div class="carousel-caption" style="padding: -15px;">
@@ -162,7 +194,12 @@
                  <button class="btn btn-secondary btn-warning">READ MORE</button>
               </div>
             </div>
-          </div>
+
+
+          </div> -->
+
+
+
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
@@ -198,10 +235,12 @@
 
   </section>
 <br><br>
-  <section class="">
+  <!-- <section class="">
 <h3 class="text-center"><strong>FEATURED PRODUCTS</strong></h3>
-<br>
-     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+<br> -->
+
+    <!-- // Comienzo Carousel -->
+     <!-- <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
      <div class="container">
      <div class="row">
      <div class="col-md-12">
@@ -356,9 +395,10 @@
 
      </div>
 
-  </div>
+  </div> -->
+<!-- // Fin Carousel -->
 
-  </section>
+  <!-- </section> -->
 
   <br><br>
   <!--
@@ -420,32 +460,32 @@
           <h5>About</h5>
           <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
           <p class="mb-0">
-            Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression.
+            {{MasterInfo[0].AboutCube}}
           </p>
         </div>
         <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
           <h5>Informations</h5>
           <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
           <ul class="list-unstyled">
-            <li><a href="">Link 1</a></li>
-            <li><a href="">Link 2</a></li>
+            <li><a href="">{{MasterInfo[0].Link1}}</a></li>
+            <li><a href="">{{MasterInfo[0].Link2}}</a></li>
           </ul>
         </div>
         <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
           <h5>Others links</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><a href="">Link 1</a></li>
-          <li><a href="">Link 2</a></li>
+          <li><a href="">{{MasterInfo[0].Link3}}</a></li>
+          <li><a href="">{{MasterInfo[0].Link4}}</a></li>
         </ul>
       </div>
       <div class="col-md-4 col-lg-3 col-xl-3">
         <h5>Contact</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><i class="fa fa-home mr-2"></i> Cube-US</li>
-          <li><i class="fa fa-envelope mr-2"></i> email@example.com</li>
-          <li><i class="fa fa-phone mr-2"></i> + 786-293-3272</li>
+          <li><i class="fa fa-home mr-2"></i> {{MasterInfo[0].CubeLocation}}</li>
+          <li><i class="fa fa-envelope mr-2"></i> {{MasterInfo[0].CubeEmail}}</li>
+          <li><i class="fa fa-phone mr-2"></i> {{MasterInfo[0].CubeLocalPhone}}</li>
         </ul>
       </div>
       <div class="col-12 copyright mt-3  " >
@@ -460,6 +500,5 @@
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
