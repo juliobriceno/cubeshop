@@ -61,7 +61,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
               $scope.ProductCards.forEach(function(el){
                 el.Fila = lFila;
-                if (lContador % 3 == 0){
+                if (lContador % 6 == 0){
                   lFila = lFila + 1;
                 }
                 lContador = lContador + 1;

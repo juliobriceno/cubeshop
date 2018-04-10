@@ -176,9 +176,9 @@
     <br>
 
     <div class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
-      <div class="col-md-4" ng-repeat="ProductCardsItem in value">
+      <div class="col-md-2" ng-repeat="ProductCardsItem in value">
         <div class="card">
-          <img class="card-img-top" ng-src="{{'/'+ ProductCardsItem.GROUPIMG}}" alt="Card image cap">
+          <img class="card-img-top" ng-src="{{'/'+ ProductCardsItem.GROUPIMG}}" alt="products-cube-image">
           <div class="card-body" >
             <h5 class="card-title" style="color: #006837;">{{ProductCardsItem.NAME}}</h5>
             <p class="card-text" >{{ProductCardsItem.DESCRIPTION}}</p>
