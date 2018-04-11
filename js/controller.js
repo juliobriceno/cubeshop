@@ -1,7 +1,8 @@
 
 // Cube Service Parameters
 // URL Cube Service String
-var connServiceString = "http://localhost:9097/";
+// var connServiceString = "http://localhost:9097/";
+var connServiceString = "https://cubeshop.herokuapp.com/";
 //var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization

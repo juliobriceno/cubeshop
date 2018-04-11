@@ -27,6 +27,11 @@ app.get('/CubeFlexIntegration.ashx', function (req, res) {
   {"ID":"5","NAME":"Automotive","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/auto.jpg"},
   {"ID":"6","NAME":"Beauty & Health","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/beuaty.jpg"},
   {"ID":"6","NAME":"Beauty & Health","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/beuaty.jpg"},
+  {"ID":"6","NAME":"Beauty & Health","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/beuaty.jpg"},
+  {"ID":"6","NAME":"Beauty & Health","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/beuaty.jpg"},
+  {"ID":"6","NAME":"Beauty & Health","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/beuaty.jpg"},
+  {"ID":"6","NAME":"Beauty & Health","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/beuaty.jpg"},
+  {"ID":"6","NAME":"Beauty & Health","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/beuaty.jpg"},
   {"ID":"6","NAME":"Beauty & Health","DESCRIPTION": "Some quick example text to build on the card title and make up the bulk of the card's content.","PARENTID":"1","GROUPIMG":"img/beuaty.jpg"}
   ]
   }
