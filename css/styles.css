@@ -115,7 +115,7 @@ ol, ul {
 .wrap {
 
   margin: 0 auto;
-  padding: 3% 0;
+  padding: 14% 0;
   margin-bottom: 5em;
 }
 
@@ -420,4 +420,8 @@ background-color: #085430;
 
 .form-check-label{
   color:#006837;
+}
+
+ul.list-square {
+    list-style-type: square;
 }

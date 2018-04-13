@@ -55,74 +55,78 @@
 
   </head>
   <body  ng-controller="ctrlCubeShopHomeController" >
-    <nav class="top-menu  sticky-top">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-4 hidden-xs">
-            <span class="nav-text">
-              <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}
-            </div>
-            <div class="col-sm-3 text-center">
-            </div>
-            <div class="col-sm-5 text-right hidden-xs">
-              <ul class="right-menu ">
-              <li><a href=""><i class="fas fa-question-circle"></i></a></li>
-                <li class="dropdown">
-                 <a class="" href="#"><i class="fas fa-user" aria-hidden="true"></i> My Account</a>
-               </li>
-               <li class="dropdown">
-                 <a class="" href="login.html"> Login/Register</a>
-               </li>
-               <li style="background-color:#048949;"><a  href="cart.html">
-                 <i class="fas fa-cart-plus"></i> My Cart
-                 <span class="badge badge-cart "> 10</span>
-               </a></li>
-             </ul>
+
+    <div class="sticky-top">
+      <nav class="top-menu  sticky-top">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-4 hidden-xs">
+              <span class="nav-text">
+                <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}
+              </div>
+              <div class="col-sm-3 text-center">
+              </div>
+              <div class="col-sm-5 text-right hidden-xs">
+                <ul class="right-menu ">
+                <li><a href=""><i class="fas fa-question-circle"></i></a></li>
+                  <li class="dropdown">
+                   <a class="" href="#"><i class="fas fa-user" aria-hidden="true"></i> My Account</a>
+                 </li>
+                 <li class="dropdown">
+                   <a class="" href="login.html"> Login/Register</a>
+                 </li>
+                 <li style="background-color:#048949;"><a  href="cart.html">
+                   <i class="fas fa-cart-plus"></i> My Cart
+                   <span class="badge badge-cart "> 10</span>
+                 </a></li>
+               </ul>
+             </div>
            </div>
          </div>
-       </div>
-    </nav>
-    <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-      <div class="container">
-        <!--logo -->
-        <a class="navbar-brand" href="#"><img ng-src="{{'/'+ MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-center"  id="navbarsExampleDefault">
-          <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <form >
+      </nav>
+      <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+        <div class="container-fluid">
+          <!--logo -->
+          <a class="navbar-brand" href="#"><img ng-src="{{'/'+ MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-center"  id="navbarsExampleDefault">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <form >
 
-                <div class="input-group input-group-sm ">
-                  <input style="border-radius:0;width:300px;" type="text" class="form-control" aria-label="Small" placeholder="Search...">
-                  <div class="input-group-append">
-                    <button type="button" class="btn btn-secondary" style="border-radius:0;">
-                      <i class="fa fa-search"></i>
-                    </button>
+                  <div class="input-group input-group-sm ">
+                    <input style="border-radius:0;width:300px;" type="text" class="form-control" aria-label="Small" placeholder="Search...">
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-secondary" style="border-radius:0;">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <!-- Links -->
-                <ul class="navbar-nav m-auto" >
-                  <li class="nav-item">
-                    <a ng-show="MasterInfo[0].Home" class="nav-link  active" href="index.html">HOME <span class="sr-only">(current)</span></a>
-                  </li>
-                  <li class="nav-item">
-                    <a ng-show="MasterInfo[0].Products" class="nav-link " href="products.html">PRODUCTS</a>
-                  </li>
-                  <li class="nav-item">
-                    <a ng-show="MasterInfo[0].Service" class="nav-link" href="#">SERVICES </a>
-                  </li>
-                  <li class="nav-item">
-                    <a ng-show="MasterInfo[0].Apps" class="nav-link" href="#">APPLICATIONS</a>
-                  </li>
-                </ul>
-              </form>
+                  <!-- Links -->
+                  <ul class="navbar-nav m-auto" >
+                    <li class="nav-item">
+                      <a ng-show="MasterInfo[0].Home" class="nav-link  active" href="index.html">HOME <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a ng-show="MasterInfo[0].Products" class="nav-link " href="products.html">PRODUCTS</a>
+                    </li>
+                    <li class="nav-item">
+                      <a ng-show="MasterInfo[0].Service" class="nav-link" href="#">SERVICES </a>
+                    </li>
+                    <li class="nav-item">
+                      <a ng-show="MasterInfo[0].Apps" class="nav-link" href="#">APPLICATIONS</a>
+                    </li>
+                  </ul>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
+
     <main>
       <section>
         <div  class="margin-top:200px;">
@@ -143,14 +147,14 @@
         </div>
 
       </section>
-
-
+<section>
+  <div class="container">
     <br> <br>
     <h3 class="text-center"><strong>PRODUCTS</strong></h3>
     <br>
 
     <div class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
-      <div class="col-md-2" ng-repeat="ProductCardsItem in value">
+      <div class="col-md-3" ng-repeat="ProductCardsItem in value">
         <div class="card">
           <img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.Column1}}" alt="products-cube-image">
           <div class="card-body" >
@@ -161,11 +165,16 @@
         </div>
       </div>
     </div>
+  </div>
+  <br><br>
+</section>
+
+
 
 
 
   </section>
-<br><br>
+
   <!-- <section class="">
 <h3 class="text-center"><strong>FEATURED PRODUCTS</strong></h3>
 <br> -->
@@ -418,7 +427,7 @@
     </script>
   </body>
   <footer class="text-light">
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-md-3 col-lg-4 col-xl-3">
           <h5>About</h5>
