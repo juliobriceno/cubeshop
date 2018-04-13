@@ -69,6 +69,24 @@ app.get('/CubeFlexIntegration4.ashx', function (req, res) {
   res.end(JSON.stringify(Data))
 });
 
+app.get('/CubeFlexIntegration5.ashx', function (req, res) {
+
+  var Data = {"responseCode":"100-1n3vt54cayosg0nxl4nkaqsr","CubeFlexIntegration":
+  {"DATA":
+  [
+    {"ID":0,"Description":"Electronics","ParentId": 0},
+    {"ID":1,"Description":"Clothing","ParentId": 0},
+    {"ID":2,"Description":"Sports","ParentId": 0},
+    {"ID":3,"Description":"Automotive","ParentId": 0},
+    {"ID":4,"Description":"Beauty & Health","ParentId": 0},
+    {"ID":5,"Description":"Toys, Kids &Baby","ParentId": 0}
+  ]
+  }
+  }
+
+  res.end(JSON.stringify(Data))
+});
+
 const port = process.env.PORT || 9097
 
 app.listen(port);

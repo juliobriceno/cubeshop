@@ -128,13 +128,13 @@
         <div  class="margin-top:200px;">
           <div class="row">
             <div class="col-md-12">
-              <div uib-carousel template-url="/tpl.html"  active="autoseq.wizardStep" no-wrap="true" on-carousel-next="autoseq.onNext()" style="height: 395px;">
+              <div uib-carousel template-url="/tpl.html"  active="autoseq.wizardStep" interval="myInterval" no-wrap="noWrapSlides" on-carousel-next="autoseq.onNext()" style="height: 395px;">
                 <div uib-slide ng-repeat="slide in slides track by slide.ID" index="slide.ID"  style="height: 395px; " index="0">
                   <img ng-src="{{'/'+ slide.Image}}" height="700" style="width:100%; "  >
                   <div class="carousel-caption" style="top: 15%;">
                     <h4>{{slide.Title}}</h4>
                     <p>{{slide.Message}}</p>
-                    <button class="btn btn-secondary btn-info">{{slide.ButtonText}}</button>
+                    <button class="btn btn-secondary btn-info">{{slide.ButonText}}</button>
                   </div>
                 </div>
               </div>
@@ -152,7 +152,7 @@
     <div class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
       <div class="col-md-2" ng-repeat="ProductCardsItem in value">
         <div class="card">
-          <img class="card-img-top" ng-src="{{'/'+ ProductCardsItem.GROUPIMG}}" alt="products-cube-image">
+          <img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.Column1}}" alt="products-cube-image">
           <div class="card-body" >
             <h5 class="card-title" style="color: #006837;">{{ProductCardsItem.NAME}}</h5>
             <p class="card-text" >{{ProductCardsItem.DESCRIPTION}}</p>
@@ -431,16 +431,14 @@
           <h5>Informations</h5>
           <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
           <ul class="list-unstyled">
-            <li><a href="">{{MasterInfo[0].Link1}}</a></li>
-            <li><a href="">{{MasterInfo[0].Link2}}</a></li>
+            <li ng-repeat="mylink in Links1"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
           </ul>
         </div>
         <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
           <h5>Others links</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><a href="">{{MasterInfo[0].Link3}}</a></li>
-          <li><a href="">{{MasterInfo[0].Link4}}</a></li>
+          <li ng-repeat="mylink in Links2"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
         </ul>
       </div>
       <div class="col-md-4 col-lg-3 col-xl-3">
