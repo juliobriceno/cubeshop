@@ -144,7 +144,15 @@
 							</nav>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card card-block bg-faded" style="padding-left:15px; padding-top:10px; background-color:#e9ecef;">
+								<p> 3 results for <b>Tools and Service Equipment:</b> <b style="color:#93190C">"au"</b></p>
+							</div>
+						</div>
+					</div>
 				</div>
+				<br>
 				<div class="container">
 					<div class="row">
 						<div class=" col-xs-12 col-sm-3">
@@ -153,11 +161,46 @@
 								<ul class="list-group list-group-flush ">
 									<li class="list-group-item" ng-repeat="ProductCardsItem in ProductCardsMainMenu"><a href="#" class=" active">{{ProductCardsItem.NAME}}</a></li>
 								</ul>
+								<div class="card-header bg-green text-white text-uppercase">Price</div>
+								<br>
+								<div class="row">
+									<div class="col-md-12">
+										<form>
+  <div class="form-row">
+    <div class="col">
+      <input type="text" class="form-control" placeholder="min">
+    </div>
+
+    <div class="col">
+      <input type="text" class="form-control" placeholder="max">
+    </div>
+		<div class="col-md-3">
+      <button type="submit" class="btn btn-secondary">></button>
+    </div>
+		<div>
+
+		</div>
+  </div>
+</form>
+									</div>
+
+								</div>
+
 
 							</div>
+
 						</div>
 
 					 <div class="col">
+						 <div class="row">
+							 <div class="col-md-12">
+								 <div class="pull-right">
+									 <a href="#" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" data-toggle="tooltip" data-placement="top" title="List View"><i class="fas fa-list-ul"></i></a>
+									 <a href="#" class="btn btn-secondary btn-sm " role="button" aria-pressed="true"  data-toggle="tooltip" data-placement="top" title="Grid View"><i class="fas fa-th-large"></i></a>
+								 </div>
+
+							 </div>
+						 </div>
 							<div ng-show="!ShowDetail" class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
 
 								<div class="col-md-4" ng-repeat="ProductCardsItem in value">
@@ -197,6 +240,29 @@
 									</ul>
 								</div>
 							</div>
+
+							<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Products</th>
+      <th scope="col">Price</th>
+			<th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A tools XX</td>
+			<td>Features 1</td>
+      <td>$13540 </td>
+    </tr>
+    <tr>
+      <td>Another tools yy</td>
+			<td>Features 2</td>
+      <td>$13540</td>
+    </tr>
+
+  </tbody>
+</table>
 						</div>
 
 
