@@ -151,139 +151,54 @@
 							<div class="card card-body bg-light mb-3">
 								<div class="card-header bg-green text-white text-uppercase">Categories</div>
 								<ul class="list-group list-group-flush ">
-									<li class="list-group-item"><a href="#" class=" active">Electronics</a></li>
-									<li class="list-group-item"><a href="#">Clothing</a></li>
-									<li class="list-group-item"><a href="#">Sports</a></li>
-									<li class="list-group-item"><a href="#">Automotive</a></li>
-									<li class="list-group-item"><a href="#">Beauty & Health</a></li>
-									<li class="list-group-item"><a href="#">Toys, Kids &Baby</a></li>
+									<li class="list-group-item" ng-repeat="ProductCardsItem in ProductCardsMainMenu"><a href="#" class=" active">{{ProductCardsItem.NAME}}</a></li>
 								</ul>
 
 							</div>
 						</div>
+
 					 <div class="col">
-							<div class="row">
-								<div class="col-md-4">
+							<div ng-show="!ShowDetail" class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
+
+								<div class="col-md-4" ng-repeat="ProductCardsItem in value">
 									<div class="card" style="width: 16rem;">
-										<img class="card-img-top" src="img/iphone.png" alt="Card image cap"  width="400" height="200">
-										<div class="card-body">
-											<h5 class="card-title text-center"><a href="details-product.html" title="View Product">Category</a></h5>
+										<img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.Column1}}" alt="products-cube-image" width="400" height="200">
+										<div class="card-body" >
+											<h5 class="card-title text-center"><a href="#" ng-click="FindSubcategories(ProductCardsItem.ID);" title="View Product">{{ProductCardsItem.NAME}}</a></h5>
 										</div>
 									</div>
 								</div>
-								<div class="col-md-4">
-									<div class="card" style="width: 16rem;">
-										<img class="card-img-top" src="img/headphones.jpg" alt="Card image cap"  width="400" height="200">
-										<div class="card-body">
-											<h5 class="card-title text-center"><a href="details-product.html" title="View Product">Category</a></h5>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="card" style="width: 16rem;">
-										<img class="card-img-top" src="img/camera.jpg" alt="Card image cap"  width="400" height="200">
-										<div class="card-body">
-											<h5 class="card-title text-center"><a href="product.html" title="View Product">Category</a></h5>
-										</div>
-									</div>
-								</div>
+
 							</div>
 							<br>
-							<div class="row">
-								<div class="col-md-4">
-									<div class="card" style="width: 16rem;">
-										<img class="card-img-top" src="img/disk.png" alt="Card image cap"  width="400" height="200">
-										<div class="card-body">
-											<h5 class="card-title text-center"><a href="details-product.html" title="View Product">Category</a></h5>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="card" style="width: 16rem;">
-										<img class="card-img-top" src="img/laptop.jpeg" alt="Card image cap"  width="400" height="200">
-										<div class="card-body">
-											<h5 class="card-title text-center"><a href="details-product.html" title="View Product">Category</a></h5>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="card" style="width: 16rem;">
-										<img class="card-img-top" src="img/projectors.jpg" alt="Card image cap"  width="400" height="200">
-										<div class="card-body">
-											<h5 class="card-title text-center"><a href="details-product.html" title="View Product">Category</a></h5>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row">
+
+							<div class="row" ng-show="ShowDetail">
 								<div class="col-md-12">
 									<ul class="list-group ">
-										<li class="list-group-item">
+										<li ng-repeat="ProductCardsItem in ProductCards" class="list-group-item">
 											<div class="row">
 												<div class=" col-md-3">
 													<img class="media-object img-rounded img-responsive" src="http://placehold.it/140x140" alt="placehold.it/350x250">
 												</div>
 												<div class="col-md-6">
-													<h5> Name Product </h5>
+													<h5> {{ProductCardsItem.NAME}} </h5>
 													<ul class="list-square">
-														<li>Features 1</li>
-														<li>Features 2</li>
-														<li>Features 3</li>
+														<li>Features 1 (No defined)</li>
+														<li>Features 2 (No defined)</li>
+														<li>Features 3 (No defined)</li>
 													</ul>
 												</div>
 												<div class="col-md-3 text-center">
-													<h4> $13540 </h4>
+													<h4> $13540 (No defined) </h4>
 												</div>
 											</div>
+											<br>
 										</li>
-										<br>
-										<li class="list-group-item">
-
-												<div class="row">
-													<div class=" col-md-3">
-														<img class="media-object img-rounded img-responsive" src="http://placehold.it/140x140" alt="placehold.it/350x250">
-													</div>
-													<div class="col-md-6">
-														<h5> Name Product </h5>
-														<ul class="list-square">
-															<li>Features 1</li>
-															<li>Features 2</li>
-															<li>Features 3</li>
-														</ul>
-													</div>
-													<div class="col-md-3 text-center">
-														<h4> $13540 </h4>
-													</div>
-												</div>
-
-										</li>
-										<br>
-										<li class="list-group-item">
-
-												<div class="row">
-													<div class=" col-md-3">
-														<img class="media-object img-rounded img-responsive" src="http://placehold.it/140x140" alt="placehold.it/350x250">
-													</div>
-													<div class="col-md-6">
-														<h5> Name Product </h5>
-														<ul class="list-square">
-															<li>Features 1</li>
-															<li>Features 2</li>
-															<li>Features 3</li>
-														</ul>
-													</div>
-													<div class="col-md-3 text-center">
-														<h4> $13540 </h4>
-													</div>
-												</div>
-
-										</li>
-
 									</ul>
 								</div>
 							</div>
 						</div>
-					
+
 
 					</div>
 				</div>
