@@ -114,8 +114,8 @@ ol, ul {
 
 .wrap {
 
-  margin: 0 auto;
-  padding: 14% 0;
+
+  padding: 160px 0;
   margin-bottom: 5em;
 }
 
@@ -424,4 +424,8 @@ background-color: #085430;
 
 ul.list-square {
     list-style-type: square;
+}
+
+.navbar-brand{
+  margin-right: -8%;
 }
