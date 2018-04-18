@@ -193,6 +193,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
 
+  $scope.ShowTable = false;
+
   var cnnData = JSON.parse(localStorage.cnnData2);
 
   function getArray(object){
@@ -256,26 +258,72 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     window.location = 'index.html';
   }
 
-  $scope.FindSubcategories = function(parentid) {
+  $scope.FindSubcategories = function(parentid, HasChild) {
 
-    if ($scope.Es == true){
-      $scope.ProductCards = [{ID: "26", NAME: "A tools XX", PARENTID: "2", Column1: "SCNoImage.JPG"}, {ID: "27", NAME: "Another tools yy", PARENTID: "2", Column1: "SCNoImage.JPG"}];
-      $scope.ShowDetail = true;
-      return 0;
+    if (HasChild == 1){
+
+      $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}', {headers: headers}).then(function (response) {
+
+        $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
+
+        console.log('Mira lo que está devolviendooOOOO');
+        console.log($scope.ProductCards);
+
+        var lFila = 1;
+        var lContador = 1;
+
+        $scope.ProductCards.forEach(function(el){
+          el.Fila = lFila;
+          el.DESCRIPTION = 'Falta la descripción el servicio no devuelve description. Una pequeña descripción de la categoría';
+          if (lContador % 3 == 0){
+            lFila = lFila + 1;
+          }
+          lContador = lContador + 1;
+        })
+
+        $scope.Es = true;
+
+      })
+      .catch(function (data) {
+        console.log('Error 16');
+        console.log(data);
+        swal("Cube Service", "Unexpected error. Check console Error 16.");
+      });
+
     }
 
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}', {headers: headers}).then(function (response) {
+  else {
 
-      $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
+      $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomParts","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}', {headers: headers}).then(function (response) {
 
-      $scope.Es = true;
+        $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
 
-    })
-    .catch(function (data) {
-      console.log('Error 16');
-      console.log(data);
-      swal("Cube Service", "Unexpected error. Check console Error 16.");
-    });
+        $scope.ShowDetail = true;
+
+        console.log('Mira lo que está devolviendooOOOO');
+        console.log($scope.ProductCards);
+
+        var lFila = 1;
+        var lContador = 1;
+
+        $scope.ProductCards.forEach(function(el){
+          el.Fila = lFila;
+          if (lContador % 3 == 0){
+            lFila = lFila + 1;
+          }
+          lContador = lContador + 1;
+        })
+
+        $scope.Es = true;
+
+      })
+      .catch(function (data) {
+        console.log('Error 16');
+        console.log(data);
+        swal("Cube Service", "Unexpected error. Check console Error 16.");
+      });
+
+    }
   }
 
   $scope.Es = false;
@@ -285,6 +333,19 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}', {headers: headers}).then(function (response) {
 
       $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
+
+      var lFila = 1;
+      var lContador = 1;
+
+      $scope.ProductCards.forEach(function(el){
+        el.Fila = lFila;
+        el.DESCRIPTION = 'Falta la descripción el servicio no devuelve description. Una pequeña descripción de la categoría';
+        if (lContador % 3 == 0){
+          lFila = lFila + 1;
+        }
+        lContador = lContador + 1;
+      })
+
       $scope.ProductCardsMainMenu = getArray(response.data.CubeFlexIntegration.DATA);
 
     })

@@ -11,7 +11,7 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
-	<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-3.0.3.js"></script>
+  <script src="js/ui-bootstrap-tpls.js"></script>
 	<!--Boostrap JQuery -->
 	<script src="js/jquery.js"></script>
 
@@ -181,19 +181,19 @@
 							<div class="row">
 								<div class="col-md-12">
 									<div class="pull-right">
-										<a href="#" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" data-toggle="tooltip" data-placement="top" title="List View"><i class="fas fa-list-ul"></i></a>
-										<a href="#" class="btn btn-secondary btn-sm " role="button" aria-pressed="true"  data-toggle="tooltip" data-placement="top" title="Grid View"><i class="fas fa-th-large"></i></a>
+										<a ng-click="ShowTable = true;" href="#" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" data-toggle="tooltip" data-placement="top" title="List View"><i class="fas fa-list-ul"></i></a>
+										<a ng-click="ShowTable = false;" href="#" class="btn btn-secondary btn-sm " role="button" aria-pressed="true"  data-toggle="tooltip" data-placement="top" title="Grid View"><i class="fas fa-th-large"></i></a>
 									</div>
 								</div>
 							</div>
-							<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+							<div ng-show="!ShowTable" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
 								<div ng-show="!ShowDetail" class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
 									  <div class="card-deck">
 									<div  ng-repeat="ProductCardsItem in value" class="card" >
 
-											<img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.Column1}}" alt="products-cube-image" width="400" height="200">
+											<img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.CATIMAGE}}" alt="products-cube-image" width="400" height="200">
 											<div class="card-body" >
-												<h5 class="card-title text-center"><a href="#" ng-click="FindSubcategories(ProductCardsItem.ID);" title="View Product">{{ProductCardsItem.NAME}}</a></h5>
+												<h5 class="card-title text-center"><a href="#" ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD);" title="View Product">{{ProductCardsItem.NAME}}</a></h5>
 											</div>
 
 									</div>
@@ -211,15 +211,15 @@
 													<img class="media-object img-rounded img-responsive" src="http://placehold.it/140x140" alt="image-products-cube" width="140" height="140">
 												</div>
 												<div class="col-md-6">
-													<h5> {{ProductCardsItem.NAME}} </h5>
+													<h5> {{ProductCardsItem.NUM}} </h5>
 													<ul class="list-square">
-														<li>Features 1 (No defined)</li>
-														<li>Features 2 (No defined)</li>
-														<li>Features 3 (No defined)</li>
+														<li>{{ProductCardsItem.WIDTH}}</li>
+														<li>{{ProductCardsItem.HEIGHT}}</li>
+														<li>{{ProductCardsItem.WEIGHT}}</li>
 													</ul>
 												</div>
 												<div class="col-md-3 text-center">
-													<h4> $13540 (No defined) </h4>
+													<h4> {{'$' + ProductCardsItem.PRICE}} </h4>
 												</div>
 											</div>
 											<br>
@@ -227,7 +227,7 @@
 									</ul>
 								</div>
 							</div>
-							<table class="table table-striped">
+							<table ng-show="ShowTable" class="table table-striped">
 								<thead>
 									<tr>
 										<th scope="col">Products</th>
@@ -236,19 +236,15 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>A tools XX</td>
-										<td>Features 1</td>
-										<td>$13540 </td>
-									</tr>
-									<tr>
-										<td>Another tools yy</td>
-										<td>Features 2</td>
-										<td>$13540</td>
+									<tr ng-repeat="ProductCardsItem in ProductCards">
+										<td>{{ProductCardsItem.NAME}}</td>
+										<td>{{'Falta el precio del producto'}}</td>
+										<td>{{ProductCardsItem.DESCRIPTION}}</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
+
 					</div>
 				</div>
 			</div>
