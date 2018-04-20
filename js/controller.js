@@ -191,6 +191,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 .controller('ctrlCubeShopHomeProducts', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
 
+  $scope.html = '<p> 3 results for <b>Tools and Service Equipment:</b> <b style="color:#93190C">"au"</b></p>';
+
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
 
   $scope.ShowTable = false;

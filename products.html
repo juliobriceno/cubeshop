@@ -140,7 +140,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card card-block bg-faded" style="padding-left:15px; padding-top:10px; background-color:#e9ecef;">
-								<p> 3 results for <b>Tools and Service Equipment:</b> <b style="color:#93190C">"au"</b></p>
+								<div ng-bind-html="html"></div>
 							</div>
 						</div>
 					</div>
@@ -181,8 +181,8 @@
 							<div class="row">
 								<div class="col-md-12">
 									<div class="pull-right">
-										<a ng-click="ShowTable = true;" href="#" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" data-toggle="tooltip" data-placement="top" title="List View"><i class="fas fa-list-ul"></i></a>
-										<a ng-click="ShowTable = false;" href="#" class="btn btn-secondary btn-sm " role="button" aria-pressed="true"  data-toggle="tooltip" data-placement="top" title="Grid View"><i class="fas fa-th-large"></i></a>
+										<a ng-show="ShowDetail" ng-click="ShowTable = true;" href="#" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" data-toggle="tooltip" data-placement="top" title="List View"><i class="fas fa-list-ul"></i></a>
+										<a ng-show="ShowDetail" ng-click="ShowTable = false;" href="#" class="btn btn-secondary btn-sm " role="button" aria-pressed="true"  data-toggle="tooltip" data-placement="top" title="Grid View"><i class="fas fa-th-large"></i></a>
 									</div>
 								</div>
 							</div>
@@ -202,7 +202,7 @@
 							</div>
 
 							<br>
-							<div class="row" ng-show="ShowDetail">
+							<div class="row" ng-show="ShowDetail && !ShowTable">
 								<div class="col-md-12">
 									<ul class="list-group ">
 										<li ng-repeat="ProductCardsItem in ProductCards" class="list-group-item">
@@ -227,7 +227,7 @@
 									</ul>
 								</div>
 							</div>
-							<table ng-show="ShowTable" class="table table-striped">
+							<table ng-show="ShowDetail && ShowTable" class="table table-striped">
 								<thead>
 									<tr>
 										<th scope="col">Products</th>
@@ -237,8 +237,8 @@
 								</thead>
 								<tbody>
 									<tr ng-repeat="ProductCardsItem in ProductCards">
-										<td>{{ProductCardsItem.NAME}}</td>
-										<td>{{'Falta el precio del producto'}}</td>
+										<td>{{ProductCardsItem.NUM}}</td>
+										<td>{{ProductCardsItem.PRICE}}</td>
 										<td>{{ProductCardsItem.DESCRIPTION}}</td>
 									</tr>
 								</tbody>
