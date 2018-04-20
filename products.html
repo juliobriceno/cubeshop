@@ -177,6 +177,10 @@
 								</div>
 							</div>
 						</div>
+
+
+
+
 						<div class="col">
 							<div class="row">
 								<div class="col-md-12">
@@ -186,19 +190,28 @@
 									</div>
 								</div>
 							</div>
-							<div ng-show="!ShowTable" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-								<div ng-show="!ShowDetail" class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
-									  <div class="card-deck">
-									<div  ng-repeat="ProductCardsItem in value" class="card" >
 
+							<div ng-show="!ShowTable">
+
+								<div ng-show="!ShowDetail" class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
+
+									<div ng-repeat="ProductCardsItem in value" class="card-deck col-xs-12 col-sm-12 col-md-4 col-lg-4">
+
+										<div class="card">
 											<img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.CATIMAGE}}" alt="products-cube-image" width="400" height="200">
 											<div class="card-body" >
-												<h5 class="card-title text-center"><a href="#" ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD);" title="View Product">{{ProductCardsItem.NAME}}</a></h5>
-											</div>
+											<h5 class="card-title text-center"><a href="#" ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD);" title="View Product">{{ProductCardsItem.NAME}}</a></h5>
+										</div>
 
 									</div>
+
+
 									</div>
+
 								</div>
+
+
+
 							</div>
 
 							<br>
@@ -208,7 +221,7 @@
 										<li ng-repeat="ProductCardsItem in ProductCards" class="list-group-item">
 											<div class="row">
 												<div class=" col-md-3">
-													<img class="media-object img-rounded img-responsive" src="http://placehold.it/140x140" alt="image-products-cube" width="140" height="140">
+													<img class="media-object img-rounded img-responsive" src="img/cameras.png" alt="image-products-cube" width="140" height="140">
 												</div>
 												<div class="col-md-6">
 													<h5> {{ProductCardsItem.NUM}} </h5>
