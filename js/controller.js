@@ -53,28 +53,35 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $scope.ProductCards = [];
 
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomMainCategories","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
 
-      $scope.ProductCards = response.data.CubeFlexIntegration.DATA;
+    $scope.FindMaincategories = function() {
+      $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}', {headers: headers}).then(function (response) {
 
-      var lFila = 1;
-      var lContador = 1;
+        $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
 
-      $scope.ProductCards.forEach(function(el){
-        el.Fila = lFila;
-        el.DESCRIPTION = 'Falta la descripción el servicio no devuelve description. Una pequeña descripción de la categoría';
-        if (lContador % 6 == 0){
-          lFila = lFila + 1;
-        }
-        lContador = lContador + 1;
+        var lFila = 1;
+        var lContador = 1;
+
+        $scope.ProductCards.forEach(function(el){
+          el.Fila = lFila;
+          el.DESCRIPTION = 'Falta la descripción el servicio no devuelve description. Una pequeña descripción de la categoría';
+          if (lContador % 3 == 0){
+            lFila = lFila + 1;
+          }
+          lContador = lContador + 1;
+        })
+
+        $scope.ProductCardsMainMenu = getArray(response.data.CubeFlexIntegration.DATA);
+
       })
+      .catch(function (data) {
+        console.log('Error 16');
+        console.log(data);
+        swal("Cube Service", "Unexpected error. Check console Error 16.");
+      });
+    }
 
-    })
-    .catch(function (data) {
-      console.log('Error 16');
-      console.log(data);
-      swal("Cube Service", "Unexpected error. Check console Error 16.");
-    });
+    $scope.FindMaincategories();
 
     $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
 
