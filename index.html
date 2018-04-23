@@ -151,7 +151,7 @@
             <div ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
               <div class="card-deck">
                 <div ng-repeat="ProductCardsItem in value" class="card">
-                  <img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.CATIMAGE}}" alt="Card image cap">
+                  <img class="card-img-top" ng-src="{{'../img/'+ ProductCardsItem.CATIMAGE}}" alt="Card image cap">
                   <div class="card-body">
                     <h5 class="card-title">{{ProductCardsItem.NAME}}</h5>
                     <p class="card-text">{{ProductCardsItem.DESCRIPTION}}</p>
