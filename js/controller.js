@@ -268,6 +268,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 .controller('ctrlCubeShopHomeProducts', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
 
+  // Valida si variable del carrito existe caso contrario la crea
+  if (typeof localStorage.myCart != 'undefined' && localStorage.myCart != ''){
+    $scope.myCart = JSON.parse(localStorage.myCart);
+  }
+  else{
+    $scope.myCart = [];
+  }
+
   $scope.minimum = 0;
   $scope.maximum = 0;
 
@@ -289,6 +297,10 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   $scope.ViewDetail = function(ProductCardsItem) {
     localStorage.ActiveProductCardsItem = JSON.stringify(ProductCardsItem);
     window.location = 'details-product.html';
+  }
+
+  $scope.AddToCart = function(ProductCardsItem) {
+    $scope.myCart.push(ProductCardsItem);
   }
 
   $scope.filterByPrice = function() {
@@ -563,4 +575,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 }])
 
 .controller('ctrlCubeShopHomeProductDetail', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+  $scope.ProductCardsItem = JSON.parse(localStorage.ActiveProductCardsItem);
+}])
+
+.controller('ctrlCubeShopHomeProductCart', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+  // Valida si variable del carrito existe caso contrario la crea
+  if (typeof localStorage.myCart != 'undefined' && localStorage.myCart != ''){
+    $scope.myCart = JSON.parse(localStorage.myCart);
+  }
+  else{
+    $scope.myCart = [];
+  }
 }])
