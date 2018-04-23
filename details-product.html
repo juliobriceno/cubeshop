@@ -3,16 +3,58 @@
 
 <head>
 	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>ConBox::..</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	 <link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
+	<link href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
 
+	<!--Boostrap JQuery -->
+	<script src="js/jquery.js"></script>
+	<!--Librería para validar números -->
+	<script src="js/autoNumeric.js"></script>
+
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+  <script src="js/ui-bootstrap-tpls.js"></script>
+
+	<!--Boostrap JS Para animaciones-->
+	<script src="js/bootstrap.min.js"></script>
+	<!--Listas-->
+	<script src="js/Lists.js"></script>
+	<!-- font Awesome -->
+	<link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<!-- *****************************************Angular Librerías***************************************** -->
+
+	<script src="js/angular-drag-and-drop-lists.js"></script>
+
+	<script src="js/angular-filter.min.js"></script>
+	<!-- *****************************************Boostrap Angular Librerías***************************************** -->
+	<script src="js/ui-bootstrap-tpls.js"></script>
+	<!-- *****************************************Código de Select Boostrap Angular***************************************** -->
+	<script src="./select.js"></script>
+	<link rel="stylesheet" href="./select.css">
+	<script src="./demo.js"></script>
+	<!-- *****************************************Librería de angular loading***************************************** -->
+	<script src="js/spin.min.js"></script>
+	<script src="js/angular-loading.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/angular-loading.css" />
+	<!-- *****************************************Librería de angular tags inputs***************************************** -->
+	<script src="js/ng-tags-input.min.js"></script>
+	<!-- *****************************************Librería de file upload***************************************** -->
+	<script src="js/angular-file-upload.min.js"></script>
+	<!-- *****************************************Librería de boostrap toogle ***************************************** -->
+	<script src="js/angular-bootstrap-toggle.min.js"></script>
+	<!-- *****************************************Alertas***************************************** -->
+	<link rel="stylesheet" type="text/css" href="https://ptreesys.mx/sharedfiles/src/sweetalert.css">
+	<script src="https://ptreesys.mx/sharedfiles/src/sweetalert.min.js"></script>
+	<!-- Pattern -->
+	<script src="js/ng-pattern-restrict.js"></script>
 </head>
 
-<body>
+<body ng-controller="ctrlCubeShopHomeProductDetail">
 <div class="fixed-top">
 	<nav class="top-menu">
 		 <div class="container-fluid">
@@ -75,9 +117,6 @@
 								<a class="nav-link  active" href="products.html">PRODUCTS</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#">SERVICES </a>
-							</li>
-							<li class="nav-item">
 								<a class="nav-link" href="#">APPLICATIONS</a>
 							</li>
 						</ul>
@@ -131,20 +170,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="form-group">
-				<label>Quantity :</label>
-				<div class="input-group mb-3">
-						<div class="input-group-prepend">
-								<button type="button" class="quantity-left-minus btn btn-default btn-number"  data-type="minus" data-field="">
-										<strong>-</strong>
-								</button>
-						</div>
-						<input type="text" class="form-control"  id="quantity" name="quantity" min="1" max="100" value="1">
-						<div class="input-group-append">
-								<button type="button" class="quantity-right-plus btn btn-default btn-number" data-type="plus" data-field="">
-										<strong>+</strong>
-								</button>
-						</div>
-				</div>
+
 		</div>
 	</div>
 </div>
@@ -215,5 +241,9 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<!-- Librería de controlador principal -->
+<script src="js/controller.js"></script>
+
 </body>
 </html>

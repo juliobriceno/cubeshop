@@ -97,9 +97,9 @@
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <form >
                   <div class="input-group input-group-sm ">
-                    <input style="border-radius:0;" type="text" class="form-control" aria-label="Small" placeholder="Search...">
+                    <input ng-model="HometxtSearch" style="border-radius:0;" type="text" class="form-control" aria-label="Small" placeholder="Search...">
                     <div class="input-group-append">
-                      <button type="button" class="btn btn-secondary" style="border-radius:0;">
+                      <button ng-click="FindProductByText()" type="button" class="btn btn-secondary" style="border-radius:0;">
                         <i class="fa fa-search"></i>
                       </button>
                     </div>
@@ -111,9 +111,6 @@
                     </li>
                     <li class="nav-item">
                       <a ng-show="MasterInfo[0].Products" class="nav-link " href="products.html">PRODUCTS</a>
-                    </li>
-                    <li class="nav-item">
-                      <a ng-show="MasterInfo[0].Service" class="nav-link" href="#">SERVICES </a>
                     </li>
                     <li class="nav-item">
                       <a ng-show="MasterInfo[0].Apps" class="nav-link" href="#">APPLICATIONS</a>
@@ -160,7 +157,7 @@
                     <p class="card-text">{{ProductCardsItem.DESCRIPTION}}</p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" class="btn btn-secondary btn-green">+ See more</a>
+                    <a ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD, ProductCardsItem.NAME);" href="#" class="btn btn-secondary btn-green">+ See more</a>
                   </div>
                 </div>
               </div>

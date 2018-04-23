@@ -28,6 +28,64 @@ function testInterceptor() {
 
 angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngTagsInput', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.select', 'ui.toggle', 'dndLists', 'ngPatternRestrict', 'angular.filter'])
 
+.directive('angularCurrency', [function () {
+    'use strict';
+
+    return {
+        'require': '?ngModel',
+        'restrict': 'A',
+        'scope': {
+            angularCurrency: '=',
+            variableOptions: '='
+        },
+        'compile': compile
+    };
+
+    function compile(tElem, tAttrs) {
+        var isInputText = tElem.is('input:text');
+
+        return function(scope, elem, attrs, controller) {
+            var updateElement = function (newVal) {
+                elem.autoNumeric('set', newVal);
+            };
+
+            elem.autoNumeric('init', scope.angularCurrency);
+            if (scope.variableOptions === true) {
+                scope.$watch('angularCurrency', function(newValue) {
+                    elem.autoNumeric('update', newValue);
+                });
+            }
+
+            if (controller && isInputText) {
+                scope.$watch(tAttrs.ngModel, function () {
+                    controller.$render();
+                });
+
+                controller.$render = function () {
+                    updateElement(controller.$viewValue);
+                };
+
+                elem.on('keyup', function () {
+                    scope.$applyAsync(function () {
+                        controller.$setViewValue(elem.autoNumeric('get'));
+                    });
+                });
+                elem.on('change', function () {
+                    scope.$applyAsync(function () {
+                        controller.$setViewValue(elem.autoNumeric('get'));
+                    });
+                });
+            } else {
+                if (isInputText) {
+                    attrs.$observe('value', function (val) {
+                        updateElement(val);
+                    });
+                }
+            }
+        };
+    }
+}])
+
 .controller('ctrlCubeShopHomeController', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
 
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
@@ -170,6 +228,18 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     window.location = 'index.html';
   }
 
+  $scope.FindSubcategories = function(HomeCardCategoryID, HomeCardHasChild, HomeCardName) {
+    localStorage.HomeCardCategoryID = HomeCardCategoryID;
+    localStorage.HomeCardHasChild = HomeCardHasChild;
+    localStorage.HomeCardName = HomeCardName;
+    window.location = 'products.html';
+  }
+
+  $scope.FindProductByText = function() {
+    localStorage.HometxtSearch = $scope.HometxtSearch;
+    window.location = 'products.html';
+  }
+
   // Cosas de carousel
   $scope.myInterval = 5000;
   $scope.noWrapSlides = false;
@@ -198,11 +268,90 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 .controller('ctrlCubeShopHomeProducts', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
 
-  $scope.html = '<p> 3 results for <b>Tools and Service Equipment:</b> <b style="color:#93190C">"au"</b></p>';
+  $scope.minimum = 0;
+  $scope.maximum = 0;
+
+  // S�lo para validar n�meros
+  $scope.options2 = {
+      aSign: '',
+      mDec: '2',
+      vMin: '0'
+  };
+
+  $scope.html = '<p>No results</p>';
 
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
 
   $scope.ShowTable = false;
+
+  $scope.txtSearch = '';
+
+  $scope.ViewDetail = function(ProductCardsItem) {
+    localStorage.ActiveProductCardsItem = JSON.stringify(ProductCardsItem);
+    window.location = 'details-product.html';
+  }
+
+  $scope.filterByPrice = function() {
+    if ($scope.minimum > 0 && $scope.minimum > 0){
+      $scope.ProductCards = $scope.ProductCardsSaved.filter(function (el){
+        return (el.PRICE >= $scope.minimum && el.PRICE <= $scope.maximum);
+      })
+    }
+    else if ($scope.minimum > 0){
+      $scope.ProductCards = $scope.ProductCardsSaved.filter(function (el){
+        return (el.PRICE >= $scope.minimum);
+      })
+    }
+    else if ($scope.maximum > 0){
+      $scope.ProductCards = $scope.ProductCardsSaved.filter(function (el){
+        return (el.PRICE <= $scope.maximum);
+      })
+    }
+    else {
+      $scope.ProductCards = $scope.ProductCardsSaved;
+    }
+  }
+
+  $scope.FindProductByText = function() {
+
+    $scope.minimum = 0;
+    $scope.maximum = 0;
+
+    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomParts","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}', {headers: headers}).then(function (response) {
+
+      $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
+
+      $scope.ShowDetail = true;
+
+      $scope.ProductCards = $scope.ProductCards.filter(function (el){
+        return ((el.NUM.toUpperCase().indexOf($scope.txtSearch.toUpperCase()) > -1 || el.DESCRIPTION.toUpperCase().indexOf($scope.txtSearch.toUpperCase()) > -1));
+      })
+
+      var lFila = 1;
+      var lContador = 1;
+
+      $scope.ProductCards.forEach(function(el){
+        el.Fila = lFila;
+        if (lContador % 3 == 0){
+          lFila = lFila + 1;
+        }
+        lContador = lContador + 1;
+      })
+
+      $scope.ProductCardsSaved = $scope.ProductCards;
+
+      $scope.html = '<p> ' + $scope.ProductCards.length + ' results for text: <b>' + $scope.txtSearch + '</b> </p>';
+
+      $scope.Es = true;
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
 
   var cnnData = JSON.parse(localStorage.cnnData2);
 
@@ -267,16 +416,20 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     window.location = 'index.html';
   }
 
-  $scope.FindSubcategories = function(parentid, HasChild) {
+  $scope.FindSubcategories = function(parentid, HasChild, Name) {
+
+    $scope.minimum = 0;
+    $scope.maximum = 0;
 
     if (HasChild == 1){
+
+      $scope.ShowDetail = false;
+      $scope.ShowTable = false;
+      $scope.html = '<p>No results</p>';
 
       $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}', {headers: headers}).then(function (response) {
 
         $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
-
-        console.log('Mira lo que está devolviendooOOOO');
-        console.log($scope.ProductCards);
 
         var lFila = 1;
         var lContador = 1;
@@ -289,6 +442,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           }
           lContador = lContador + 1;
         })
+
+        $scope.ProductCardsSaved = $scope.ProductCards;
 
         $scope.Es = true;
 
@@ -309,9 +464,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
         $scope.ShowDetail = true;
 
-        console.log('Mira lo que está devolviendooOOOO');
-        console.log($scope.ProductCards);
-
         var lFila = 1;
         var lContador = 1;
 
@@ -322,6 +474,10 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           }
           lContador = lContador + 1;
         })
+
+        $scope.html = '<p> ' + $scope.ProductCards.length + ' results for Category: <b>' + Name + '</b></p>';
+
+        $scope.ProductCardsSaved = $scope.ProductCards;
 
         $scope.Es = true;
 
@@ -357,6 +513,19 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
       $scope.ProductCardsMainMenu = getArray(response.data.CubeFlexIntegration.DATA);
 
+      // Si viene de HOME click en categorías muestra las subcategorías o los productos de esa categoría
+      if (typeof localStorage.HomeCardCategoryID != 'undefined' && localStorage.HomeCardCategoryID != ''){
+        $scope.FindSubcategories(localStorage.HomeCardCategoryID, localStorage.HomeCardHasChild, localStorage.HomeCardName)
+        localStorage.HomeCardCategoryID = '';
+      }
+
+      // Si viene de HOME con search
+      if (typeof localStorage.HometxtSearch != 'undefined' && localStorage.HometxtSearch != ''){
+        $scope.txtSearch = localStorage.HometxtSearch;
+        $scope.FindProductByText();
+        localStorage.HometxtSearch = '';
+      }
+
     })
     .catch(function (data) {
       console.log('Error 16');
@@ -391,4 +560,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       }
   }
 
+}])
+
+.controller('ctrlCubeShopHomeProductDetail', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
 }])
