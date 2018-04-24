@@ -71,9 +71,9 @@
 								<li class="dropdown">
 									<a class="" href="login.html"> Login/Register </a>
 								</li>
-								<li class="carrito"><a  href="cart.html">
+								<li ng-class="(myCart.length>0) ? 'carrito-azul' : 'carrito'"><a  href="cart.html">
 									<i class="fas fa-cart-plus"></i> Cart
-									<span class="badge badge-cart">{{myCart.length}}</span>
+									<span ng-class="(myCart.length>0) ? 'badge carrito-lleno' : 'badge badge-cart'">{{myCart.length}}</span>
 								</a></li>
 							</ul>
 						</div>
