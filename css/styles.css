@@ -209,10 +209,10 @@ ol, ul {
 
 a.remove {
   text-decoration: none;
-    font-family: "Lato", sans-serif;
+  font-family: "Lato", sans-serif;
   color: #ffffff;
   font-weight: bold;
-  background: #e0e0e0;
+  background: #5A6268;
   padding: .5em;
   font-size: .75em;
   display: inline-block;
@@ -390,7 +390,7 @@ vertical-align: baseline;
 
 
 .badge-cart{
-  display: inline-block;
+display: inline-block;
 padding: .50em .50em;
 font-size: 90%;
 font-weight: 700;
@@ -428,4 +428,30 @@ ul.list-square {
 
 .navbar-brand{
   margin-right: -8%;
+}
+
+
+.carrito{
+  background-color:#048949;
+}
+
+.carrito-azul{
+  background-color:#007bff;
+}
+
+.carrito-lleno{
+display: inline-block;
+padding: .50em .50em;
+font-size: 90%;
+font-weight: 700;
+line-height: 1;
+text-align: center;
+white-space: nowrap;
+vertical-align: baseline;
+width: 2rem;
+height: 2rem;
+line-height: inherit;
+margin-top: -8px;
+background-color: #33a1ea;
+
 }

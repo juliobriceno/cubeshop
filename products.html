@@ -71,7 +71,7 @@
 								<li class="dropdown">
 									<a class="" href="login.html"> Login/Register </a>
 								</li>
-								<li style="background-color:#048949;"><a  href="cart.html">
+								<li class="carrito"><a  href="cart.html">
 									<i class="fas fa-cart-plus"></i> Cart
 									<span class="badge badge-cart">{{myCart.length}}</span>
 								</a></li>
@@ -148,7 +148,7 @@
 				<div class="container">
 					<div class="row">
 						<div class=" col-xs-12 col-sm-12 col-md-3 col-lg-3">
-							<div class="card card-body bg-light mb-3">
+							<div class="card card-body bg-light mb-4">
 
 								<div ng-show="ShowDetail">
 
@@ -165,14 +165,16 @@
 													<div class="col">
 														<input ng-model="maximum" type="text" angular-currency="options2" variable-options="true" class="form-control">
 													</div>
-													<div class="col-md-3">
-														<button ng-click="filterByPrice();" type="submit" class="btn btn-secondary"><i class="fas fa-angle-right"></i></button>
-													</div>
+
 													<div>
 													</div>
 												</div>
 											</form>
+											<button ng-click="filterByPrice();" type="submit" class="btn btn-secondary btn-block"><i class="fas fa-search"></i></button>
 										</div>
+
+
+
 									</div>
 
 									<br>
@@ -186,10 +188,6 @@
 
 							</div>
 						</div>
-
-
-
-
 						<div class="col">
 							<div class="row">
 								<div class="col-md-12">
@@ -227,18 +225,15 @@
 														<li>{{ProductCardsItem.HEIGHT}}</li>
 														<li>{{ProductCardsItem.WEIGHT}}</li>
 													</ul>
+													<a ng-click="ViewDetail(ProductCardsItem)" href="#" style="color:#1979B9;" >
+															<i class="fas fa-eye"></i> View Details
+														</a>
 												</div>
 												<div class="col-md-3 text-center">
 													<h4> {{'$' + ProductCardsItem.PRICE}} </h4>
-
-													<button ng-click="ViewDetail(ProductCardsItem)" type="button" class="btn btn-secondary" style="border-radius:0;">
-														View Details (ARREGLAR)
-		                        <i class="fa fa-search"></i>
-		                      </button>
-
-													<button ng-click="AddToCart(ProductCardsItem)" type="button" class="btn btn-secondary" style="border-radius:0;">
-														Add to cart (ARREGLAR)
-		                        <i class="fa fa-search"></i>
+													<button ng-click="AddToCart(ProductCardsItem)" type="button" class="btn btn-secondary btn-green btn-block " style="border-radius:0;">
+														<i class="fas fa-cart-plus"></i>
+														Add to cart
 		                      </button>
 
 												</div>
