@@ -122,6 +122,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
         $scope.ProductCards.forEach(function(el){
           el.Fila = lFila;
+          el.CATIMAGE = el.CATIMAGE.replace(".JPG", ".jpg");
           el.DESCRIPTION = 'Falta la descripción el servicio no devuelve description. Una pequeña descripción de la categoría';
           if (lContador % 3 == 0){
             lFila = lFila + 1;
@@ -353,6 +354,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
       $scope.ProductCards.forEach(function(el){
         el.Fila = lFila;
+        el.CATIMAGE = el.CATIMAGE.replace(".JPG", ".jpg");
         if (lContador % 3 == 0){
           lFila = lFila + 1;
         }
@@ -457,6 +459,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
         $scope.ProductCards.forEach(function(el){
           el.Fila = lFila;
+          el.CATIMAGE = el.CATIMAGE.replace(".JPG", ".jpg");
           el.DESCRIPTION = 'Falta la descripción el servicio no devuelve description. Una pequeña descripción de la categoría';
           if (lContador % 3 == 0){
             lFila = lFila + 1;
