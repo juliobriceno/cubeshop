@@ -73,7 +73,7 @@
 								</li>
 								<li style="background-color:#048949;"><a  href="cart.html">
 									<i class="fas fa-cart-plus"></i> Cart
-									<span class="badge badge-cart">10</span>
+									<span class="badge badge-cart">{{myCart.length}}</span>
 								</a></li>
 							</ul>
 						</div>
@@ -231,15 +231,15 @@
 												<div class="col-md-3 text-center">
 													<h4> {{'$' + ProductCardsItem.PRICE}} </h4>
 
-													<!-- <button ng-click="ViewDetail(ProductCardsItem)" type="button" class="btn btn-secondary" style="border-radius:0;">
+													<button ng-click="ViewDetail(ProductCardsItem)" type="button" class="btn btn-secondary" style="border-radius:0;">
 														View Details (ARREGLAR)
 		                        <i class="fa fa-search"></i>
 		                      </button>
 
-													<button ng-click="ViewDetail(ProductCardsItem)" type="button" class="btn btn-secondary" style="border-radius:0;">
+													<button ng-click="AddToCart(ProductCardsItem)" type="button" class="btn btn-secondary" style="border-radius:0;">
 														Add to cart (ARREGLAR)
 		                        <i class="fa fa-search"></i>
-		                      </button> -->
+		                      </button>
 
 												</div>
 											</div>
