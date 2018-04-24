@@ -3,16 +3,58 @@
 
 <head>
 	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>ConBox::..</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	 <link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
-	 <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
- 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+	<link href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
 
+	<!--Boostrap JQuery -->
+	<script src="js/jquery.js"></script>
+	<!--Librería para validar números -->
+	<script src="js/autoNumeric.js"></script>
+
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+  <script src="js/ui-bootstrap-tpls.js"></script>
+
+	<!--Boostrap JS Para animaciones-->
+	<script src="js/bootstrap.min.js"></script>
+	<!--Listas-->
+	<script src="js/Lists.js"></script>
+	<!-- font Awesome -->
+	<link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<!-- *****************************************Angular Librerías***************************************** -->
+
+	<script src="js/angular-drag-and-drop-lists.js"></script>
+
+	<script src="js/angular-filter.min.js"></script>
+	<!-- *****************************************Boostrap Angular Librerías***************************************** -->
+	<script src="js/ui-bootstrap-tpls.js"></script>
+	<!-- *****************************************Código de Select Boostrap Angular***************************************** -->
+	<script src="./select.js"></script>
+	<link rel="stylesheet" href="./select.css">
+	<script src="./demo.js"></script>
+	<!-- *****************************************Librería de angular loading***************************************** -->
+	<script src="js/spin.min.js"></script>
+	<script src="js/angular-loading.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/angular-loading.css" />
+	<!-- *****************************************Librería de angular tags inputs***************************************** -->
+	<script src="js/ng-tags-input.min.js"></script>
+	<!-- *****************************************Librería de file upload***************************************** -->
+	<script src="js/angular-file-upload.min.js"></script>
+	<!-- *****************************************Librería de boostrap toogle ***************************************** -->
+	<script src="js/angular-bootstrap-toggle.min.js"></script>
+	<!-- *****************************************Alertas***************************************** -->
+	<link rel="stylesheet" type="text/css" href="https://ptreesys.mx/sharedfiles/src/sweetalert.css">
+	<script src="https://ptreesys.mx/sharedfiles/src/sweetalert.min.js"></script>
+	<!-- Pattern -->
+	<script src="js/ng-pattern-restrict.js"></script>
 </head>
 
-<body>
+<body ng-controller="ctrlCubeShopHomeProductCart">
 	<div class="fixed-top">
 		<nav class="top-menu">
 			 <div class="container-fluid">
@@ -22,7 +64,7 @@
 							 <i class="fas fa-phone" aria-hidden="true"></i>   + 786-293-3272
 
 						 </div>
-						
+
 				 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 text-right">
 							 <ul class="right-menu ">
 							 <li><a href=""><i class="fas fa-question-circle"></i></a></li>
@@ -34,7 +76,7 @@
 								</li>
 								<li style="background-color:#048949;"><a  href="cart.html">
 									<i class="fas fa-cart-plus"></i> Cart
-									<span class="badge badge-cart">10</span>
+									<span class="badge badge-cart">{{myCart.length}}</span>
 								</a></li>
 
 
@@ -105,29 +147,34 @@
        <li>Remove</li>
     </ul>-->
     <ul class="cart-shoppingWrap">
-      <li class="items odd">
+
+
+      <li ng-repeat="ProductCardsItem in myCart" class="items odd">
 
     <div class="infoWrap">
         <div class="cart-shoppingSection">
         <img src="img/phone300x300.png" alt="" class="itemImg" />
-          <p class="itemNumber">#QUE-007544-002</p>
-          <h3>Item Name 1</h3>
+          <p class="itemNumber">{{ProductCardsItem.NUM}}</p>
+          <h3>{{ProductCardsItem.NUM}}</h3>
 
-           <p> <input type="text"  class="qty" placeholder="1"/> x $500.00</p>
+           <p> <input ng-model="ProductCardsItem.QTY" type="text"  class="qty" placeholder="1"/></p>
 
           <p class="stockStatus"> In Stock</p>
         </div>
 
 
         <div class="prodTotal cart-shoppingSection">
-          <p>$15.00</p>
+          <p>${{ProductCardsItem.PRICE}}</p>
         </div>
               <div class="cart-shoppingSection removeWrap">
            <a href="#" class="remove">x</a>
         </div>
       </div>
       </li>
-      <li class="items even">
+
+
+
+      <!-- <li class="items even">
 
        <div class="infoWrap">
         <div class="cart-shoppingSection">
@@ -149,7 +196,7 @@
            <a href="#" class="remove">x</a>
         </div>
       </div>
-      </li>
+      </li> -->
 
 
 
@@ -226,5 +273,9 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<!-- Librería de controlador principal -->
+<script src="js/controller.js"></script>
+
 </body>
 </html>

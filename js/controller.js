@@ -300,7 +300,16 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   }
 
   $scope.AddToCart = function(ProductCardsItem) {
+    $scope.myCarttmp = $scope.myCart.filter(function(el){
+      return el.NUM == ProductCardsItem.NUM;
+    })
+    if ($scope.myCarttmp.length > 0){
+      return 0;
+    }
+    ProductCardsItem.Identifer = $scope.myCart.length + 1;
+    ProductCardsItem.QTY = 0;
     $scope.myCart.push(ProductCardsItem);
+    localStorage.myCart = JSON.stringify($scope.myCart);
   }
 
   $scope.filterByPrice = function() {
@@ -586,4 +595,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   else{
     $scope.myCart = [];
   }
+  console.log('VALEEEEEEEEEEEEEEEEEEEEEE');
+  console.log($scope.myCart);
 }])
