@@ -142,28 +142,32 @@
           </div>
         </div>
       </section>
-      <section>
+      <section >
         <div class="container">
           <br> <br>
           <h3 class="text-center"><strong>PRODUCTS</strong></h3>
           <br>
-          <div class="col-md-6">
-            <div ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
+          <div class="">
+            <div  class="row"  ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'" style="margin-bottom:20px;">
               <div class="card-deck">
-                <div ng-repeat="ProductCardsItem in value" class="card">
-                  <img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.CATIMAGE}}" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">{{ProductCardsItem.NAME}}</h5>
-                    <p class="card-text">{{ProductCardsItem.DESCRIPTION}}</p>
-                  </div>
-                  <div class="card-footer">
-                    <a ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD, ProductCardsItem.NAME);" href="#" class="btn btn-secondary btn-green">+ See more</a>
+                <div ng-repeat="ProductCardsItem in value" class=" col-xs-12 col-sm-12 col-md-4 col-lg-4 ">
+                  <div class="card">
+                    <img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.CATIMAGE}}" alt="Card image cap">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ProductCardsItem.NAME}}</h5>
+                      <p class="card-text">{{ProductCardsItem.DESCRIPTION}}</p>
+                    </div>
+                    <div class="card-footer">
+                      <a ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD, ProductCardsItem.NAME);" href="#" class="btn btn-secondary btn-green">+ See more</a>
+                    </div>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
-        </div>
+
+          </div>
         <br><br>
       </section>
     </section>
