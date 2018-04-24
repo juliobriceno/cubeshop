@@ -595,6 +595,10 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   else{
     $scope.myCart = [];
   }
-  console.log('VALEEEEEEEEEEEEEEEEEEEEEE');
-  console.log($scope.myCart);
+  $scope.removeCart = function(NUM) {
+    $scope.myCart = $scope.myCart.filter(function(el){
+      return el.NUM != NUM
+    })
+    localStorage.myCart = JSON.stringify($scope.myCart);
+  }
 }])

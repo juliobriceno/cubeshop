@@ -149,7 +149,7 @@
     <ul class="cart-shoppingWrap">
 
 
-      <li ng-repeat="ProductCardsItem in myCart" class="items odd">
+      <li ng-repeat="ProductCardsItem in myCart" ng-class-odd="'items odd'" ng-class-even="'items even'" >
 
     <div class="infoWrap">
         <div class="cart-shoppingSection">
@@ -167,7 +167,7 @@
           <p>${{ProductCardsItem.PRICE}}</p>
         </div>
               <div class="cart-shoppingSection removeWrap">
-           <a href="#" class="remove">x</a>
+           <a ng-click="removeCart(ProductCardsItem.NUM);" href="#" class="remove">x</a>
         </div>
       </div>
       </li>
