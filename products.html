@@ -199,30 +199,18 @@
 									</div>
 								</div>
 							</div>
-
 							<div ng-show="!ShowTable">
-
-								<div ng-show="!ShowDetail" class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'">
-
+								<div ng-show="!ShowDetail" class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'" style="margin-bottom:20px;">
 									<div ng-repeat="ProductCardsItem in value" class="card-deck col-xs-12 col-sm-12 col-md-4 col-lg-4">
-
 										<div class="card">
 											<img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.CATIMAGE}}" alt="products-cube-image" width="400" height="200">
 											<div class="card-body" >
 											<h5 class="card-title text-center"><a href="#" ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD, ProductCardsItem.NAME);" title="View Product">{{ProductCardsItem.NAME}}</a></h5>
 										</div>
-
 									</div>
-
-
 									</div>
-
 								</div>
-
-
-
 							</div>
-
 							<br>
 							<div class="row" ng-show="ShowDetail && !ShowTable">
 								<div class="col-md-12">
