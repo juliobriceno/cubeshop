@@ -86,6 +86,16 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     }
 }])
 
+.service('myMemoryService', ['$http', function($http) {
+  // Valida si variable del carrito existe caso contrario la crea
+  if (typeof localStorage.myCart != 'undefined' && localStorage.myCart != ''){
+    this.myCart = JSON.parse(localStorage.myCart);
+  }
+  else{
+    this.myCart = [];
+  }
+}])
+
 .controller('ctrlCubeShopHomeController', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
 
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
@@ -267,15 +277,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 }])
 
-.controller('ctrlCubeShopHomeProducts', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+.controller('ctrlCubeShopHomeProducts', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
 
-  // Valida si variable del carrito existe caso contrario la crea
-  if (typeof localStorage.myCart != 'undefined' && localStorage.myCart != ''){
-    $scope.myCart = JSON.parse(localStorage.myCart);
-  }
-  else{
-    $scope.myCart = [];
-  }
+  $scope.myCart = myMemoryService.myCart;
 
   $scope.minimum = 0;
   $scope.maximum = 0;
@@ -587,8 +591,21 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 }])
 
-.controller('ctrlCubeShopHomeProductDetail', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+.controller('ctrlCubeShopHomeProductDetail', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
+  $scope.myCart = myMemoryService.myCart;
   $scope.ProductCardsItem = JSON.parse(localStorage.ActiveProductCardsItem);
+  $scope.AddToCart = function(ProductCardsItem) {
+    $scope.myCarttmp = $scope.myCart.filter(function(el){
+      return el.NUM == ProductCardsItem.NUM;
+    })
+    if ($scope.myCarttmp.length > 0){
+      return 0;
+    }
+    ProductCardsItem.Identifer = $scope.myCart.length + 1;
+    ProductCardsItem.QTY = 0;
+    $scope.myCart.push(ProductCardsItem);
+    localStorage.myCart = JSON.stringify($scope.myCart);
+  }
 }])
 
 .controller('ctrlCubeShopHomeProductCart', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
