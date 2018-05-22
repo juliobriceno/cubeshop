@@ -3,23 +3,65 @@
 
 <head>
 	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>ConBox::..</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	 <link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
+	<link href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
 
+	<!--Boostrap JQuery -->
+	<script src="js/jquery.js"></script>
+	<!--Librería para validar números -->
+	<script src="js/autoNumeric.js"></script>
+
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+  <script src="js/ui-bootstrap-tpls.js"></script>
+
+	<!--Boostrap JS Para animaciones-->
+	<script src="js/bootstrap.min.js"></script>
+	<!--Listas-->
+	<script src="js/Lists.js"></script>
+	<!-- font Awesome -->
+	<link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<!-- *****************************************Angular Librerías***************************************** -->
+
+	<script src="js/angular-drag-and-drop-lists.js"></script>
+
+	<script src="js/angular-filter.min.js"></script>
+	<!-- *****************************************Boostrap Angular Librerías***************************************** -->
+	<script src="js/ui-bootstrap-tpls.js"></script>
+	<!-- *****************************************Código de Select Boostrap Angular***************************************** -->
+	<script src="./select.js"></script>
+	<link rel="stylesheet" href="./select.css">
+	<script src="./demo.js"></script>
+	<!-- *****************************************Librería de angular loading***************************************** -->
+	<script src="js/spin.min.js"></script>
+	<script src="js/angular-loading.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/angular-loading.css" />
+	<!-- *****************************************Librería de angular tags inputs***************************************** -->
+	<script src="js/ng-tags-input.min.js"></script>
+	<!-- *****************************************Librería de file upload***************************************** -->
+	<script src="js/angular-file-upload.min.js"></script>
+	<!-- *****************************************Librería de boostrap toogle ***************************************** -->
+	<script src="js/angular-bootstrap-toggle.min.js"></script>
+	<!-- *****************************************Alertas***************************************** -->
+	<link rel="stylesheet" type="text/css" href="https://ptreesys.mx/sharedfiles/src/sweetalert.css">
+	<script src="https://ptreesys.mx/sharedfiles/src/sweetalert.min.js"></script>
+	<!-- Pattern -->
+	<script src="js/ng-pattern-restrict.js"></script>
 </head>
 
-<body>
+<body ng-controller="ctrlCubeShopLoginRegister">
 <div class="fixed-top">
 	<nav class="top-menu">
 		 <div class="container-fluid">
 			 <div class="row">
 				 <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
 					 <span class="nav-text">
-						 <i class="fas fa-phone" aria-hidden="true"></i>   + 786-293-3272
+						 <i class="fas fa-phone" aria-hidden="true"></i>   +5555
 
 					 </div>
 
@@ -73,9 +115,6 @@
 								<a class="nav-link " href="products.html">PRODUCTS</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#">SERVICES </a>
-							</li>
-							<li class="nav-item">
 								<a class="nav-link" href="#">APPLICATIONS</a>
 							</li>
 						</ul>
@@ -110,41 +149,41 @@
 			<div class="row justify-content-md-center">
 				<div class="col-md-8">
 					<div class="card card-body bg-light">
-		    		<form>
+		    		<form name="newAccount">
 		    			<legend> Sign Up for Your New Account</legend>
 		  			  <hr>
 						  <div class="form-group">
 						    <label for="exampleInputEmail1">Company ID: </label>
-						    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+						    <input type="text" class="form-control"  aria-describedby="emailHelp" placeholder="">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">First Name: </label>
-						    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+						    <input type="text" class="form-control" placeholder="">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Last Name: </label>
-						    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+						    <input type="text" class="form-control" placeholder="">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Email: </label>
-						    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+						    <input type="text" class="form-control" placeholder="">
 						  </div>
 						   <div class="form-group">
 						    <label for="exampleInputPassword1">Password: </label>
-						    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="">
+						    <input type="password" class="form-control" placeholder="">
 						    <small id="emailHelp" class="form-text text-muted">Use at least 6 characters including one number. No special characters allowed.</small>
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Confirm Password: </label>
-						    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="">
+						    <input type="password" class="form-control" placeholder="">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Security Question: </label>
-						    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+						    <input type="text" class="form-control" placeholder="">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Security Answer: </label>
-						    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+						    <input type="text" class="form-control" placeholder="">
 						  </div>
 			  			<a href="products.html"><button type="submit" class="btn btn-secondary btn-green btn-block">Create user</button></a>
 						</form>
@@ -160,22 +199,32 @@
 
 			<div class="card card-body bg-light">
 
-				<form style="margin-top:30px;">
+				<form name="userForm" style="margin-top:30px;" >
 				 <fieldset>
 
 			 <h6><strong>Basic</strong></h6>
 			 <hr>
 			 <div class="row">
 				<div class="col-md-6">
+
 					<div class="form-group">
-	 				 <label for="exampleInputEmail1">Customer name: </label>
-	 				 <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
-	 			 </div>
+						<label class="control-label" for="name">Customer name:</label>
+						<div class="input-group">
+							<input ng-model="CustomerName" name="CustomerName" type="text" class="form-control" ng-class="{'is-invalid':userForm.CustomerName.$invalid && userForm.CustomerName.$dirty}" placeholder="Customer Name" ng-required="true">
+						</div>
+					</div>
+
+
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 	 				 <label for="exampleInputEmail1">Customer type: </label>
-	 				 <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+
+					 <select class="form-control" name:"CustomerType" ng-class="{'is-invalid':selectedCustomerType == undefined}"
+									 ng-model="selectedCustomerType"
+									 ng-options="CustomerType as CustomerType.CUSTOMERTYPE for CustomerType in CustomerTypes" ng-required="true">
+					 </select>
+
 	 			 </div>
 				</div>
 			</div>
@@ -183,26 +232,22 @@
 
 				 <div class="form-group">
 					 <label for="exampleInputEmail1">Street Address 1: </label>
-					 <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+					 <input ng-model="StreetAddress1" name="StreetAddress1" type="text" class="form-control" ng-class="{'is-invalid':userForm.StreetAddress1.$invalid && userForm.StreetAddress1.$dirty}" placeholder="Street Address 1" ng-required="true">
 				 </div>
 				 <div class="form-group">
-					 <label for="exampleInputPassword1">Street Address 2: </label>
-					 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+					 <input ng-model="StreetAddress2" name="StreetAddress2" type="text" class="form-control" ng-class="{'is-invalid':userForm.StreetAddress2.$invalid && userForm.StreetAddress2.$dirty}" placeholder="Street Address 2" ng-required="true">
 				 </div>
 				 <div class="row">
 					 <div class="col-md-6">
 						 <div class="form-group">
 							 <label for="exampleInputPassword1">  City: </label>
-							 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+							 <input ng-model="City" name="City" type="text" class="form-control" ng-class="{'is-invalid':userForm.City.$invalid && userForm.City.$dirty}" placeholder="City" ng-required="true">
 						 </div>
 					 </div>
 					 <div class="col-md-6">
 						 <div class="form-group">
 							 <label for="exampleInputPassword1">  State:</label>
-							 <select class="form-control" id="exampleFormControlSelect1">
-								 <option>option 1</option>
-								 <option>option 2</option>
-							 </select>
+							 <input ng-model="State" name="State" type="text" class="form-control" ng-class="{'is-invalid':userForm.State.$invalid && userForm.State.$dirty}" placeholder="State" ng-required="true">
 						 </div>
 					 </div>
 				 </div>
@@ -210,16 +255,18 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="exampleInputPassword1"> Zip: </label>
-							<input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+							<input ng-model="Zip" name="Zip" type="text" class="form-control" ng-class="{'is-invalid':userForm.Zip.$invalid && userForm.Zip.$dirty}" placeholder="Zip" ng-required="true">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="exampleInputPassword1"> Country:</label>
-							<select class="form-control" id="exampleFormControlSelect1">
-								<option>option 1</option>
-								<option>option 2</option>
-							</select>
+
+							<select class="form-control" name:"CustomerType" ng-class="{'is-invalid':selectedCountry == undefined}"
+	 									 ng-model="selectedCountry"
+	 									 ng-options="Country as Country.COUNTYNAME for Country in Countries" ng-required="true">
+	 					 </select>
+
 						</div>
 					</div>
 				</div>
@@ -227,55 +274,52 @@
 					 <div class="col-md-6">
 						 <div class="form-group">
 							 <label for="exampleInputPassword1">  Phone: </label>
-							 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+							 <input ng-model="Phone" name="Phone" type="text" class="form-control" ng-class="{'is-invalid':userForm.Phone.$invalid && userForm.Phone.$dirty}" placeholder="Phone" ng-required="true">
 						 </div>
 					 </div>
 					 <div class="col-md-6">
 						 <div class="form-group">
 							 <label for="exampleInputPassword1">  Fax: </label>
-							 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+							 <input ng-model="Fax" name="Fax" type="text" class="form-control" ng-class="{'is-invalid':userForm.Fax.$invalid && userForm.Fax.$dirty}" placeholder="Fax" ng-required="true">
 						 </div>
 					 </div>
 				 </div>
 				 <div class="form-group">
 					 <label for="exampleInputPassword1">List ID: </label>
-					 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+					 <input ng-model="List" name="List" type="text" class="form-control" ng-class="{'is-invalid':userForm.List.$invalid && userForm.List.$dirty}" placeholder="Fax" ng-required="true">
 				 </div>
 			 </fieldset>
-		 </form>
+			 <a href="products.html">
 
+			<button ng-click="SaveCustomer();" class="btn btn-secondary btn-green btn-block">Create company</button></a>
 
-		 <form style="margin-top:30px;">
 			 <fieldset>
 
 		 <h6> <strong>Billing address</strong></h6>
 		 <hr>
 		 <div class="form-group">
 			<label for="exampleInputEmail1">Billing name: </label>
-			<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+			<input ng-model="BillingName" name="BillingName" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingName.$invalid && userForm.BillingName.$dirty}" placeholder="Billing Name" ng-required="true">
 		</div>
 		 <div class="form-group">
 			 <label for="exampleInputEmail1">Street Address 1: </label>
-			 <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+			 <input ng-model="BillingStreetAddress1" name="BillingStreetAddress1" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingStreetAddress1.$invalid && userForm.BillingStreetAddress1.$dirty}" placeholder="Street Address1" ng-required="true">
 		 </div>
 		 <div class="form-group">
 			 <label for="exampleInputPassword1">Street Address 2: </label>
-			 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+			 <input ng-model="BillingStreetAddress2" name="BillingStreetAddress2" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingStreetAddress2.$invalid && userForm.BillingStreetAddress1.$dirty}" placeholder="Street Address2" ng-required="true">
 		 </div>
 		 <div class="row">
 			 <div class="col-md-6">
 				 <div class="form-group">
 					 <label for="exampleInputPassword1">  City: </label>
-					 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+					 <input ng-model="BillingCity" name="BillingCity" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingCity.$invalid && userForm.BillingCity.$dirty}" placeholder="City" ng-required="true">
 				 </div>
 			 </div>
 			 <div class="col-md-6">
 				 <div class="form-group">
 					 <label for="exampleInputPassword1">  State:</label>
-					 <select class="form-control" id="exampleFormControlSelect1">
-						 <option>option 1</option>
-						 <option>option 2</option>
-					 </select>
+					 <input ng-model="BillingState" name="BillingState" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingState.$invalid && userForm.BillingState.$dirty}" placeholder="State" ng-required="true">
 				 </div>
 			 </div>
 		 </div>
@@ -283,18 +327,25 @@
 			 <div class="col-md-6">
 				 <div class="form-group">
 					 <label for="exampleInputPassword1">  Zip: </label>
-					 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+					 <input ng-model="BillingZip" name="BillingZip" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingZip.$invalid && userForm.BillingZip.$dirty}" placeholder="Zip" ng-required="true">
 				 </div>
 			 </div>
 			 <div class="col-md-6">
 				 <div class="form-group">
 					 <label for="exampleInputPassword1">  Country: </label>
-					 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+
+					 <select class="form-control" name:"CustomerType" ng-class="{'is-invalid':selectedBillingCountry == undefined}"
+									ng-model="selectedBillingCountry"
+									ng-options="Country as Country.COUNTYNAME for Country in Countries" ng-required="true">
+					</select>
+
 				 </div>
 			 </div>
 		 </div>
 
 		 </fieldset>
+
+		 <button ng-click="SaveCustomer();" class="btn btn-secondary btn-green btn-block">Create company</button></a>
 
 		 </form>
 
@@ -366,5 +417,9 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<!-- Librería de controlador principal -->
+<script src="js/controller.js"></script>
+
 </body>
 </html>

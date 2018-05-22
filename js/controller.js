@@ -96,6 +96,55 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   }
 }])
 
+.controller('ctrlCubeShopLoginRegister', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+
+  var headers = {"Authorization": ServerAuth};
+  localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
+  var cnnData = JSON.parse(localStorage.cnnData2);
+
+  function getArray(object){
+      if (Array.isArray(object)){
+        return object;
+      }
+      else{
+        return [object]
+      }
+  }
+
+  // Customer Types
+  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"GetCustomerType","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+    $scope.CustomerTypes = getArray(response.data.CubeFlexIntegration.DATA);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
+  // Countries
+  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"GetCustomerCountry","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+    $scope.Countries = getArray(response.data.CubeFlexIntegration.DATA);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
+  $scope.SaveCustomer = function() {
+    $scope.userForm.$setSubmitted();
+    // alert($scope.userForm.$valid);
+    // if (!$scope.userForm.$valid)
+    // {
+    // }
+  }
+
+}])
+
 .controller('ctrlCubeShopHomeController', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
 
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
