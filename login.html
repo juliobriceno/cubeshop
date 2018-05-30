@@ -3,23 +3,66 @@
 
 <head>
 	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>ConBox::..</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	 <link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
-	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
-	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>ConBox::..</title>
 
+  <link href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
+  <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-3.0.3.js"></script>
+  <!--Boostrap JQuery -->
+  <script src="js/jquery.js"></script>
+
+  <!--Boostrap JS Para animaciones-->
+  <script src="js/bootstrap.min.js"></script>
+  <!--Listas-->
+  <script src="js/Lists.js"></script>
+  <!-- font Awesome -->
+  <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <!-- *****************************************Angular Librerías***************************************** -->
+
+  <script src="js/angular-drag-and-drop-lists.js"></script>
+
+  <script src="js/angular-filter.min.js"></script>
+  <!-- *****************************************Boostrap Angular Librerías***************************************** -->
+  <script src="js/ui-bootstrap-tpls.js"></script>
+  <!-- *****************************************Código de Select Boostrap Angular***************************************** -->
+  <script src="./select.js"></script>
+  <link rel="stylesheet" href="./select.css">
+  <script src="./demo.js"></script>
+  <!-- *****************************************Librería de angular loading***************************************** -->
+  <script src="js/spin.min.js"></script>
+  <script src="js/angular-loading.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/angular-loading.css" />
+  <!-- *****************************************Librería de angular tags inputs***************************************** -->
+  <script src="js/ng-tags-input.min.js"></script>
+  <!-- *****************************************Librería de file upload***************************************** -->
+  <script src="js/angular-file-upload.min.js"></script>
+  <!-- *****************************************Librería de boostrap toogle ***************************************** -->
+  <script src="js/angular-bootstrap-toggle.min.js"></script>
+  <!-- *****************************************Librería de controlador principal***************************************** -->
+  <script src="js/controller.js"></script>
+  <!-- *****************************************Alertas***************************************** -->
+  <link rel="stylesheet" type="text/css" href="https://ptreesys.mx/sharedfiles/src/sweetalert.css">
+  <script src="https://ptreesys.mx/sharedfiles/src/sweetalert.min.js"></script>
+  <!-- Pattern -->
+  <script src="js/ng-pattern-restrict.js"></script>
 </head>
 
-<body>
+<body ng-controller="ctrlCubeShopLoginController">
 <div class="fixed-top">
 	<nav class="top-menu">
 		 <div class="container-fluid">
 			 <div class="row">
 				 <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
 					 <span class="nav-text">
-						 <i class="fas fa-phone" aria-hidden="true"></i>   + 786-293-3272
+						 <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}
 
 					 </div>
 
@@ -34,7 +77,7 @@
 							</li>
 							<li style="background-color:#048949;"><a  href="cart.html">
 								<i class="fas fa-cart-plus"></i> Cart
-								<span class="badge  badge-cart">10</span>
+								<span class="badge  badge-cart">{{myCart.length}}</span>
 							</a></li>
 
 
@@ -99,12 +142,12 @@
             <hr>
             <div class="form-group">
               <label for="exampleInputEmail1">User name: </label>
-              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+              <input ng-model="UserEmail" type="text" class="form-control" aria-describedby="emailHelp" placeholder="">
 
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Password: </label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="">
+              <input ng-model="UserPassword" type="password" class="form-control" placeholder="">
               <small id="emailHelp" class="form-text text-muted">Use at least 6 characters including one number. No special characters allowed.</small>
             </div>
             <div class="form-check">
@@ -112,7 +155,7 @@
               <label class="form-check-label" for="exampleCheck1">Keep me signed in</label>
             </div>
             <br>
-            <button type="submit" class="btn btn-secondary btn-green btn-block">SIGN IN</button>
+            <button ng-click="Login()" type="submit" class="btn btn-secondary btn-green btn-block">SIGN IN</button>
           </form>
         </div>
       </div>
@@ -127,38 +170,36 @@
 </main>
 <br>
 <footer class="text-light">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-3 col-lg-4 col-xl-3">
-          <h5>About</h5>
-          <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-          <p class="mb-0">
-            Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression.
-          </p>
-        </div>
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-          <h5>Informations</h5>
-          <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-          <ul class="list-unstyled">
-            <li><a href="">Link 1</a></li>
-            <li><a href="">Link 2</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
-          <h5>Others links</h5>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3 col-lg-4 col-xl-3">
+        <h5>About</h5>
+        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+        <p class="mb-0">
+          {{MasterInfo[0].AboutCube}}
+        </p>
+      </div>
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <h5>Informations</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><a href="">Link 1</a></li>
-          <li><a href="">Link 2</a></li>
+          <li ng-repeat="mylink in Links1"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
+        <h5>Others links</h5>
+        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+        <ul class="list-unstyled">
+          <li ng-repeat="mylink in Links2"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
         </ul>
       </div>
       <div class="col-md-4 col-lg-3 col-xl-3">
         <h5>Contact</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><i class="fa fa-home mr-2"></i> Cube-US</li>
-          <li><i class="fa fa-envelope mr-2"></i> email@example.com</li>
-          <li><i class="fa fa-phone mr-2"></i> + 786-293-3272</li>
+          <li><i class="fa fa-home mr-2"></i> {{MasterInfo[0].CubeLocation}}</li>
+          <li><i class="fa fa-envelope mr-2"></i> {{MasterInfo[0].CubeEmail}}</li>
+          <li><i class="fa fa-phone mr-2"></i> {{MasterInfo[0].CubeLocalPhone}}</li>
         </ul>
       </div>
       <div class="col-12 copyright mt-3  " >
@@ -168,7 +209,7 @@
       </div>
     </div>
   </div>
-  </footer>
+</footer>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

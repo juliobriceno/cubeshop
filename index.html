@@ -76,7 +76,7 @@
                 </li>
                 <li class="carrito"><a  href="cart.html">
                   <i class="fas fa-cart-plus"></i> My Cart
-                  <span class="badge badge-cart "> 10</span>
+                  <span class="badge badge-cart "> {{myCart.length}}</span>
                 </a></li>
               </ul>
             </div>
@@ -152,7 +152,7 @@
               <div class="card-deck">
                 <div ng-repeat="ProductCardsItem in value" class=" col-xs-12 col-sm-12 col-md-4 col-lg-4 ">
                   <div class="card">
-                    <img class="card-img-top" ng-src="{{'/img/'+ ProductCardsItem.CATIMAGE}}" alt="Card image cap">
+                    <img class="card-img-top" ng-src="{{ProductCardsItem.CATIMAGE}}" alt="Card image cap">
                     <div class="card-body">
                       <h5 class="card-title">{{ProductCardsItem.NAME}}</h5>
                     </div>

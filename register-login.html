@@ -61,7 +61,7 @@
 			 <div class="row">
 				 <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
 					 <span class="nav-text">
-						 <i class="fas fa-phone" aria-hidden="true"></i>   +5555
+						 <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}
 
 					 </div>
 
@@ -72,11 +72,11 @@
 								<a class="" href="#"><i class="fas fa-user" aria-hidden="true"></i> My Account</a>
 							</li>
 							<li class="dropdown">
-								<a class="active" href="register-login.html"> Login/Register</a>
+								<a class="active" href="login.html"> Login/Register</a>
 							</li>
 							<li class="carrito"><a  href="cart.html">
 								<i class="fas fa-cart-plus"></i> Cart
-								<span class="badge  badge-cart ">10</span>
+								<span class="badge  badge-cart ">{{myCart.length}}</span>
 							</a></li>
 
 
@@ -88,7 +88,7 @@
 		<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 			<div class="container-fluid">
 				<!--logo -->
-				<a class="navbar-brand" href="#"><img src="img/logo-cube-mia.png" style="max-width:130px;" /></a>
+				<a class="navbar-brand" href="#"><img ng-src="{{'/'+ MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
@@ -154,38 +154,37 @@
 		  			  <hr>
 						  <div class="form-group">
 						    <label for="exampleInputEmail1">Company ID: </label>
-						    <input type="text" class="form-control"  aria-describedby="emailHelp" placeholder="">
+								<input ng-model="UserCompanyID" name="UserCompanyID" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserCompanyID.$invalid && newAccount.UserCompanyID.$dirty}" placeholder="Company ID" ng-required="true">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">First Name: </label>
-						    <input type="text" class="form-control" placeholder="">
+								<input ng-model="UserFirstName" name="UserFirstName" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserFirstName.$invalid && newAccount.UserFirstName.$dirty}" placeholder="First Name" ng-required="true">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Last Name: </label>
-						    <input type="text" class="form-control" placeholder="">
+								<input ng-model="UserLastName" name="UserLastName" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserLastName.$invalid && newAccount.UserLastName.$dirty}" placeholder="Last Name" ng-required="true">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Email: </label>
-						    <input type="text" class="form-control" placeholder="">
+								<input ng-model="UserEmail" name="UserEmail" type="email" class="form-control" ng-class="{'is-invalid':newAccount.UserEmail.$invalid && newAccount.UserEmail.$dirty}" placeholder="Last Name" ng-required="true">
 						  </div>
 						   <div class="form-group">
 						    <label for="exampleInputPassword1">Password: </label>
-						    <input type="password" class="form-control" placeholder="">
-						    <small id="emailHelp" class="form-text text-muted">Use at least 6 characters including one number. No special characters allowed.</small>
+								<input ng-model="UserPassword" name="UserPassword" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserPassword.$invalid && newAccount.UserPassword.$dirty}" placeholder="Last Name" ng-required="true">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Confirm Password: </label>
-						    <input type="password" class="form-control" placeholder="">
+								<input ng-model="UserConfirmPassword" name="UserConfirmPassword" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserConfirmPassword.$invalid && newAccount.UserConfirmPassword.$dirty}" placeholder="Last Name" ng-required="true">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Security Question: </label>
-						    <input type="text" class="form-control" placeholder="">
+								<input ng-model="UserSecurityQuestion" name="UserSecurityQuestion" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityQuestion.$invalid && newAccount.UserSecurityQuestion.$dirty}" placeholder="Last Name" ng-required="true">
 						  </div>
 						  <div class="form-group">
 						    <label for="exampleInputPassword1">Security Answer: </label>
-						    <input type="text" class="form-control" placeholder="">
+								<input ng-model="UserSecurityAnswer" name="UserSecurityAnswer" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityAnswer.$invalid && newAccount.UserSecurityAnswer.$dirty}" placeholder="Last Name" ng-required="true">
 						  </div>
-			  			<a href="products.html"><button type="submit" class="btn btn-secondary btn-green btn-block">Create user</button></a>
+			  			<a href="products.html"><button ng-click="SaveUser();" type="submit" class="btn btn-secondary btn-green btn-block">Create user</button></a>
 						</form>
 					</div>
 				</div>
@@ -368,38 +367,36 @@
 </body>
 
 <footer class="text-light">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-3 col-lg-4 col-xl-3">
-          <h5>About</h5>
-          <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-          <p class="mb-0">
-            Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression.
-          </p>
-        </div>
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-          <h5>Informations</h5>
-          <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-          <ul class="list-unstyled">
-            <li><a href="">Link 1</a></li>
-            <li><a href="">Link 2</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
-          <h5>Others links</h5>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3 col-lg-4 col-xl-3">
+        <h5>About</h5>
+        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+        <p class="mb-0">
+          {{MasterInfo[0].AboutCube}}
+        </p>
+      </div>
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <h5>Informations</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><a href="">Link 1</a></li>
-          <li><a href="">Link 2</a></li>
+          <li ng-repeat="mylink in Links1"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
+        <h5>Others links</h5>
+        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+        <ul class="list-unstyled">
+          <li ng-repeat="mylink in Links2"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
         </ul>
       </div>
       <div class="col-md-4 col-lg-3 col-xl-3">
         <h5>Contact</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><i class="fa fa-home mr-2"></i> Cube-US</li>
-          <li><i class="fa fa-envelope mr-2"></i> email@example.com</li>
-          <li><i class="fa fa-phone mr-2"></i> + 786-293-3272</li>
+          <li><i class="fa fa-home mr-2"></i> {{MasterInfo[0].CubeLocation}}</li>
+          <li><i class="fa fa-envelope mr-2"></i> {{MasterInfo[0].CubeEmail}}</li>
+          <li><i class="fa fa-phone mr-2"></i> {{MasterInfo[0].CubeLocalPhone}}</li>
         </ul>
       </div>
       <div class="col-12 copyright mt-3  " >
@@ -409,7 +406,7 @@
       </div>
     </div>
   </div>
-  </footer>
+</footer>
 
 </div>
 

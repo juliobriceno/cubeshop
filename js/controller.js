@@ -2,8 +2,9 @@
 // Cube Service Parameters
 // URL Cube Service String
 // var connServiceString = "http://localhost:9097/";
-//var connServiceString = "https://cubeshop.herokuapp.com/";
-var connServiceString = "https://portal.cube-usa.com/api/";
+// var connServiceString = "https://cubeshop.herokuapp.com/";
+var connServiceString = "http://cube-mia.com/api/";
+// var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
 var ServerAuth = "Basic Y3ViZXU6Y3ViZTIwMTc=";
@@ -96,11 +97,13 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   }
 }])
 
-.controller('ctrlCubeShopLoginRegister', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+.controller('ctrlCubeShopLoginController', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
 
   var headers = {"Authorization": ServerAuth};
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
+
+  $scope.myCart = myMemoryService.myCart;
 
   function getArray(object){
       if (Array.isArray(object)){
@@ -110,6 +113,209 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         return [object]
       }
   }
+
+  $scope.GetBase64Image = function(rowWithout64Img, source){
+
+    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+
+      if (source == 'productsType'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'carrousel'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'masterpage'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
+        }
+        else{
+          rowWithout64Img.HOMELOGO = response.data.imagedata;
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
+  $scope.Login = function(){
+
+    $http.get(connServiceString + 'CubeECClientAuthentication.ashx?obj={"username": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "customercode": "' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+      console.log(response);
+      if (typeof response.data.CubeAuthentication.DATA != 'undefined'){
+        $scope.myCart = [];
+        localStorage.myCart = JSON.stringify($scope.myCart);
+        window.location = 'index.html';
+      }
+      else{
+        swal("Cube Service", "Invalid credentials.");
+      }
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
+  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+    var MasterData = response.data.CubeFlexIntegration.DATA;
+
+    var MasterInfo = {};
+
+    MasterInfo.Home = true;
+    MasterInfo.Products = true;
+    MasterInfo.Service = true;
+    MasterInfo.Apps = true;
+    MasterInfo.ID = 0;
+    MasterInfo.AboutCube = 'El SP no devuelve información de about la empresa que es la que está usando éste sistema. Está pendiente';
+    MasterInfo.CubeEmail = 'no@faltaenservice.com'
+
+    var MasterLocation = '';
+    var MasterCity = '';
+    var MasterState = '';
+
+    MasterData.forEach(function(el){
+      MasterInfo.ID = MasterInfo.ID + 1;
+      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
+      if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
+      if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
+      if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      $scope.GetBase64Image(el, 'masterpage');
+    })
+
+    MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
+
+    $scope.MasterInfo = [];
+    $scope.MasterInfo.push(MasterInfo);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
+}])
+
+.controller('ctrlCubeShopLoginRegister', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
+
+  var headers = {"Authorization": ServerAuth};
+  localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
+  var cnnData = JSON.parse(localStorage.cnnData2);
+
+  $scope.myCart = myMemoryService.myCart;
+
+  function getArray(object){
+      if (Array.isArray(object)){
+        return object;
+      }
+      else{
+        return [object]
+      }
+  }
+
+  $scope.GetBase64Image = function(rowWithout64Img, source){
+
+    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+
+      if (source == 'productsType'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'carrousel'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'masterpage'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
+        }
+        else{
+          rowWithout64Img.HOMELOGO = response.data.imagedata;
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
+  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+    var MasterData = response.data.CubeFlexIntegration.DATA;
+
+    var MasterInfo = {};
+
+    MasterInfo.Home = true;
+    MasterInfo.Products = true;
+    MasterInfo.Service = true;
+    MasterInfo.Apps = true;
+    MasterInfo.ID = 0;
+    MasterInfo.AboutCube = 'El SP no devuelve información de about la empresa que es la que está usando éste sistema. Está pendiente';
+    MasterInfo.CubeEmail = 'no@faltaenservice.com'
+
+    var MasterLocation = '';
+    var MasterCity = '';
+    var MasterState = '';
+
+    MasterData.forEach(function(el){
+      MasterInfo.ID = MasterInfo.ID + 1;
+      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
+      if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
+      if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
+      if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      $scope.GetBase64Image(el, 'masterpage');
+    })
+
+    MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
+
+    $scope.MasterInfo = [];
+    $scope.MasterInfo.push(MasterInfo);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
 
   // Customer Types
   $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"GetCustomerType","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
@@ -137,17 +343,111 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.SaveCustomer = function() {
     $scope.userForm.$setSubmitted();
-    // alert($scope.userForm.$valid);
-    // if (!$scope.userForm.$valid)
-    // {
-    // }
+
+    if (!$scope.userForm.$valid)
+    {
+      swal("Cube Shop", "There are invalid field. Please review.");
+      return 0
+    }
+
+    var strInsert = 'CubeFlexIntegration.ashx?obj={"method":"Insert_Customer","conncode":"' + cnnData.DBNAME + '", "customername": "' + $scope.CustomerName + '", "address": "' + $scope.StreetAddress1 + '", "addressline2": "' + $scope.StreetAddress2 + '", "city": "' + $scope.City + '", "state": "' + $scope.State + '", "zip": "' +
+    $scope.Zip + '", "country": "' + $scope.selectedCountry.CountryISO3 + '", "offphone": "' + $scope.selectedCountry.Phone + '", "offfax": "' + $scope.Fax + '", "listid": "' + $scope.List + '", "billingname": "' + $scope.BillingName + '", "billingaddress": "' +
+    $scope.BillingStreetAddress1 + '", "billingaddressline2": "' + $scope.BillingStreetAddress2 + '", "billingcity": "' + $scope.BillingCity + '", "billingstate": "' + $scope.BillingState + '", "billingzip": "' + $scope.BillingZip + '", "billingcountry": "' + $scope.selectedBillingCountry.CountryISO3 + '", "customertypeid": "' + $scope.selectedCustomerType.ID + '" }'
+
+    // Save the Company
+    $http.get(connServiceString + strInsert, {headers: headers}).then(function (response) {
+
+      if (typeof response.data.CubeFlexIntegration.DATA.Column1 != 'undefined'){
+
+        $scope.CustomerName = '';
+        $scope.StreetAddress1 = '';
+        $scope.StreetAddress2 = '';
+        $scope.City = '';
+        $scope.State = '';
+        $scope.Zip = '';
+        $scope.selectedCountry = null;
+        $scope.Fax = '';
+        $scope.List = '';
+        $scope.BillingName = '';
+        $scope.BillingStreetAddress1 = '';
+        $scope.BillingStreetAddress2 = '';
+        $scope.BillingCity = '';
+        $scope.BillingState = '';
+        $scope.BillingZip = '';
+        $scope.selectedBillingCountry = null;
+
+        $scope.userForm.$setPristine()
+
+        swal("Cube Shop", "Your Company was created.");
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
+  $scope.SaveUser = function() {
+    $scope.newAccount.$setSubmitted();
+
+    if (!$scope.newAccount.$valid)
+    {
+      swal("Cube Shop", "There are invalid field. Please review.");
+      return 0
+    }
+
+    if ($scope.UserPassword != $scope.UserConfirmPassword)
+    {
+      swal("Cube Shop", "Password not match.");
+      return 0
+    }
+
+    var strInsert = 'CubeFlexIntegration.ashx?obj={"method":"Insert_EComm_User","conncode":"' + cnnData.DBNAME + '", "companyid": "' + $scope.UserCompanyID + '", "firstname": "' + $scope.UserFirstName + '", "lastname": "' + $scope.UserLastName + '", "email": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "passwordquestion": "' +
+    $scope.UserSecurityQuestion + '", "passwordanswer": "' + $scope.UserSecurityAnswer + '"}'
+
+    // Save the User
+    $http.get(connServiceString + strInsert, {headers: headers}).then(function (response) {
+
+      if (typeof response.data.CubeFlexIntegration.DATA.ID != 'undefined'){
+        if (response.data.CubeFlexIntegration.DATA.ID != -1){
+          swal("Cube Shop", "Your User was created.");
+
+          $scope.UserCompanyID = '';
+          $scope.UserFirstName = '';
+          $scope.UserLastName = '';
+          $scope.UserEmail = '';
+          $scope.UserPassword = '';
+          $scope.UserConfirmPassword = '';
+          $scope.UserSecurityQuestion = '';
+          $scope.UserSecurityAnswer = '';
+
+          $scope.newAccount.$setPristine()
+
+        }
+        else{
+          swal("Cube Shop", "Company does not exist.");
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
   }
 
 }])
 
-.controller('ctrlCubeShopHomeController', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+.controller('ctrlCubeShopHomeController', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
 
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
+
+  $scope.myCart = myMemoryService.myCart;
 
   var cnnData = JSON.parse(localStorage.cnnData2);
 
@@ -170,6 +470,46 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $scope.ProductCards = [];
 
+    $scope.GetBase64Image = function(rowWithout64Img, source){
+
+      $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+
+        if (source == 'productsType'){
+          if (response.data.imagedata == ''){
+            // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+            rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
+          }
+          else{
+            rowWithout64Img.CATIMAGE = response.data.imagedata;
+          }
+        }
+        else if (source == 'carrousel'){
+          if (response.data.imagedata == ''){
+            // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+            rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
+          }
+          else{
+            rowWithout64Img.CATIMAGE = response.data.imagedata;
+          }
+        }
+        else if (source == 'masterpage'){
+          if (response.data.imagedata == ''){
+            // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+            rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
+          }
+          else{
+            rowWithout64Img.HOMELOGO = response.data.imagedata;
+          }
+        }
+
+      })
+      .catch(function (data) {
+        console.log('Error 16');
+        console.log(data);
+        swal("Cube Service", "Unexpected error. Check console Error 16.");
+      });
+
+    }
 
     $scope.FindMaincategories = function() {
       $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}', {headers: headers}).then(function (response) {
@@ -182,11 +522,13 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         $scope.ProductCards.forEach(function(el){
           el.Fila = lFila;
           el.CATIMAGE = el.CATIMAGE.replace(".JPG", ".jpg");
+          el.CATIMAGE = el.CATIMAGE.replace(".PNG", ".png");
           el.DESCRIPTION = 'Falta la descripción el servicio no devuelve description. Una pequeña descripción de la categoría';
           if (lContador % 3 == 0){
             lFila = lFila + 1;
           }
           lContador = lContador + 1;
+          $scope.GetBase64Image(el, 'productsType');
         })
 
         $scope.ProductCardsMainMenu = getArray(response.data.CubeFlexIntegration.DATA);
@@ -226,6 +568,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
         if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
         if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+        $scope.GetBase64Image(el, 'masterpage');
       })
 
       MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
@@ -250,6 +593,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         el.Image = 'img/cameras1100x700.png';
         el.ID = lFila;
         lFila = lFila + 1;
+        $scope.GetBase64Image(el, 'carrousel');
       })
 
     })
@@ -330,6 +674,49 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.myCart = myMemoryService.myCart;
 
+  $scope.GetBase64Image = function(rowWithout64Img, source){
+    console.log('Llegó aquí');
+    console.log(rowWithout64Img);
+
+    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+
+      if (source == 'productsType'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'carrousel'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'masterpage'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
+        }
+        else{
+          rowWithout64Img.HOMELOGO = response.data.imagedata;
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
   $scope.minimum = 0;
   $scope.maximum = 0;
 
@@ -344,9 +731,53 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
 
+  var cnnData = JSON.parse(localStorage.cnnData2);
+
+  var headers = {"Authorization": ServerAuth};
+
   $scope.ShowTable = false;
 
   $scope.txtSearch = '';
+
+  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+    var MasterData = response.data.CubeFlexIntegration.DATA;
+
+    var MasterInfo = {};
+
+    MasterInfo.Home = true;
+    MasterInfo.Products = true;
+    MasterInfo.Service = true;
+    MasterInfo.Apps = true;
+    MasterInfo.ID = 0;
+    MasterInfo.AboutCube = 'El SP no devuelve información de about la empresa que es la que está usando éste sistema. Está pendiente';
+    MasterInfo.CubeEmail = 'no@faltaenservice.com'
+
+    var MasterLocation = '';
+    var MasterCity = '';
+    var MasterState = '';
+
+    MasterData.forEach(function(el){
+      MasterInfo.ID = MasterInfo.ID + 1;
+      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
+      if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
+      if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
+      if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      $scope.GetBase64Image(el, 'masterpage');
+    })
+
+    MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
+
+    $scope.MasterInfo = [];
+    $scope.MasterInfo.push(MasterInfo);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
 
   $scope.ViewDetail = function(ProductCardsItem) {
     localStorage.ActiveProductCardsItem = JSON.stringify(ProductCardsItem);
@@ -429,8 +860,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   }
 
-  var cnnData = JSON.parse(localStorage.cnnData2);
-
   function getArray(object){
       if (Array.isArray(object)){
         return object;
@@ -439,8 +868,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         return [object]
       }
   }
-
-  var headers = {"Authorization": ServerAuth};
 
   if (typeof localStorage.cnnData2 != 'undefined'){
 
@@ -518,6 +945,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             lFila = lFila + 1;
           }
           lContador = lContador + 1;
+          $scope.GetBase64Image(el, 'productsType');
         })
 
         $scope.ProductCardsSaved = $scope.ProductCards;
@@ -587,6 +1015,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           lFila = lFila + 1;
         }
         lContador = lContador + 1;
+        $scope.GetBase64Image(el, 'productsType');
       })
 
       $scope.ProductCardsMainMenu = getArray(response.data.CubeFlexIntegration.DATA);
