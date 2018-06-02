@@ -792,7 +792,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       return 0;
     }
     ProductCardsItem.Identifer = $scope.myCart.length + 1;
-    ProductCardsItem.QTY = 0;
+    ProductCardsItem.QTY = 1;
     $scope.myCart.push(ProductCardsItem);
     localStorage.myCart = JSON.stringify($scope.myCart);
   }
@@ -1087,9 +1087,113 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 }])
 
 .controller('ctrlCubeShopHomeProductCart', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+
+  var headers = {"Authorization": ServerAuth};
+  localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
+  var cnnData = JSON.parse(localStorage.cnnData2);
+
+  $scope.GetBase64Image = function(rowWithout64Img, source){
+
+    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+
+      if (source == 'productsType'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'carrousel'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'masterpage'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
+        }
+        else{
+          rowWithout64Img.HOMELOGO = response.data.imagedata;
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
+  $scope.AllPrice = 0;
+
+  $scope.CalcPrices = function(){
+    $scope.AllPrice = 0;
+    $scope.myCart.forEach(function(eachProduct){
+      $scope.AllPrice = $scope.AllPrice + (eachProduct.PRICE * eachProduct.QTY);
+    })
+  }
+
+  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+    var MasterData = response.data.CubeFlexIntegration.DATA;
+
+    var MasterInfo = {};
+
+    MasterInfo.Home = true;
+    MasterInfo.Products = true;
+    MasterInfo.Service = true;
+    MasterInfo.Apps = true;
+    MasterInfo.ID = 0;
+    MasterInfo.AboutCube = 'El SP no devuelve información de about la empresa que es la que está usando éste sistema. Está pendiente';
+    MasterInfo.CubeEmail = 'no@faltaenservice.com'
+
+    var MasterLocation = '';
+    var MasterCity = '';
+    var MasterState = '';
+
+    MasterData.forEach(function(el){
+      MasterInfo.ID = MasterInfo.ID + 1;
+      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
+      if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
+      if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
+      if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      $scope.GetBase64Image(el, 'masterpage');
+    })
+
+    MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
+
+    $scope.MasterInfo = [];
+    $scope.MasterInfo.push(MasterInfo);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
+
   // Valida si variable del carrito existe caso contrario la crea
   if (typeof localStorage.myCart != 'undefined' && localStorage.myCart != ''){
     $scope.myCart = JSON.parse(localStorage.myCart);
+    $scope.CalcPrices();
+
+    $scope.myCart.forEach(function(el){
+      el.CATIMAGE = el.CATIMAGE.replace(".JPG", ".jpg");
+      el.CATIMAGE = el.CATIMAGE.replace(".PNG", ".png");
+      $scope.GetBase64Image(el, 'productsType');
+    })
+
   }
   else{
     $scope.myCart = [];
@@ -1100,4 +1204,790 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     })
     localStorage.myCart = JSON.stringify($scope.myCart);
   }
+}])
+
+.controller('ctrlCubeShopHomePaymentInformation', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+
+  var headers = {"Authorization": ServerAuth};
+  localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
+  var cnnData = JSON.parse(localStorage.cnnData2);
+
+  $scope.PaymentsInfo = [];
+  $scope.CreditCardNumberSelected = {};
+
+  $scope.SaveCreditCard = function(){
+    $scope.newCreditCard.$setSubmitted();
+    if (!$scope.newCreditCard.$valid)
+    {
+      swal("Cube Shop", "There are invalid field. Please review.");
+      return 0
+    }
+    // One one credit card same number
+    var PaymentsInfo = $scope.PaymentsInfo.filter(function(payment){
+      return payment.CreditCardNumber == $scope.CreditCardNumber;
+    })
+    if (PaymentsInfo.length > 0 ){
+      swal("Cube Shop", "Credit card number exists.");
+      return 0;
+    }
+    $scope.PaymentInfo = {FirstName: $scope.FirstName, LastName: $scope.LastName, CreditCardType: $scope.CreditCardType, CreditCardNumber: $scope.CreditCardNumber, CreditCardCode: $scope.CreditCardCode, ExpirationDate: $scope.ExpirationDate};
+    $scope.PaymentsInfo.push($scope.PaymentInfo);
+    $scope.FirstName = '';
+    $scope.LastName = '';
+    $scope.CreditCardType = '';
+    $scope.CreditCardNumber = '';
+    $scope.CreditCardCode = '';
+    $scope.ExpirationDate = '';
+    $scope.newCreditCard.$setPristine()
+    swal("Cube Shop", "Credit card was saved.");
+  }
+
+  $scope.DeleteCreditCard = function(CreditCardNumber){
+    $scope.PaymentsInfo = $scope.PaymentsInfo.filter(function(payment){
+      return payment.CreditCardNumber != CreditCardNumber;
+    })
+  }
+
+  $scope.Continue = function(){
+    if (typeof $scope.CreditCardNumberSelected.FirstName == 'undefined'){
+      swal("Cube Shop", "Must select a Credit Card.");
+      return 0;
+    }
+    window.location = 'shipping-address.html';
+  }
+
+  $scope.GetBase64Image = function(rowWithout64Img, source){
+
+    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+
+      if (source == 'productsType'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'carrousel'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'masterpage'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
+        }
+        else{
+          rowWithout64Img.HOMELOGO = response.data.imagedata;
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
+  $scope.AllPrice = 0;
+
+  $scope.CalcPrices = function(){
+    $scope.AllPrice = 0;
+    $scope.myCart.forEach(function(eachProduct){
+      $scope.AllPrice = $scope.AllPrice + (eachProduct.PRICE * eachProduct.QTY);
+    })
+  }
+
+  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+    var MasterData = response.data.CubeFlexIntegration.DATA;
+
+    var MasterInfo = {};
+
+    MasterInfo.Home = true;
+    MasterInfo.Products = true;
+    MasterInfo.Service = true;
+    MasterInfo.Apps = true;
+    MasterInfo.ID = 0;
+    MasterInfo.AboutCube = 'El SP no devuelve información de about la empresa que es la que está usando éste sistema. Está pendiente';
+    MasterInfo.CubeEmail = 'no@faltaenservice.com'
+
+    var MasterLocation = '';
+    var MasterCity = '';
+    var MasterState = '';
+
+    MasterData.forEach(function(el){
+      MasterInfo.ID = MasterInfo.ID + 1;
+      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
+      if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
+      if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
+      if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      $scope.GetBase64Image(el, 'masterpage');
+    })
+
+    MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
+
+    $scope.MasterInfo = [];
+    $scope.MasterInfo.push(MasterInfo);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
+
+  // Valida si variable del carrito existe caso contrario la crea
+  if (typeof localStorage.myCart != 'undefined' && localStorage.myCart != ''){
+    $scope.myCart = JSON.parse(localStorage.myCart);
+    $scope.CalcPrices();
+
+    $scope.myCart.forEach(function(el){
+      el.CATIMAGE = el.CATIMAGE.replace(".JPG", ".jpg");
+      el.CATIMAGE = el.CATIMAGE.replace(".PNG", ".png");
+      $scope.GetBase64Image(el, 'productsType');
+    })
+
+  }
+  else{
+    $scope.myCart = [];
+  }
+  $scope.removeCart = function(NUM) {
+    $scope.myCart = $scope.myCart.filter(function(el){
+      return el.NUM != NUM
+    })
+    localStorage.myCart = JSON.stringify($scope.myCart);
+  }
+
+  // Fin s�lo para validar n�meros
+  // S�lo para que funcione el control de fecha
+  $scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.clear = function() {
+    $scope.dt = null;
+  };
+
+  $scope.inlineOptions = {
+    customClass: getDayClass,
+    minDate: new Date(),
+    showWeeks: true
+  };
+
+  $scope.dateOptions = {
+    dateDisabled: disabled,
+    formatYear: 'yy',
+    maxDate: new Date(2020, 5, 22),
+    minDate: new Date(),
+    startingDay: 1
+  };
+
+  // Disable weekend selection
+  function disabled(data) {
+    var date = data.date,
+      mode = data.mode;
+    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+  }
+
+  $scope.toggleMin = function() {
+    $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+    $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+  };
+
+  $scope.toggleMin();
+
+  $scope.open1 = function() {
+    $scope.popup1.opened = true;
+  };
+
+  $scope.open2 = function() {
+    $scope.popup2.opened = true;
+  };
+
+  $scope.setDate = function(year, month, day) {
+    $scope.dt = new Date(year, month, day);
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+  $scope.altInputFormats = ['M!/d!/yyyy'];
+
+  $scope.popup1 = {
+    opened: false
+  };
+
+  $scope.popup2 = {
+    opened: false
+  };
+
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var afterTomorrow = new Date();
+  afterTomorrow.setDate(tomorrow.getDate() + 1);
+  $scope.events = [
+    {
+      date: tomorrow,
+      status: 'full'
+    },
+    {
+      date: afterTomorrow,
+      status: 'partially'
+    }
+  ];
+
+  function getDayClass(data) {
+    var date = data.date,
+      mode = data.mode;
+    if (mode === 'day') {
+      var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+      for (var i = 0; i < $scope.events.length; i++) {
+        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+        if (dayToCheck === currentDay) {
+          return $scope.events[i].status;
+        }
+      }
+    }
+
+    return '';
+  }
+  // Fin s�lo para que funcione el control de fecha
+
+}])
+
+.controller('ctrlCubeShopHomeShippingInformation', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+
+  var headers = {"Authorization": ServerAuth};
+  localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
+  var cnnData = JSON.parse(localStorage.cnnData2);
+
+  $scope.ShippingsInfo = [];
+  $scope.ShippingSelected = {};
+
+  $scope.SaveShipping = function(){
+    $scope.newShipping.$setSubmitted();
+    if (!$scope.newShipping.$valid)
+    {
+      swal("Cube Shop", "There are invalid field. Please review.");
+      return 0
+    }
+    // One one credit card same number
+    var ShippingsInfo = $scope.ShippingsInfo.filter(function(shipping){
+      return shipping.Address1 == $scope.Address1;
+    })
+    if (ShippingsInfo.length > 0 ){
+      swal("Cube Shop", "Shipping Address exists.");
+      return 0;
+    }
+    $scope.ShippingInfo = {Address1: $scope.Address1, Address2: $scope.Address2, City: $scope.City, State: $scope.State, Phone: $scope.Phone, Fax: $scope.Fax};
+    $scope.ShippingsInfo.push($scope.ShippingInfo);
+    $scope.Address1 = '';
+    $scope.Address2 = '';
+    $scope.City = '';
+    $scope.State = '';
+    $scope.Phone = '';
+    $scope.Fax = '';
+    $scope.newShipping.$setPristine()
+    swal("Cube Shop", "Shipping Address was saved.");
+  }
+
+  $scope.DeleteShipping = function(Address1){
+    $scope.ShippingsInfo = $scope.ShippingsInfo.filter(function(shipping){
+      return shipping.Address1 != Address1;
+    })
+  }
+
+  $scope.Continue = function(){
+    if (typeof $scope.ShippingSelected.Address1 == 'undefined'){
+      swal("Cube Shop", "Must select a Shipping Address.");
+      return 0;
+    }
+    window.location = 'shipping-address.html';
+  }
+
+  $scope.GetBase64Image = function(rowWithout64Img, source){
+
+    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+
+      if (source == 'productsType'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'carrousel'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'masterpage'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
+        }
+        else{
+          rowWithout64Img.HOMELOGO = response.data.imagedata;
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
+  $scope.AllPrice = 0;
+
+  $scope.CalcPrices = function(){
+    $scope.AllPrice = 0;
+    $scope.myCart.forEach(function(eachProduct){
+      $scope.AllPrice = $scope.AllPrice + (eachProduct.PRICE * eachProduct.QTY);
+    })
+  }
+
+  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+    var MasterData = response.data.CubeFlexIntegration.DATA;
+
+    var MasterInfo = {};
+
+    MasterInfo.Home = true;
+    MasterInfo.Products = true;
+    MasterInfo.Service = true;
+    MasterInfo.Apps = true;
+    MasterInfo.ID = 0;
+    MasterInfo.AboutCube = 'El SP no devuelve información de about la empresa que es la que está usando éste sistema. Está pendiente';
+    MasterInfo.CubeEmail = 'no@faltaenservice.com'
+
+    var MasterLocation = '';
+    var MasterCity = '';
+    var MasterState = '';
+
+    MasterData.forEach(function(el){
+      MasterInfo.ID = MasterInfo.ID + 1;
+      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
+      if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
+      if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
+      if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      $scope.GetBase64Image(el, 'masterpage');
+    })
+
+    MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
+
+    $scope.MasterInfo = [];
+    $scope.MasterInfo.push(MasterInfo);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
+
+  // Valida si variable del carrito existe caso contrario la crea
+  if (typeof localStorage.myCart != 'undefined' && localStorage.myCart != ''){
+    $scope.myCart = JSON.parse(localStorage.myCart);
+    $scope.CalcPrices();
+
+    $scope.myCart.forEach(function(el){
+      el.CATIMAGE = el.CATIMAGE.replace(".JPG", ".jpg");
+      el.CATIMAGE = el.CATIMAGE.replace(".PNG", ".png");
+      $scope.GetBase64Image(el, 'productsType');
+    })
+
+  }
+  else{
+    $scope.myCart = [];
+  }
+  $scope.removeCart = function(NUM) {
+    $scope.myCart = $scope.myCart.filter(function(el){
+      return el.NUM != NUM
+    })
+    localStorage.myCart = JSON.stringify($scope.myCart);
+  }
+
+  // Fin s�lo para validar n�meros
+  // S�lo para que funcione el control de fecha
+  $scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.clear = function() {
+    $scope.dt = null;
+  };
+
+  $scope.inlineOptions = {
+    customClass: getDayClass,
+    minDate: new Date(),
+    showWeeks: true
+  };
+
+  $scope.dateOptions = {
+    dateDisabled: disabled,
+    formatYear: 'yy',
+    maxDate: new Date(2020, 5, 22),
+    minDate: new Date(),
+    startingDay: 1
+  };
+
+  // Disable weekend selection
+  function disabled(data) {
+    var date = data.date,
+      mode = data.mode;
+    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+  }
+
+  $scope.toggleMin = function() {
+    $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+    $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+  };
+
+  $scope.toggleMin();
+
+  $scope.open1 = function() {
+    $scope.popup1.opened = true;
+  };
+
+  $scope.open2 = function() {
+    $scope.popup2.opened = true;
+  };
+
+  $scope.setDate = function(year, month, day) {
+    $scope.dt = new Date(year, month, day);
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+  $scope.altInputFormats = ['M!/d!/yyyy'];
+
+  $scope.popup1 = {
+    opened: false
+  };
+
+  $scope.popup2 = {
+    opened: false
+  };
+
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var afterTomorrow = new Date();
+  afterTomorrow.setDate(tomorrow.getDate() + 1);
+  $scope.events = [
+    {
+      date: tomorrow,
+      status: 'full'
+    },
+    {
+      date: afterTomorrow,
+      status: 'partially'
+    }
+  ];
+
+  function getDayClass(data) {
+    var date = data.date,
+      mode = data.mode;
+    if (mode === 'day') {
+      var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+      for (var i = 0; i < $scope.events.length; i++) {
+        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+        if (dayToCheck === currentDay) {
+          return $scope.events[i].status;
+        }
+      }
+    }
+
+    return '';
+  }
+  // Fin s�lo para que funcione el control de fecha
+
+}])
+
+.controller('ctrlCubeShopHomeShippingCardInformation', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+
+  var headers = {"Authorization": ServerAuth};
+  localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
+  var cnnData = JSON.parse(localStorage.cnnData2);
+
+  $scope.ShippingsInfo = [];
+  $scope.ShippingSelected = {};
+
+  $scope.SaveShipping = function(){
+    $scope.newShipping.$setSubmitted();
+    if (!$scope.newShipping.$valid)
+    {
+      swal("Cube Shop", "There are invalid field. Please review.");
+      return 0
+    }
+    // One one credit card same number
+    var ShippingsInfo = $scope.ShippingsInfo.filter(function(shipping){
+      return shipping.Address1 == $scope.Address1;
+    })
+    if (ShippingsInfo.length > 0 ){
+      swal("Cube Shop", "Shipping Address exists.");
+      return 0;
+    }
+    $scope.ShippingInfo = {Address1: $scope.Address1, Address2: $scope.Address2, City: $scope.City, State: $scope.State, Phone: $scope.Phone, Fax: $scope.Fax};
+    $scope.ShippingsInfo.push($scope.ShippingInfo);
+    $scope.Address1 = '';
+    $scope.Address2 = '';
+    $scope.City = '';
+    $scope.State = '';
+    $scope.Phone = '';
+    $scope.Fax = '';
+    $scope.newShipping.$setPristine()
+    swal("Cube Shop", "Credit Card Address was saved.");
+  }
+
+  $scope.DeleteShipping = function(Address1){
+    $scope.ShippingsInfo = $scope.ShippingsInfo.filter(function(shipping){
+      return shipping.Address1 != Address1;
+    })
+  }
+
+  $scope.Continue = function(){
+    if (typeof $scope.ShippingSelected.Address1 == 'undefined'){
+      swal("Cube Shop", "Must select a Shipping Address.");
+      return 0;
+    }
+    window.location = 'details-product.html';
+  }
+
+  $scope.GetBase64Image = function(rowWithout64Img, source){
+
+    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+
+      if (source == 'productsType'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'carrousel'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = response.data.imagedata;
+        }
+      }
+      else if (source == 'masterpage'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
+        }
+        else{
+          rowWithout64Img.HOMELOGO = response.data.imagedata;
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
+  $scope.AllPrice = 0;
+
+  $scope.CalcPrices = function(){
+    $scope.AllPrice = 0;
+    $scope.myCart.forEach(function(eachProduct){
+      $scope.AllPrice = $scope.AllPrice + (eachProduct.PRICE * eachProduct.QTY);
+    })
+  }
+
+  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+
+    var MasterData = response.data.CubeFlexIntegration.DATA;
+
+    var MasterInfo = {};
+
+    MasterInfo.Home = true;
+    MasterInfo.Products = true;
+    MasterInfo.Service = true;
+    MasterInfo.Apps = true;
+    MasterInfo.ID = 0;
+    MasterInfo.AboutCube = 'El SP no devuelve información de about la empresa que es la que está usando éste sistema. Está pendiente';
+    MasterInfo.CubeEmail = 'no@faltaenservice.com'
+
+    var MasterLocation = '';
+    var MasterCity = '';
+    var MasterState = '';
+
+    MasterData.forEach(function(el){
+      MasterInfo.ID = MasterInfo.ID + 1;
+      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
+      if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
+      if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
+      if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      $scope.GetBase64Image(el, 'masterpage');
+    })
+
+    MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
+
+    $scope.MasterInfo = [];
+    $scope.MasterInfo.push(MasterInfo);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
+
+  // Valida si variable del carrito existe caso contrario la crea
+  if (typeof localStorage.myCart != 'undefined' && localStorage.myCart != ''){
+    $scope.myCart = JSON.parse(localStorage.myCart);
+    $scope.CalcPrices();
+
+    $scope.myCart.forEach(function(el){
+      el.CATIMAGE = el.CATIMAGE.replace(".JPG", ".jpg");
+      el.CATIMAGE = el.CATIMAGE.replace(".PNG", ".png");
+      $scope.GetBase64Image(el, 'productsType');
+    })
+
+  }
+  else{
+    $scope.myCart = [];
+  }
+  $scope.removeCart = function(NUM) {
+    $scope.myCart = $scope.myCart.filter(function(el){
+      return el.NUM != NUM
+    })
+    localStorage.myCart = JSON.stringify($scope.myCart);
+  }
+
+  // Fin s�lo para validar n�meros
+  // S�lo para que funcione el control de fecha
+  $scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.clear = function() {
+    $scope.dt = null;
+  };
+
+  $scope.inlineOptions = {
+    customClass: getDayClass,
+    minDate: new Date(),
+    showWeeks: true
+  };
+
+  $scope.dateOptions = {
+    dateDisabled: disabled,
+    formatYear: 'yy',
+    maxDate: new Date(2020, 5, 22),
+    minDate: new Date(),
+    startingDay: 1
+  };
+
+  // Disable weekend selection
+  function disabled(data) {
+    var date = data.date,
+      mode = data.mode;
+    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+  }
+
+  $scope.toggleMin = function() {
+    $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+    $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+  };
+
+  $scope.toggleMin();
+
+  $scope.open1 = function() {
+    $scope.popup1.opened = true;
+  };
+
+  $scope.open2 = function() {
+    $scope.popup2.opened = true;
+  };
+
+  $scope.setDate = function(year, month, day) {
+    $scope.dt = new Date(year, month, day);
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+  $scope.altInputFormats = ['M!/d!/yyyy'];
+
+  $scope.popup1 = {
+    opened: false
+  };
+
+  $scope.popup2 = {
+    opened: false
+  };
+
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var afterTomorrow = new Date();
+  afterTomorrow.setDate(tomorrow.getDate() + 1);
+  $scope.events = [
+    {
+      date: tomorrow,
+      status: 'full'
+    },
+    {
+      date: afterTomorrow,
+      status: 'partially'
+    }
+  ];
+
+  function getDayClass(data) {
+    var date = data.date,
+      mode = data.mode;
+    if (mode === 'day') {
+      var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+      for (var i = 0; i < $scope.events.length; i++) {
+        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+        if (dayToCheck === currentDay) {
+          return $scope.events[i].status;
+        }
+      }
+    }
+
+    return '';
+  }
+  // Fin s�lo para que funcione el control de fecha
+
 }])

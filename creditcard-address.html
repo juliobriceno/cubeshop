@@ -54,14 +54,14 @@
 	<script src="js/ng-pattern-restrict.js"></script>
 </head>
 
-<body ng-controller="ctrlCubeShopHomeProductCart">
+<body ng-controller="ctrlCubeShopHomeShippingCardInformation">
 	<div class="fixed-top">
 		<nav class="top-menu">
 			 <div class="container-fluid">
 				 <div class="row">
 					 <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
 						 <span class="nav-text">
-							 <i class="fas fa-phone" aria-hidden="true"></i>   + 786-293-3272
+							 <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}
 
 						 </div>
 
@@ -134,14 +134,13 @@
 
   <div class="heading heading-principal">
     <h1>Credit Card billing address</h1>
-    <a href="#" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new Credit Card billing address</a>
+    <a href="#jumpto" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new Credit Card billing address</a>
   </div>
   <div class="cart-shopping">
 		<table class="table table-hover">
 		  <thead>
 		    <tr>
 					<th></th>
-		      <th scope="col">Full name</th>
 		      <th scope="col">Address</th>
 		      <th scope="col">City</th>
 					<th scope="col">State</th>
@@ -151,88 +150,86 @@
 		    </tr>
 		  </thead>
 		  <tbody>
-		    <tr>
-		      <th scope="row"> <input type="radio" aria-label="Radio button for following text input"></th>
-		      <td>Julio Briceño</td>
-		      <td>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </td>
-		      <td>Florida 3322-1045</td>
-					<td>Medley ,Fl 3322 United States</td>
-					<td>(305)603410</td>
-					<td><a class="btn "><i class="fas fa-times"></i></a></td>
+
+				<tr ng-repeat="ShippingInfo in ShippingsInfo">
+		      <th scope="row"> <input ng-model="$parent.ShippingSelected" ng-value="ShippingInfo" type="radio" aria-label="Radio button for following text input"></th>
+		      <td>{{ShippingInfo.Address1}}</td>
+					<td>{{ShippingInfo.City}}</td>
+					<td>{{ShippingInfo.State}}</td>
+					<td>{{ShippingInfo.Phone}}</td>
+					<td><a ng-click="DeleteShipping(ShippingInfo.Address1);" class="btn "><i class="fas fa-times"></i></a></td>
 		    </tr>
-		    <tr>
-					<th scope="row"> <input type="radio" aria-label="Radio button for following text input"></th>
- 				 <td>Julio Briceño</td>
- 				 <td>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </td>
- 				 <td>Detroit 3322-1045</td>
- 				 <td>Medley ,Fl 3322 United States</td>
- 				 <td>(305)603410</td>
-				 <td><a class="btn "><i class="fas fa-times"></i></a></td>
-		    </tr>
+
 
 		  </tbody>
 		</table>
-<br>
-<form style="margin-top:30px;">
-			 <fieldset>
-
-		 <h6> <strong>Credit Card billing address</strong></h6>
-		 <hr>
-		 <div class="form-check">
-			 <input type="checkbox" class="form-check-input" id="exampleCheck1">
-			 <label class="form-check-label" for="exampleCheck1">The Billing Address is the same as the Business Address</label>
-		 </div>
-		 <br>
-		 <div class="form-group">
-			 <label for="exampleInputEmail1">Street Address 1: </label>
-			 <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
-		 </div>
-		 <div class="form-group">
-			 <label for="exampleInputPassword1">Street Address 2: </label>
-			 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
-		 </div>
-		 <div class="row">
-			 <div class="col-md-6">
-				 <div class="form-group">
-					 <label for="exampleInputPassword1">  City: </label>
-					 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
-				 </div>
-			 </div>
-			 <div class="col-md-6">
-				 <div class="form-group">
-					 <label for="exampleInputPassword1">  State:</label>
-					 <select class="form-control" id="exampleFormControlSelect1">
-						 <option>Purchasing</option>
-						 <option>Technician</option>
-					 </select>
-				 </div>
-			 </div>
-		 </div>
-		 <div class="row">
-			 <div class="col-md-6">
-				 <div class="form-group">
-					 <label for="exampleInputPassword1">  Zip: </label>
-					 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
-				 </div>
-			 </div>
-			 <div class="col-md-6">
-				 <div class="form-group">
-					 <label for="exampleInputPassword1">  Country: </label>
-					 <input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
-				 </div>
-			 </div>
-		 </div>
-
-		 </fieldset>
-
-		 </form>
-
-		<br>
 		<div class="row justify-content-end">
 			<div class="col-md-4 ">
-				<a href="order.html" class="btn btn-secondary btn-green btn-block ">Continue</a>
+				<a ng-click="Continue();" class="btn btn-secondary btn-green btn-block ">Continue</a>
 			</div>
 		</div>
+
+		<div id="jumpto"> </div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+
+		<form name="newShipping" style="margin-top:30px;">
+          <fieldset>
+
+        <h6><strong>Shipping address</strong></h6>
+        <hr>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Street Address 1: </label>
+						<input ng-model="Address1" name="Address1" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address1.$invalid && newShipping.Address1.$dirty}" ng-required="true" >
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Street Address 2: </label>
+						<input ng-model="Address2" name="Address2" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address2.$invalid && newShipping.Address2.$dirty}" ng-required="true" >
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputPassword1">  City: </label>
+								<input ng-model="City" name="City" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.City.$invalid && newShipping.City.$dirty}" ng-required="true" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputPassword1">  State:</label>
+								<input ng-model="State" name="State" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.State.$invalid && newShipping.State.$dirty}" ng-required="true" >
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputPassword1">  Phone: </label>
+								<input ng-model="Phone" name="Phone" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Phone.$invalid && newShipping.Phone.$dirty}" ng-required="true" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="exampleInputPassword1">  Fax: </label>
+								<input ng-model="Fax" name="Fax" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Fax.$invalid && newShipping.Fax.$dirty}" ng-required="true" >
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+				<div class="row justify-content-end">
+					<div class="col-md-4 ">
+						<a><button ng-click="SaveShipping();" type="submit" class="btn btn-secondary btn-green btn-block">Save Credit Card Billing Address</button></a>
+					</div>
+				</div>
+
+      </form>
+
+		<br>
+
 
 </div>
 </div>
@@ -240,38 +237,36 @@
 </body>
 
 <footer class="text-light">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-3 col-lg-4 col-xl-3">
-          <h5>About</h5>
-          <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-          <p class="mb-0">
-            Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression.
-          </p>
-        </div>
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-          <h5>Informations</h5>
-          <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-          <ul class="list-unstyled">
-            <li><a href="">Link 1</a></li>
-            <li><a href="">Link 2</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
-          <h5>Others links</h5>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3 col-lg-4 col-xl-3">
+        <h5>About</h5>
+        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+        <p class="mb-0">
+          {{MasterInfo[0].AboutCube}}
+        </p>
+      </div>
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <h5>Informations</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><a href="">Link 1</a></li>
-          <li><a href="">Link 2</a></li>
+          <li ng-repeat="mylink in Links1"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
+        <h5>Others links</h5>
+        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+        <ul class="list-unstyled">
+          <li ng-repeat="mylink in Links2"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
         </ul>
       </div>
       <div class="col-md-4 col-lg-3 col-xl-3">
         <h5>Contact</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><i class="fa fa-home mr-2"></i> Cube-US</li>
-          <li><i class="fa fa-envelope mr-2"></i> email@example.com</li>
-          <li><i class="fa fa-phone mr-2"></i> + 786-293-3272</li>
+          <li><i class="fa fa-home mr-2"></i> {{MasterInfo[0].CubeLocation}}</li>
+          <li><i class="fa fa-envelope mr-2"></i> {{MasterInfo[0].CubeEmail}}</li>
+          <li><i class="fa fa-phone mr-2"></i> {{MasterInfo[0].CubeLocalPhone}}</li>
         </ul>
       </div>
       <div class="col-12 copyright mt-3  " >
@@ -281,7 +276,7 @@
       </div>
     </div>
   </div>
-  </footer>
+</footer>
 
 </div>
 

@@ -5,7 +5,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>ConBox::..</title>
-	<link href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
@@ -18,10 +17,8 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
-  <script src="js/ui-bootstrap-tpls.js"></script>
 
-	<!--Boostrap JS Para animaciones-->
-	<script src="js/bootstrap.min.js"></script>
+
 	<!--Listas-->
 	<script src="js/Lists.js"></script>
 	<!-- font Awesome -->
@@ -32,7 +29,10 @@
 
 	<script src="js/angular-filter.min.js"></script>
 	<!-- *****************************************Boostrap Angular Librerías***************************************** -->
-	<script src="js/ui-bootstrap-tpls.js"></script>
+	<script src="js/ui-bootstrap-tpls-3.0.3.min.js"></script>
+	<link rel="stylesheet" href="css/svg-icon.css"/>
+	<!-- *****************************************Boostrap 4 Css librerías ***************************************** -->
+	<link href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 	<!-- *****************************************Código de Select Boostrap Angular***************************************** -->
 	<script src="./select.js"></script>
 	<link rel="stylesheet" href="./select.css">
@@ -54,14 +54,14 @@
 	<script src="js/ng-pattern-restrict.js"></script>
 </head>
 
-<body ng-controller="ctrlCubeShopHomeProductCart">
+<body ng-controller="ctrlCubeShopHomePaymentInformation">
 	<div class="fixed-top">
 		<nav class="top-menu">
 			 <div class="container-fluid">
 				 <div class="row">
 					 <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
 						 <span class="nav-text">
-							 <i class="fas fa-phone" aria-hidden="true"></i>   + 786-293-3272
+							 <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}
 
 						 </div>
 
@@ -132,9 +132,9 @@
 
 	<div class="container wrap heading-principal">
 
-  <div class="heading heading-principal">
+  <div id="jumptopayment"  class="heading heading-principal">
     <h1>Payment Information</h1>
-    <a href="#" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new card</a>
+    <a href="#jumpto" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new card</a>
   </div>
   <div class="cart-shopping">
 		<table class="table table-hover">
@@ -149,40 +149,47 @@
 		    </tr>
 		  </thead>
 		  <tbody>
-		    <tr>
-		      <th scope="row"> <input type="radio" aria-label="Radio button for following text input"></th>
-		      <td>Julio Briceño</td>
-		      <td>589</td>
-		      <td>11/2020</td>
-					<td><a class="btn "><i class="fas fa-times"></i></a></td>
+		    <tr ng-repeat="PaymentInfo in PaymentsInfo">
+		      <th scope="row"> <input ng-model="$parent.CreditCardNumberSelected" ng-value="PaymentInfo" type="radio" aria-label="Radio button for following text input"></th>
+		      <td>{{PaymentInfo.CreditCardNumber}}</td>
+		      <td>{{PaymentInfo.FirstName}}</td>
+		      <td>{{PaymentInfo.ExpirationDate | date:'MM/dd/yyyy'}}</td>
+					<td><a ng-click="DeleteCreditCard(PaymentInfo.CreditCardNumber);" class="btn "><i class="fas fa-times"></i></a></td>
 		    </tr>
-		    <tr>
-		      <th scope="row"> <input type="radio" aria-label="Radio button for following text input"></th>
-		      <td>Hector Hernandez </td>
-		      <td>1010</td>
-		      <td>01/2021</td>
-					<td><a class="btn "><i class="fas fa-times"></i></a></td>
-		    </tr>
-
 		  </tbody>
 		</table>
 <br>
-		<form style="margin-top:30px;">
-			<fieldset>
 
-		<h6> <strong>Add new Payment Information</strong></h6>
+
+<div class="row justify-content-end">
+	<div class="col-md-4 ">
+		<a ng-click="Continue();" class="btn btn-secondary btn-green btn-block ">Continue</a>
+	</div>
+</div>
+
+		<div id="jumpto"> </div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+
+		<form name="newCreditCard">
+			<fieldset>
+		<h6 > <strong>Add new Payment Information</strong></h6>
 		<hr>
 		<div class="row">
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="exampleInputEmail1">First Name: </label>
-					<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+					<input ng-model="FirstName" name="FirstName" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newCreditCard.FirstName.$invalid && newCreditCard.FirstName.$dirty}" ng-required="true" >
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="exampleInputPassword1">Last Name: </label>
-					<input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+					<input ng-model="LastName" name="LastName" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newCreditCard.LastName.$invalid && newCreditCard.LastName.$dirty}" ng-required="true" >
 				</div>
 			</div>
 		</div>
@@ -192,9 +199,9 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="exampleInputPassword1">	Credit Card Type:</label>
-						<select class="form-control" id="exampleFormControlSelect1">
-							<option>Purchasing</option>
-							<option>Technician</option>
+						<select ng-model="CreditCardType" class="form-control" ng-class="{'is-invalid':newCreditCard.CreditCardType.$invalid && newCreditCard.CreditCardType.$dirty}" ng-required="true">
+							<option>VISA</option>
+							<option>MASTER CARD</option>
 						</select>
 					</div>
 				</div>
@@ -202,7 +209,7 @@
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="exampleInputPassword1">Credit Card Number: </label>
-					<input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+					<input ng-model="CreditCardNumber" name="CreditCardNumber" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newCreditCard.CreditCardNumber.$invalid && newCreditCard.CreditCardNumber.$dirty}" ng-required="true" >
 				</div>
 			</div>
 		</div>
@@ -210,32 +217,70 @@
 <div class="col-md-6">
 	<div class="form-group">
 		<label for="exampleInputPassword1">Code: </label>
-		<input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
+		<input ng-model="CreditCardCode" name="CreditCardCode" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newCreditCard.CreditCardCode.$invalid && newCreditCard.CreditCardCode.$dirty}" ng-required="true" >
 	</div>
 </div>
-<div class="col-md-3">
+
+<div class="col-md-6">
+	<p class="input-group">
+		<input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="ExpirationDate" name="ExpirationDate" ng-class="{'is-invalid':newCreditCard.ExpirationDate.$invalid && newCreditCard.ExpirationDate.$dirty}" ng-required="true"  is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+		<span class="input-group-btn">
+			<button type="button" class="btn btn-secondary" ng-click="open1()">
+				<i class="fa-svg-icon">
+					<svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M192 1664h288v-288h-288v288zm352 0h320v-288h-320v288zm-352-352h288v-320h-288v320zm352 0h320v-320h-320v320zm-352-384h288v-288h-288v288zm736 736h320v-288h-320v288zm-384-736h320v-288h-320v288zm768 736h288v-288h-288v288zm-384-352h320v-320h-320v320zm-352-864v-288q0-13-9.5-22.5t-22.5-9.5h-64q-13 0-22.5 9.5t-9.5 22.5v288q0 13 9.5 22.5t22.5 9.5h64q13 0 22.5-9.5t9.5-22.5zm736 864h288v-320h-288v320zm-384-384h320v-288h-320v288zm384 0h288v-288h-288v288zm32-480v-288q0-13-9.5-22.5t-22.5-9.5h-64q-13 0-22.5 9.5t-9.5 22.5v288q0 13 9.5 22.5t22.5 9.5h64q13 0 22.5-9.5t9.5-22.5zm384-64v1280q0 52-38 90t-90 38h-1408q-52 0-90-38t-38-90v-1280q0-52 38-90t90-38h128v-96q0-66 47-113t113-47h64q66 0 113 47t47 113v96h384v-96q0-66 47-113t113-47h64q66 0 113 47t47 113v96h128q52 0 90 38t38 90z"/></svg>
+				</i>
+			</button>
+		</span>
+	</p>
+</div>
+
+
+<!-- <div class="col-md-3">
+	<div class="form-group">
+		<label>Expiration Date:</label>
+					<div class="input-group">
+							<input ng-model="datExpirationDate" type="text" class="form-control" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+							<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+					</div>
+
+	</div>
+</div> -->
+
+<!-- <div class="col-md-3">
+	<div class="input-group">
+		<label for="exampleInputPassword1"> </label>
+			<input ng-model="datExpirationDate" type="text" class="form-control" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+			<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+			</span>
+	</div>
+</div> -->
+
+<!-- <div class="col-md-3">
 	<div class="form-group">
 		<label for="exampleInputPassword1">Expiration Date: </label>
 		<input type="text" class="form-control" id="exampleInputPassword1" placeholder="">
 	</div>
-</div>
-<div class="col-md-3">
-	<label for="exampleInputPassword1">  </label>
-	<select class="form-control" id="exampleFormControlSelect1">
-		<option>Purchasing</option>
-		<option>Technician</option>
-	</select>
-</div>
+</div> -->
+
 </div>
 
 		</fieldset>
-		</form>
-		<br>
+
 		<div class="row justify-content-end">
 			<div class="col-md-4 ">
-				<a href="shipping-address.html" class="btn btn-secondary btn-green btn-block ">Continue</a>
+				<a href="payment-information.html"><button ng-click="SaveCreditCard();" type="submit" class="btn btn-secondary btn-green btn-block">Save Credit Card</button></a>
 			</div>
 		</div>
+
+		</form>
+		<br>
+
+		<br>
+
+
 
 </div>
 </div>
@@ -243,38 +288,36 @@
 </body>
 
 <footer class="text-light">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-3 col-lg-4 col-xl-3">
-          <h5>About</h5>
-          <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-          <p class="mb-0">
-            Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression.
-          </p>
-        </div>
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-          <h5>Informations</h5>
-          <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-          <ul class="list-unstyled">
-            <li><a href="">Link 1</a></li>
-            <li><a href="">Link 2</a></li>
-          </ul>
-        </div>
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
-          <h5>Others links</h5>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3 col-lg-4 col-xl-3">
+        <h5>About</h5>
+        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+        <p class="mb-0">
+          {{MasterInfo[0].AboutCube}}
+        </p>
+      </div>
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
+        <h5>Informations</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><a href="">Link 1</a></li>
-          <li><a href="">Link 2</a></li>
+          <li ng-repeat="mylink in Links1"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
+        <h5>Others links</h5>
+        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
+        <ul class="list-unstyled">
+          <li ng-repeat="mylink in Links2"><a href={{mylink.PageLinks}}>{{mylink.PageLinks}}</a></li>
         </ul>
       </div>
       <div class="col-md-4 col-lg-3 col-xl-3">
         <h5>Contact</h5>
         <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
         <ul class="list-unstyled">
-          <li><i class="fa fa-home mr-2"></i> Cube-US</li>
-          <li><i class="fa fa-envelope mr-2"></i> email@example.com</li>
-          <li><i class="fa fa-phone mr-2"></i> + 786-293-3272</li>
+          <li><i class="fa fa-home mr-2"></i> {{MasterInfo[0].CubeLocation}}</li>
+          <li><i class="fa fa-envelope mr-2"></i> {{MasterInfo[0].CubeEmail}}</li>
+          <li><i class="fa fa-phone mr-2"></i> {{MasterInfo[0].CubeLocalPhone}}</li>
         </ul>
       </div>
       <div class="col-12 copyright mt-3  " >
@@ -284,13 +327,14 @@
       </div>
     </div>
   </div>
-  </footer>
+</footer>
 
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
 
 <!-- Librería de controlador principal -->
 <script src="js/controller.js"></script>
