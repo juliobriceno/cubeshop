@@ -155,14 +155,62 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   }
 
+  String.prototype.replaceAll = function(search, replacement) {
+      var target = this;
+      return target.replace(new RegExp(search, 'g'), replacement);
+  };
+
   $scope.Login = function(){
 
     $http.get(connServiceString + 'CubeECClientAuthentication.ashx?obj={"username": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "customercode": "' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
-      console.log(response);
       if (typeof response.data.CubeAuthentication.DATA != 'undefined'){
-        $scope.myCart = [];
-        localStorage.myCart = JSON.stringify($scope.myCart);
-        window.location = 'index.html';
+
+        var lActiveUserID = response.data.CubeAuthentication.DATA.ID;
+
+        // Call service to get temp cart
+        $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + response.data.CubeAuthentication.DATA.ID + '", "datatype": "cart"}', {headers: headers}).then(function (response) {
+          $scope.myCart = [];
+
+          if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
+            var myCartBack = response.data.CubeFlexIntegration.DATA.DATA.replaceAll('@@@', '"');
+            $scope.myCart = JSON.parse( myCartBack );
+          }
+          localStorage.myCart = JSON.stringify($scope.myCart);
+          localStorage.ActiveUserID = lActiveUserID;
+
+          // Get User Credit Cards
+          $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "creditcard"}', {headers: headers}).then(function (response) {
+            if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
+              localStorage.myPaymentsInfo = response.data.CubeFlexIntegration.DATA.DATA;
+            }
+
+            // Get User Shippings
+            $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "shipping"}', {headers: headers}).then(function (response) {
+              if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
+                localStorage.myPaymentsInfo = response.data.CubeFlexIntegration.DATA.DATA;
+              }
+              window.location = 'index.html';
+            })
+            .catch(function (data) {
+              console.log('Error 16');
+              console.log(data);
+              swal("Cube Service", "Unexpected error. Check console Error 16.");
+            });
+
+          })
+          .catch(function (data) {
+            console.log('Error 16');
+            console.log(data);
+            swal("Cube Service", "Unexpected error. Check console Error 16.");
+          });
+
+        })
+        .catch(function (data) {
+          console.log('Error 16');
+          console.log(data);
+          swal("Cube Service", "Unexpected error. Check console Error 16.");
+        });
+
       }
       else{
         swal("Cube Service", "Invalid credentials.");
@@ -377,6 +425,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         $scope.selectedBillingCountry = null;
 
         $scope.userForm.$setPristine()
+
+        console.log(response);
 
         swal("Cube Shop", "Your Company was created.");
       }
@@ -784,17 +834,42 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     window.location = 'details-product.html';
   }
 
+  String.prototype.replaceAll = function(search, replacement) {
+      var target = this;
+      return target.replace(new RegExp(search, 'g'), replacement);
+  };
+
   $scope.AddToCart = function(ProductCardsItem) {
-    $scope.myCarttmp = $scope.myCart.filter(function(el){
-      return el.NUM == ProductCardsItem.NUM;
-    })
-    if ($scope.myCarttmp.length > 0){
+    // Check if user is connected
+    if (typeof localStorage.ActiveUserID == 'undefined' || localStorage.ActiveUserID =='' ){
+      window.location = 'login.html';
       return 0;
     }
+
     ProductCardsItem.Identifer = $scope.myCart.length + 1;
     ProductCardsItem.QTY = 1;
     $scope.myCart.push(ProductCardsItem);
-    localStorage.myCart = JSON.stringify($scope.myCart);
+
+    var myCart = JSON.stringify($scope.myCart);
+    var myCartBack = myCart.replaceAll("'", "@@");
+    myCartBack = myCartBack.replaceAll('"', '@@@');
+
+    // Save cart in server
+
+    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "cart", "id": "0", "data": "' + myCartBack + '"}', {headers: headers}).then(function (response) {
+      $scope.myCarttmp = $scope.myCart.filter(function(el){
+        return el.NUM == ProductCardsItem.NUM;
+      })
+      if ($scope.myCarttmp.length > 0){
+        return 0;
+      }
+      localStorage.myCart = JSON.stringify(myCart);
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
   }
 
   $scope.filterByPrice = function() {
@@ -1088,6 +1163,12 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 .controller('ctrlCubeShopHomeProductCart', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
 
+  // If user is not authenticate
+  if (typeof localStorage.ActiveUserID == 'undefined' || localStorage.ActiveUserID =='' ){
+    window.location = 'login.html';
+    return 0;
+  }
+
   var headers = {"Authorization": ServerAuth};
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
@@ -1212,8 +1293,27 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
 
-  $scope.PaymentsInfo = [];
+  // If Payment Informations Exists
+  if (typeof localStorage.myPaymentsInfo != 'undefined' && localStorage.myPaymentsInfo != '' ){
+    $scope.PaymentsInfo = JSON.parse(localStorage.myPaymentsInfo);
+  }
+  else{
+    $scope.PaymentsInfo = [];
+  }
+
   $scope.CreditCardNumberSelected = {};
+
+  // By default show cards lists
+  $scope.shownewItem = false;
+
+  $scope.AlternateNewListCard = function(){
+    $scope.shownewItem = !$scope.shownewItem;
+  }
+
+  String.prototype.replaceAll = function(search, replacement) {
+      var target = this;
+      return target.replace(new RegExp(search, 'g'), replacement);
+  };
 
   $scope.SaveCreditCard = function(){
     $scope.newCreditCard.$setSubmitted();
@@ -1239,13 +1339,46 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     $scope.CreditCardCode = '';
     $scope.ExpirationDate = '';
     $scope.newCreditCard.$setPristine()
-    swal("Cube Shop", "Credit card was saved.");
+    $scope.AlternateNewListCard()
+
+    // Save card at server
+    var myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
+    var myPaymentsInfoBack = myPaymentsInfo.replaceAll("'", "@@");
+    myPaymentsInfoBack = myPaymentsInfoBack.replaceAll('"', '@@@');
+
+    console.log(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": "' + myPaymentsInfoBack + '"}');
+
+    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": "' + myPaymentsInfoBack + '"}', {headers: headers}).then(function (response) {
+      console.log(response);
+      localStorage.myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
+      console.log(localStorage.myPaymentsInfo);
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+
   }
 
   $scope.DeleteCreditCard = function(CreditCardNumber){
     $scope.PaymentsInfo = $scope.PaymentsInfo.filter(function(payment){
       return payment.CreditCardNumber != CreditCardNumber;
     })
+    // Save card at server
+    var myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
+    var myPaymentsInfoBack = myPaymentsInfo.replaceAll("'", "@@");
+    myPaymentsInfoBack = myPaymentsInfoBack.replaceAll('"', '@@@');
+
+    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": "' + myPaymentsInfoBack + '"}', {headers: headers}).then(function (response) {
+      localStorage.myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
   }
 
   $scope.Continue = function(){
@@ -1474,8 +1607,26 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
 
-  $scope.ShippingsInfo = [];
+  // If Payment Informations Exists
+  if (typeof localStorage.myShippingsInfo != 'undefined' && localStorage.myShippingsInfo != '' ){
+    $scope.ShippingsInfo = JSON.parse(localStorage.myShippingsInfo);
+  }
+  else{
+    $scope.ShippingsInfo = [];
+  }
+
   $scope.ShippingSelected = {};
+
+  $scope.shownewItem = false;
+
+  $scope.AlternateNewListCard = function(){
+    $scope.shownewItem = !$scope.shownewItem;
+  }
+
+  String.prototype.replaceAll = function(search, replacement) {
+      var target = this;
+      return target.replace(new RegExp(search, 'g'), replacement);
+  };
 
   $scope.SaveShipping = function(){
     $scope.newShipping.$setSubmitted();
@@ -1500,14 +1651,46 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     $scope.State = '';
     $scope.Phone = '';
     $scope.Fax = '';
-    $scope.newShipping.$setPristine()
-    swal("Cube Shop", "Shipping Address was saved.");
+    $scope.newShipping.$setPristine();
+    $scope.AlternateNewListCard();
+
+    // Save card at server
+    var myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
+    var myShippingsInfoBack = myShippingsInfo.replaceAll("'", "@@");
+    myShippingsInfoBack = myShippingsInfoBack.replaceAll('"', '@@@');
+
+    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": "' + myShippingsInfoBack + '"}', {headers: headers}).then(function (response) {
+      localStorage.myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
+      console.log(localStorage.myShippingsInfo);
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
   }
 
   $scope.DeleteShipping = function(Address1){
     $scope.ShippingsInfo = $scope.ShippingsInfo.filter(function(shipping){
       return shipping.Address1 != Address1;
     })
+
+    // Save card at server
+    var myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
+    var myShippingsInfoBack = myShippingsInfo.replaceAll("'", "@@");
+    myShippingsInfoBack = myShippingsInfoBack.replaceAll('"', '@@@');
+
+    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "shipping", "id": "0", "data": "' + myShippingsInfoBack + '"}', {headers: headers}).then(function (response) {
+      localStorage.myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
+      console.log(localStorage.myShippingsInfo);
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
   }
 
   $scope.Continue = function(){

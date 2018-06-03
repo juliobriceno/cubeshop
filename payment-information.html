@@ -139,8 +139,8 @@
 	    <h3>Payment Information</h3>
 
 	  </div>
-	  <div class="cart-shopping">
-			<a href="#jumpto" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new card</a>
+	  <div ng-show="!shownewItem" class="cart-shopping">
+			<a ng-click="AlternateNewListCard();" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new card</a>
 
 			<table class="table  table-bordered" style="margin-top:5%;">
 			  <thead>
@@ -175,15 +175,7 @@
   </div>
 
 
-		<div id="jumpto"> </div>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-
-		<div>
+		<div ng-show="shownewItem">
 			<form name="newCreditCard">
 				<fieldset>
 			<h6 > <strong>Add new Payment Information</strong></h6>
