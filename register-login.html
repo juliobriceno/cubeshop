@@ -60,14 +60,14 @@
 		 <div class="container-fluid">
 			 <div class="row">
 				 <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
-					 <span class="nav-text">
-						 <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}
+
 
 					 </div>
 
 			 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 text-right">
 						 <ul class="right-menu ">
-						 <li><a href=""><i class="fas fa-question-circle"></i></a></li>
+							 <li class="nav-text"> <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}</li>
+						 	<li><a href=""><i class="fas fa-question-circle"></i></a></li>
 							 <li class="dropdown">
 								<a class="" href="#"><i class="fas fa-user" aria-hidden="true"></i> My Account</a>
 							</li>
@@ -88,7 +88,7 @@
 		<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 			<div class="container-fluid">
 				<!--logo -->
-				<a class="navbar-brand" href="#"><img ng-src="{{'/'+ MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
+				<a class="navbar-brand"  href="index.html"><img ng-src="{{'/'+ MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
@@ -129,8 +129,8 @@
 
 <main class="wrap">
 <div class="container">
-	<div class="heading cf">
-		<h4>Sign Up for Your New Account</h4>
+	<div class="heading heading-principal">
+		<h3>Sign Up for Your New Account</h3>
 	</div>
 	<br>
 	<div class="row justify-content-md-center">
@@ -150,7 +150,7 @@
 				<div class="col-md-8">
 					<div class="card card-body bg-light">
 		    		<form name="newAccount">
-		    			<legend> Sign Up for Your New Account</legend>
+		    			<h5>Sign Up for Your New Account</h5>
 		  			  <hr>
 						  <div class="form-group">
 						    <label for="exampleInputEmail1">Company ID: </label>

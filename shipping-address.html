@@ -60,13 +60,12 @@
 			 <div class="container-fluid">
 				 <div class="row">
 					 <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
-						 <span class="nav-text">
-							 <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}
-
+						
 						 </div>
 
 				 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 text-right">
 							 <ul class="right-menu ">
+								   <li class="nav-text"> <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}</li>
 							 <li><a href=""><i class="fas fa-question-circle"></i></a></li>
 								 <li class="dropdown">
 									<a class="" href="#"><i class="fas fa-user" aria-hidden="true"></i> My Account</a>
@@ -88,7 +87,7 @@
 			<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 				<div class="container-fluid">
 					<!--logo -->
-					<a class="navbar-brand" href="#"><img src="img/logo-cube-mia.png" style="max-width:130px;" /></a>
+					<a class="navbar-brand"  href="index.html"><img src="img/logo-cube-mia.png" style="max-width:130px;" /></a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
@@ -133,13 +132,14 @@
 	<div class="container wrap heading-principal">
 
   <div class="heading heading-principal">
-    <h1>Shipping address</h1>
-    <a href="#jumpto" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new Shipping address</a>
+    <h6><strong>Shipping address</strong></h6>
+
   </div>
   <div class="cart-shopping">
-		<table class="table table-hover">
+		  <a href="#jumpto" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new Shipping address</a>
+		<table class="table  table-bordered" style="margin-top:5%;">
 		  <thead>
-		    <tr>
+		    <tr class="table-secondary">
 					<th></th>
 		      <th scope="col">Address</th>
 		      <th scope="col">City</th>
@@ -166,7 +166,8 @@
 
 		<div class="row justify-content-end">
 			<div class="col-md-4 ">
-				<a ng-click="Continue();" class="btn btn-secondary btn-green btn-block ">Continue</a>
+				<a><button ng-click="Continue();" class="btn btn-secondary btn-green btn-block ">Continue</button></a>
+
 			</div>
 		</div>
 
