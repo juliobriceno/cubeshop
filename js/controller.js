@@ -160,6 +160,26 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       return target.replace(new RegExp(search, 'g'), replacement);
   };
 
+  String.prototype.replaceAll = function(search, replacement) {
+      var target = this;
+      return target.replace(new RegExp(search, 'g'), replacement);
+  };
+
+  function RemoveQuote(arrayObj){
+    var myarrayObj = _.cloneDeep(arrayObj);
+    myarrayObj.forEach(function(eachRecord){
+      var keys = Object.keys(eachRecord);
+      keys.forEach(function(eachKey){
+        if (typeof eachRecord[eachKey] == 'string'){
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll('@@', '"')
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll("@@@", "'")
+        }
+      })
+    })
+    var myarrayStr = JSON.stringify(myarrayObj)
+    return myarrayStr;
+  }
+
   $scope.Login = function(){
 
     $http.get(connServiceString + 'CubeECClientAuthentication.ashx?obj={"username": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "customercode": "' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
@@ -171,10 +191,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + response.data.CubeAuthentication.DATA.ID + '", "datatype": "cart"}', {headers: headers}).then(function (response) {
           $scope.myCart = [];
 
-          if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
-            var myCartBack = response.data.CubeFlexIntegration.DATA.DATA.replaceAll('@@@', '"');
+          if (typeof response.data.CubeFlexIntegration.DATA != 'undefined' && response.data.CubeFlexIntegration.DATA.DATA != ''){
+            var myCartBack = response.data.CubeFlexIntegration.DATA.DATA;
             $scope.myCart = JSON.parse( myCartBack );
+            console.log($scope.myCart);
+            var myCartStr = RemoveQuote($scope.myCart);
+            console.log(myCartStr);
+            $scope.myCart = JSON.parse( myCartStr );
           }
+
           localStorage.myCart = JSON.stringify($scope.myCart);
           localStorage.ActiveUserID = lActiveUserID;
 
@@ -455,11 +480,12 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       return 0
     }
 
-    var strInsert = 'CubeFlexIntegration.ashx?obj={"method":"Insert_EComm_User","conncode":"' + cnnData.DBNAME + '", "companyid": "' + $scope.UserCompanyID + '", "firstname": "' + $scope.UserFirstName + '", "lastname": "' + $scope.UserLastName + '", "email": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "passwordquestion": "' +
-    $scope.UserSecurityQuestion + '", "passwordanswer": "' + $scope.UserSecurityAnswer + '"}'
+    var strInsert = 'http://localhost:61093/BodApp.asmx/Insert_EComm_User?customername=NombreEmpresa'
 
     // Save the User
-    $http.get(connServiceString + strInsert, {headers: headers}).then(function (response) {
+    $http.get(strInsert).then(function (response) {
+
+      console.log(response);
 
       if (typeof response.data.CubeFlexIntegration.DATA.ID != 'undefined'){
         if (response.data.CubeFlexIntegration.DATA.ID != -1){
@@ -488,6 +514,41 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       console.log(data);
       swal("Cube Service", "Unexpected error. Check console Error 16.");
     });
+
+    //
+    // var strInsert = 'CubeFlexIntegration.ashx?obj={"method":"Insert_EComm_User","conncode":"' + cnnData.DBNAME + '", "companyid": "' + $scope.UserCompanyID + '", "firstname": "' + $scope.UserFirstName + '", "lastname": "' + $scope.UserLastName + '", "email": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "passwordquestion": "' +
+    // $scope.UserSecurityQuestion + '", "passwordanswer": "' + $scope.UserSecurityAnswer + '"}'
+    //
+    // // Save the User
+    // $http.get(connServiceString + strInsert, {headers: headers}).then(function (response) {
+    //
+    //   if (typeof response.data.CubeFlexIntegration.DATA.ID != 'undefined'){
+    //     if (response.data.CubeFlexIntegration.DATA.ID != -1){
+    //       swal("Cube Shop", "Your User was created.");
+    //
+    //       $scope.UserCompanyID = '';
+    //       $scope.UserFirstName = '';
+    //       $scope.UserLastName = '';
+    //       $scope.UserEmail = '';
+    //       $scope.UserPassword = '';
+    //       $scope.UserConfirmPassword = '';
+    //       $scope.UserSecurityQuestion = '';
+    //       $scope.UserSecurityAnswer = '';
+    //
+    //       $scope.newAccount.$setPristine()
+    //
+    //     }
+    //     else{
+    //       swal("Cube Shop", "Company does not exist.");
+    //     }
+    //   }
+    //
+    // })
+    // .catch(function (data) {
+    //   console.log('Error 16');
+    //   console.log(data);
+    //   swal("Cube Service", "Unexpected error. Check console Error 16.");
+    // });
 
   }
 
@@ -725,8 +786,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   $scope.myCart = myMemoryService.myCart;
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
-    console.log('Llegó aquí');
-    console.log(rowWithout64Img);
 
     $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
 
@@ -839,6 +898,21 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       return target.replace(new RegExp(search, 'g'), replacement);
   };
 
+  function RemoveQuote(arrayObj){
+    var myarrayObj = _.cloneDeep(arrayObj);
+    myarrayObj.forEach(function(eachRecord){
+      var keys = Object.keys(eachRecord);
+      keys.forEach(function(eachKey){
+        if (typeof eachRecord[eachKey] == 'string'){
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll('"', '@@')
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll("'", '@@@')
+        }
+      })
+    })
+    var myarrayStr = "'" + JSON.stringify(myarrayObj) + "'"
+    return myarrayStr;
+  }
+
   $scope.AddToCart = function(ProductCardsItem) {
     // Check if user is connected
     if (typeof localStorage.ActiveUserID == 'undefined' || localStorage.ActiveUserID =='' ){
@@ -846,24 +920,24 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       return 0;
     }
 
+    $scope.myCarttmp = $scope.myCart.filter(function(el){
+      return el.NUM == ProductCardsItem.NUM;
+    })
+
+    if ($scope.myCarttmp.length > 0){
+      return 0;
+    }
+
     ProductCardsItem.Identifer = $scope.myCart.length + 1;
     ProductCardsItem.QTY = 1;
     $scope.myCart.push(ProductCardsItem);
 
-    var myCart = JSON.stringify($scope.myCart);
-    var myCartBack = myCart.replaceAll("'", "@@");
-    myCartBack = myCartBack.replaceAll('"', '@@@');
-
     // Save cart in server
+    var myCartLocal = $scope.myCart;
+    var myCartStr = RemoveQuote($scope.myCart);
 
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "cart", "id": "0", "data": "' + myCartBack + '"}', {headers: headers}).then(function (response) {
-      $scope.myCarttmp = $scope.myCart.filter(function(el){
-        return el.NUM == ProductCardsItem.NUM;
-      })
-      if ($scope.myCarttmp.length > 0){
-        return 0;
-      }
-      localStorage.myCart = JSON.stringify(myCart);
+    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "cart", "id": "0", "data": ' + myCartStr + '}', {headers: headers}).then(function (response) {
+      localStorage.myCart = JSON.stringify(myCartLocal);
     })
     .catch(function (data) {
       console.log('Error 16');
@@ -1263,7 +1337,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     swal("Cube Service", "Unexpected error. Check console Error 16.");
   });
 
-
   // Valida si variable del carrito existe caso contrario la crea
   if (typeof localStorage.myCart != 'undefined' && localStorage.myCart != ''){
     $scope.myCart = JSON.parse(localStorage.myCart);
@@ -1279,12 +1352,47 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   else{
     $scope.myCart = [];
   }
+
+  String.prototype.replaceAll = function(search, replacement) {
+      var target = this;
+      return target.replace(new RegExp(search, 'g'), replacement);
+  };
+
+  function RemoveQuote(arrayObj){
+    var myarrayObj = _.cloneDeep(arrayObj);
+    myarrayObj.forEach(function(eachRecord){
+      var keys = Object.keys(eachRecord);
+      keys.forEach(function(eachKey){
+        if (typeof eachRecord[eachKey] == 'string'){
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll('"', '@@')
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll("'", '@@@')
+        }
+      })
+    })
+    var myarrayStr = "'" + JSON.stringify(myarrayObj) + "'"
+    return myarrayStr;
+  }
+
   $scope.removeCart = function(NUM) {
     $scope.myCart = $scope.myCart.filter(function(el){
       return el.NUM != NUM
     })
-    localStorage.myCart = JSON.stringify($scope.myCart);
+
+    // Save cart in server
+    var myCartLocal = $scope.myCart;
+    var myCartStr = RemoveQuote($scope.myCart);
+
+    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "cart", "id": "0", "data": ' + myCartStr + '}', {headers: headers}).then(function (response) {
+      localStorage.myCart = JSON.stringify($scope.myCart);
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
   }
+
 }])
 
 .controller('ctrlCubeShopHomePaymentInformation', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
@@ -1315,6 +1423,21 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       return target.replace(new RegExp(search, 'g'), replacement);
   };
 
+  function RemoveQuote(arrayObj){
+    var myarrayObj = _.cloneDeep(arrayObj);
+    myarrayObj.forEach(function(eachRecord){
+      var keys = Object.keys(eachRecord);
+      keys.forEach(function(eachKey){
+        if (typeof eachRecord[eachKey] == 'string'){
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll('"', '@@')
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll("'", '@@@')
+        }
+      })
+    })
+    var myarrayStr = "'" + JSON.stringify(myarrayObj) + "'"
+    return myarrayStr;
+  }
+
   $scope.SaveCreditCard = function(){
     $scope.newCreditCard.$setSubmitted();
     if (!$scope.newCreditCard.$valid)
@@ -1341,14 +1464,13 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     $scope.newCreditCard.$setPristine()
     $scope.AlternateNewListCard()
 
-    // Save card at server
-    var myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
-    var myPaymentsInfoBack = myPaymentsInfo.replaceAll("'", "@@");
-    myPaymentsInfoBack = myPaymentsInfoBack.replaceAll('"', '@@@');
+    // Save cart in server
+    var myPaymentInfoLocal = $scope.PaymentsInfo;
+    var myPaymentInfoStr = RemoveQuote($scope.PaymentsInfo);
 
-    console.log(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": "' + myPaymentsInfoBack + '"}');
+    console.log(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": ' + myPaymentInfoStr + '}');
 
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": "' + myPaymentsInfoBack + '"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": ' + myPaymentInfoStr + '}', {headers: headers}).then(function (response) {
       console.log(response);
       localStorage.myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
       console.log(localStorage.myPaymentsInfo);
