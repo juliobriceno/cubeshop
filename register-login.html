@@ -68,12 +68,8 @@
 						 <ul class="right-menu ">
 							 <li class="nav-text"> <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}</li>
 						 	<li><a href=""><i class="fas fa-question-circle"></i></a></li>
-							 <li class="dropdown">
-								<a class="" href="#"><i class="fas fa-user" aria-hidden="true"></i> My Account</a>
-							</li>
-							<li class="dropdown">
-								<a class="active" href="login.html"> Login/Register</a>
-							</li>
+
+
 							<li class="carrito"><a  href="cart.html">
 								<i class="fas fa-cart-plus"></i> Cart
 								<span class="badge  badge-cart ">{{myCart.length}}</span>
@@ -416,6 +412,9 @@
 
 <!-- Librería de controlador principal -->
 <script src="js/controller.js"></script>
+
+<div dw-loading="myloading" dw-loading-options="{text: 'Working...'}">
+</div><!-- ./loading -->
 
 </body>
 </html>

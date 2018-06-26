@@ -4,6 +4,7 @@
 // var connServiceString = "http://localhost:9097/";
 // var connServiceString = "https://cubeshop.herokuapp.com/";
 var connServiceString = "http://cube-mia.com/api/";
+var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
@@ -310,7 +311,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -349,7 +350,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   }
 
-  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+  $http.get(connServiceStringGateway + 'Get_EcomCustomerInformation?obj={"method":"Get_EcomCustomerInformation"}').then(function (response) {
 
     var MasterData = response.data.CubeFlexIntegration.DATA;
 
@@ -391,7 +392,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 
   // Customer Types
-  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"GetCustomerType","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+  $http.get(connServiceStringGateway + 'GetCustomerType?obj={"method":"GetCustomerType","conncode":"' + cnnData.DBNAME + '"}').then(function (response) {
 
     $scope.CustomerTypes = getArray(response.data.CubeFlexIntegration.DATA);
 
@@ -403,7 +404,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   });
 
   // Countries
-  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"GetCustomerCountry","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+  $http.get(connServiceStringGateway + 'GetCustomerCountry?obj={"method":"GetCustomerCountry","conncode":"' + cnnData.DBNAME + '"}').then(function (response) {
 
     $scope.Countries = getArray(response.data.CubeFlexIntegration.DATA);
 
@@ -419,16 +420,18 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     if (!$scope.userForm.$valid)
     {
-      swal("Cube Shop", "There are invalid field. Please review.");
+      swal("Cube Shop", "There are invalid field. Please check.");
       return 0
     }
 
-    var strInsert = 'CubeFlexIntegration.ashx?obj={"method":"Insert_Customer","conncode":"' + cnnData.DBNAME + '", "customername": "' + $scope.CustomerName + '", "address": "' + $scope.StreetAddress1 + '", "addressline2": "' + $scope.StreetAddress2 + '", "city": "' + $scope.City + '", "state": "' + $scope.State + '", "zip": "' +
+    $loading.start('myloading');
+
+    var strInsert = 'Insert_Customer?obj={"method":"Insert_Customer", "customername": "' + $scope.CustomerName + '", "address": "' + $scope.StreetAddress1 + '", "addressline2": "' + $scope.StreetAddress2 + '", "city": "' + $scope.City + '", "state": "' + $scope.State + '", "zip": "' +
     $scope.Zip + '", "country": "' + $scope.selectedCountry.CountryISO3 + '", "offphone": "' + $scope.selectedCountry.Phone + '", "offfax": "' + $scope.Fax + '", "listid": "' + $scope.List + '", "billingname": "' + $scope.BillingName + '", "billingaddress": "' +
     $scope.BillingStreetAddress1 + '", "billingaddressline2": "' + $scope.BillingStreetAddress2 + '", "billingcity": "' + $scope.BillingCity + '", "billingstate": "' + $scope.BillingState + '", "billingzip": "' + $scope.BillingZip + '", "billingcountry": "' + $scope.selectedBillingCountry.CountryISO3 + '", "customertypeid": "' + $scope.selectedCustomerType.ID + '" }'
 
     // Save the Company
-    $http.get(connServiceString + strInsert, {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + strInsert).then(function (response) {
 
       if (typeof response.data.CubeFlexIntegration.DATA.Column1 != 'undefined'){
 
@@ -453,7 +456,10 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
         console.log(response);
 
-        swal("Cube Shop", "Your Company was created.");
+        swal("Cube Shop", "Your Company was created. Your COMPANY ID is: " + response.data.CubeFlexIntegration.DATA.Column1 + '. It will required for create users.');
+
+        $loading.finish('myloading');
+
       }
 
     })
