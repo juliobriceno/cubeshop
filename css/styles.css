@@ -113,10 +113,9 @@ ol, ul {
 }
 
 .wrap {
-
-
   padding: 160px 0;
-  margin-bottom: 5em;
+  padding: 3% 0;
+  margin-bottom: 5em; 
 }
 
 .heading {

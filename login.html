@@ -58,75 +58,79 @@
 </head>
 
 <body ng-controller="ctrlCubeShopLoginController">
-<div class="fixed-top">
-	<nav class="top-menu">
-		 <div class="container-fluid">
-			 <div class="row">
-				 <div class="col-xs-12 col-sm-4 col-md-6 col-lg-6">
-					 					 </div>
+	<div class="sticky-top">
 
-			 <div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 text-right">
-						 <ul class="right-menu ">
-							   <li class="nav-text"> <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}</li>
-						 <li><a href=""><i class="fas fa-question-circle"></i></a></li>
-							 <li class="dropdown">
-								<a class="" href="#"><i class="fas fa-user" aria-hidden="true"></i> My Account</a>
-							</li>
-							<li class="dropdown">
-								<a class="" href="login.html"> Login/Register</a>
-							</li>
-							<li style="background-color:#048949;"><a  href="cart.html">
-								<i class="fas fa-cart-plus"></i> Cart
-								<span class="badge  badge-cart">{{myCart.length}}</span>
-							</a></li>
+		<nav class="top-menu sticky-top">
+			<div class="container-fluid">
+				<div class="row">
 
 
-						</ul>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
+							<ul class="right-menu ">
+								<li class="nav-text"> <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}</li>
+								<li><a href=""><i class="fas fa-question-circle"></i></a></li>
+
+								<li class="dropdown show">
+									<a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<i class="fas fa-user" aria-hidden="true"></i> My Account
+									</a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<a class="dropdown-item" href="#" style="color:#5A6268;">Close sesion</a>
+									</div>
+								</li>
+
+								<li class="">
+									<a class="" href="login.html"> Login/Register</a>
+								</li>
+								<li class="carrito"><a  href="cart.html">
+									<i class="fas fa-cart-plus"></i> My Cart
+									<span class="badge badge-cart "> {{myCart.length}}</span>
+								</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
-		</nav>
-		<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-			<div class="container-fluid">
-				<!--logo -->
-				<a class="navbar-brand"  href="index.html"><img src="img/logo-cube-mia.png" style="max-width:130px;" /></a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse justify-content-center"  id="navbarsExampleDefault">
-					<form style="">
-						<div class="row" style="margin-top:10px;">
+			</nav>
+			<nav class="navbar navbar-expand-md navbar-light bg-light ">
+				<div class="container-fluid">
+					<!--logo -->
+
+					<a class="navbar-brand" href="index.html"><img ng-src="{{'/'+ MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse justify-content-center "  id="navbarsExampleDefault">
+						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<div class="input-group input-group-sm">
-									<input style="border-radius:0;" type="text" class="form-control" aria-label="Small" placeholder="Search...">
-									<div class="input-group-append">
-										<button type="button" class="btn btn-secondary" style="border-radius:0;">
-											<i class="fa fa-search"></i>
-										</button>
+								<form >
+									<div class="input-group input-group-sm ">
+										<input ng-model="HometxtSearch" style="border-radius:0;" type="text" class="form-control" aria-label="Small" placeholder="Search...">
+										<div class="input-group-append">
+											<button ng-click="FindProductByText()" type="button" class="btn btn-secondary" style="border-radius:0;">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
 									</div>
-								</div>
+									<!-- Links -->
+									<ul class="navbar-nav " >
+										<li class="nav-item">
+											<a ng-show="MasterInfo[0].Home" class="nav-link " href="index.html">HOME <span class="sr-only">(current)</span></a>
+										</li>
+										<li class="nav-item">
+											<a ng-show="MasterInfo[0].Products" class="nav-link " href="products.html">PRODUCTS</a>
+										</li>
+										<li class="nav-item">
+											<a ng-show="MasterInfo[0].Apps" class="nav-link" href="#">APPLICATIONS</a>
+										</li>
+									</ul>
+								</form>
 							</div>
 						</div>
-						<!-- Links -->
-						<ul class="navbar-nav m-auto" >
-							<li class="nav-item">
-								<a class="nav-link " href="index.html">HOME <span class="sr-only">(current)</span></a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link " href="products.html">PRODUCTS</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">APPLICATIONS</a>
-							</li>
-						</ul>
-					</form>
-
-
+					</div>
 				</div>
-			</div>
-		</nav>
-</div>
-
+			</nav>
+		</div>
 
 <main class="wrap">
 	<div class="container">
