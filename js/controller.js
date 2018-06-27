@@ -5,9 +5,9 @@
 // var connServiceString = "https://cubeshop.herokuapp.com/";
 var connServiceString = "http://cube-mia.com/api/";
 
-//var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+//ar connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
 var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
-// var connServiceString = "https://portal.cube-usa.com/api/";
+//var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
 var ServerAuth = "Basic Y3ViZXU6Y3ViZTIwMTc=";
@@ -1466,6 +1466,13 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
 
+  $scope.CloseSession = function() {
+    $http.get(connServiceStringGateway + 'CloseSession?obj={"method":"CloseSession"}').then(function (response) {
+      $scope.UserName = '';
+      localStorage.UserName = '';
+    })
+  }
+
   // If Payment Informations Exists
   if (typeof localStorage.myPaymentsInfo != 'undefined' && localStorage.myPaymentsInfo != '' ){
     console.log(localStorage.myPaymentsInfo);
@@ -1794,6 +1801,13 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   var headers = {"Authorization": ServerAuth};
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
+
+  $scope.CloseSession = function() {
+    $http.get(connServiceStringGateway + 'CloseSession?obj={"method":"CloseSession"}').then(function (response) {
+      $scope.UserName = '';
+      localStorage.UserName = '';
+    })
+  }
 
   // If Payment Informations Exists
   if (typeof localStorage.myShippingsInfo != 'undefined' && localStorage.myShippingsInfo != '' ){

@@ -67,18 +67,20 @@
 								<li class="nav-text"> <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}</li>
 								<li><a href=""><i class="fas fa-question-circle"></i></a></li>
 
-								<li class="dropdown show">
-									<a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<i class="fas fa-user" aria-hidden="true"></i> My Account
-									</a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<a class="dropdown-item" href="#" style="color:#5A6268;">Close sesion</a>
-									</div>
-								</li>
+								<li ng-show="UserName!=''" class="dropdown show">
+                  <a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user" aria-hidden="true"></i> My Account
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Close sesion</a>
+                  </div>
+                </li>
 
-								<li class="">
-									<a class="" href="login.html"> Login/Register</a>
-								</li>
+                <li class="">
+                  <a class="" ng-show="UserName==''" href="login.html"> Login/Register</a>
+                </li>
+
+
 								<li class="carrito"><a  href="cart.html">
 									<i class="fas fa-cart-plus"></i> My Cart
 									<span class="badge badge-cart "> {{myCart.length}}</span>
