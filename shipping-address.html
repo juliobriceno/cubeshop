@@ -136,12 +136,12 @@
 	<div class="container wrap heading-principal">
 
   <div class="heading heading-principal">
-    <h6><strong>Shipping address</strong></h6>
+    <h3>Shipping address</h3>
 
   </div>
   <div ng-show="!shownewItem" class="cart-shopping">
-		  <a ng-click="AlternateNewListCard();" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new Shipping address</a>
-		<table class="table  table-bordered" style="margin-top:5%;">
+		  <a ng-click="AlternateNewListCard();" class="btn btn-secondary continue-shopping" style="color:white;"><i class="fas fa-plus"></i> Add new Shipping address</a>
+		<table class="table " style="margin-top:5%;">
 		  <thead>
 		    <tr class="table-secondary">
 					<th></th>
@@ -181,7 +181,7 @@
 		<form  name="newShipping" style="margin-top:30px;">
           <fieldset>
 
-        <hr>
+
           <div class="form-group">
             <label for="exampleInputEmail1">Street Address 1: </label>
 						<input ng-model="Address1" name="Address1" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address1.$invalid && newShipping.Address1.$dirty}" ng-required="true" >

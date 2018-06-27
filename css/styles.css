@@ -115,7 +115,7 @@ ol, ul {
 .wrap {
   padding: 160px 0;
   padding: 3% 0;
-  margin-bottom: 5em; 
+  margin-bottom: 5em;
 }
 
 .heading {
@@ -233,6 +233,7 @@ a.remove:hover {
   font-size: 0.85em;
   float: right;
   text-align: right;
+
 }
 
 .page-link{
@@ -328,6 +329,7 @@ a.remove:hover {
 
 .btn {
   border-radius: 0;
+
 }
 
 .form-control{
