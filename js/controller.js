@@ -30,6 +30,10 @@ function testInterceptor() {
 
 angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngTagsInput', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ui.select', 'ui.toggle', 'dndLists', 'ngPatternRestrict', 'angular.filter'])
 
+.config(function ($httpProvider) {
+    $httpProvider.defaults.withCredentials = true;
+})
+
 .directive('angularCurrency', [function () {
     'use strict';
 
@@ -117,7 +121,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -183,21 +187,30 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.Login = function(){
 
-    $http.get(connServiceString + 'CubeECClientAuthentication.ashx?obj={"username": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "customercode": "' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'CubeECClientAuthentication?obj={"username": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '"}').then(function (response) {
+
+      console.log(response);
+
       if (typeof response.data.CubeAuthentication.DATA != 'undefined'){
 
+        console.log(response);
+
         var lActiveUserID = response.data.CubeAuthentication.DATA.ID;
+        localStorage.UserName = response.data.CubeAuthentication.DATA.Name;
 
         // Call service to get temp cart
-        $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + response.data.CubeAuthentication.DATA.ID + '", "datatype": "cart"}', {headers: headers}).then(function (response) {
+        $http.get(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "cart"}').then(function (response) {
+
+          console.log('SIIIIIIII');
+          console.log(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "cart"}');
+          console.log(response);
+
           $scope.myCart = [];
 
           if (typeof response.data.CubeFlexIntegration.DATA != 'undefined' && response.data.CubeFlexIntegration.DATA.DATA != ''){
             var myCartBack = response.data.CubeFlexIntegration.DATA.DATA;
             $scope.myCart = JSON.parse( myCartBack );
-            console.log($scope.myCart);
             var myCartStr = RemoveQuote($scope.myCart);
-            console.log(myCartStr);
             $scope.myCart = JSON.parse( myCartStr );
           }
 
@@ -205,13 +218,13 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           localStorage.ActiveUserID = lActiveUserID;
 
           // Get User Credit Cards
-          $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "creditcard"}', {headers: headers}).then(function (response) {
+          $http.get(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "creditcard"}').then(function (response) {
             if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
               localStorage.myPaymentsInfo = response.data.CubeFlexIntegration.DATA.DATA;
             }
 
             // Get User Shippings
-            $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "shipping"}', {headers: headers}).then(function (response) {
+            $http.get(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "shipping"}').then(function (response) {
               if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
                 localStorage.myPaymentsInfo = response.data.CubeFlexIntegration.DATA.DATA;
               }
@@ -250,7 +263,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   }
 
-  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+  $http.get(connServiceStringGateway + 'Get_EcomCustomerInformation?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}').then(function (response) {
 
     var MasterData = response.data.CubeFlexIntegration.DATA;
 
@@ -350,6 +363,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   }
 
+  $loading.start('myloading');
+
   $http.get(connServiceStringGateway + 'Get_EcomCustomerInformation?obj={"method":"Get_EcomCustomerInformation"}').then(function (response) {
 
     var MasterData = response.data.CubeFlexIntegration.DATA;
@@ -382,6 +397,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $scope.MasterInfo = [];
     $scope.MasterInfo.push(MasterInfo);
+
+    $loading.finish('myloading');
 
   })
   .catch(function (data) {
@@ -456,7 +473,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
         console.log(response);
 
-        swal("Cube Shop", "Your Company was created. Your COMPANY ID is: " + response.data.CubeFlexIntegration.DATA.Column1 + '. It will required for create users.');
+        swal("Cube Shop", "Your Company was created. Your COMPANY ID is: " + response.data.CubeFlexIntegration.DATA.Column1 + '. It will be required for create users.');
 
         $loading.finish('myloading');
 
@@ -486,47 +503,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       return 0
     }
 
-    var strInsert = 'http://localhost:61093/BodApp.asmx/Insert_EComm_User?customername=NombreEmpresa'
-
-    // Save the User
-    $http.get(strInsert).then(function (response) {
-
-      console.log(response);
-
-      if (typeof response.data.CubeFlexIntegration.DATA.ID != 'undefined'){
-        if (response.data.CubeFlexIntegration.DATA.ID != -1){
-          swal("Cube Shop", "Your User was created.");
-
-          $scope.UserCompanyID = '';
-          $scope.UserFirstName = '';
-          $scope.UserLastName = '';
-          $scope.UserEmail = '';
-          $scope.UserPassword = '';
-          $scope.UserConfirmPassword = '';
-          $scope.UserSecurityQuestion = '';
-          $scope.UserSecurityAnswer = '';
-
-          $scope.newAccount.$setPristine()
-
-        }
-        else{
-          swal("Cube Shop", "Company does not exist.");
-        }
-      }
-
-    })
-    .catch(function (data) {
-      console.log('Error 16');
-      console.log(data);
-      swal("Cube Service", "Unexpected error. Check console Error 16.");
-    });
-
+    // var strInsert = 'http://localhost:61093/BodApp.asmx/Insert_EComm_User?customername=NombreEmpresa'
     //
-    // var strInsert = 'CubeFlexIntegration.ashx?obj={"method":"Insert_EComm_User","conncode":"' + cnnData.DBNAME + '", "companyid": "' + $scope.UserCompanyID + '", "firstname": "' + $scope.UserFirstName + '", "lastname": "' + $scope.UserLastName + '", "email": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "passwordquestion": "' +
-    // $scope.UserSecurityQuestion + '", "passwordanswer": "' + $scope.UserSecurityAnswer + '"}'
+    // $loading.start('myloading');
     //
     // // Save the User
-    // $http.get(connServiceString + strInsert, {headers: headers}).then(function (response) {
+    // $http.get(connServiceStringGateway + strInsert).then(function (response) {
+    //
+    //   console.log(response);
     //
     //   if (typeof response.data.CubeFlexIntegration.DATA.ID != 'undefined'){
     //     if (response.data.CubeFlexIntegration.DATA.ID != -1){
@@ -543,6 +527,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     //
     //       $scope.newAccount.$setPristine()
     //
+    //       $loading.finish('myloading');
+    //
     //     }
     //     else{
     //       swal("Cube Shop", "Company does not exist.");
@@ -556,11 +542,61 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     //   swal("Cube Service", "Unexpected error. Check console Error 16.");
     // });
 
+
+    var strInsert = 'Insert_EComm_User?obj={"method":"Insert_EComm_User", "companyid": "' + $scope.UserCompanyID + '", "firstname": "' + $scope.UserFirstName + '", "lastname": "' + $scope.UserLastName + '", "email": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "passwordquestion": "' +
+    $scope.UserSecurityQuestion + '", "passwordanswer": "' + $scope.UserSecurityAnswer + '"}'
+
+    $loading.start('myloading');
+
+    // Save the User
+    $http.get(connServiceStringGateway + strInsert).then(function (response) {
+
+      if (typeof response.data.CubeFlexIntegration.DATA.ID != 'undefined'){
+        if (response.data.CubeFlexIntegration.DATA.ID != -1){
+
+          $scope.UserCompanyID = '';
+          $scope.UserFirstName = '';
+          $scope.UserLastName = '';
+          $scope.UserEmail = '';
+          $scope.UserPassword = '';
+          $scope.UserConfirmPassword = '';
+          $scope.UserSecurityQuestion = '';
+          $scope.UserSecurityAnswer = '';
+
+          $scope.newAccount.$setPristine()
+
+          $loading.finish('myloading');
+
+          localStorage.UserName = response.data.CubeFlexIntegration.DATA.Name;
+
+          window.location = 'index.html';
+
+        }
+        else{
+          swal("Cube Shop", "Company does not exist.");
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
   }
 
 }])
 
 .controller('ctrlCubeShopHomeController', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
+
+  $scope.UserName = '';
+
+  if (typeof localStorage.UserName != 'undefined'){
+    if (typeof localStorage.UserName != ''){
+      $scope.UserName = localStorage.UserName;
+    }
+  }
 
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
 
@@ -589,7 +625,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $scope.GetBase64Image = function(rowWithout64Img, source){
 
-      $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+      $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
 
         if (source == 'productsType'){
           if (response.data.imagedata == ''){
@@ -628,8 +664,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     }
 
+    $scope.CloseSession = function() {
+      $http.get(connServiceStringGateway + 'CloseSession?obj={"method":"CloseSession"}').then(function (response) {
+        $scope.UserName = '';
+        localStorage.UserName = '';
+      })
+    }
+
     $scope.FindMaincategories = function() {
-      $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}', {headers: headers}).then(function (response) {
+      $http.get(connServiceStringGateway + 'Get_EcomSubCategories?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}').then(function (response) {
 
         $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
 
@@ -660,7 +703,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $scope.FindMaincategories();
 
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'Get_EcomCustomerInformation?obj={"method":"Get_EcomCustomerInformation"}').then(function (response) {
 
       var MasterData = response.data.CubeFlexIntegration.DATA;
 
@@ -700,7 +743,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       swal("Cube Service", "Unexpected error. Check console Error 16.");
     });
 
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomMainPageCarrousel","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'Get_EcomMainPageCarrousel?obj={"method":"Get_EcomMainPageCarrousel"}').then(function (response) {
 
       $scope.slides = getArray(response.data.CubeFlexIntegration.DATA);
 
@@ -720,7 +763,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       swal("Cube Service", "Unexpected error. Check console Error 16.");
     });
 
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomPageLinks","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'Get_EcomPageLinks?obj={"method":"Get_EcomPageLinks","conncode":"' + cnnData.DBNAME + '"}').then(function (response) {
 
       var lLinks = getArray(response.data.CubeFlexIntegration.DATA);
 
@@ -793,7 +836,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -854,7 +897,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.txtSearch = '';
 
-  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+  $http.get(connServiceStringGateway + 'Get_EcomCustomerInformation?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}').then(function (response) {
 
     var MasterData = response.data.CubeFlexIntegration.DATA;
 
@@ -942,7 +985,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     var myCartLocal = $scope.myCart;
     var myCartStr = RemoveQuote($scope.myCart);
 
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "cart", "id": "0", "data": ' + myCartStr + '}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'CubeFlexIntegration.ashx?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "cart", "id": "0", "data": ' + myCartStr + '}', {headers: headers}).then(function (response) {
       localStorage.myCart = JSON.stringify(myCartLocal);
     })
     .catch(function (data) {
@@ -978,7 +1021,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     $scope.minimum = 0;
     $scope.maximum = 0;
 
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomParts","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomParts","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}', {headers: headers}).then(function (response) {
 
       $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
 
@@ -1085,7 +1128,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       $scope.ShowTable = false;
       $scope.html = '<p>No results</p>';
 
-      $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}', {headers: headers}).then(function (response) {
+      $http.get(connServiceStringGateway + 'Get_EcomSubCategories?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}').then(function (response) {
 
         $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
 
@@ -1118,7 +1161,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   else {
 
-      $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomParts","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}', {headers: headers}).then(function (response) {
+      $http.get(connServiceStringGateway + 'Get_EcomParts?obj={"method":"Get_EcomParts","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}').then(function (response) {
 
         $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
 
@@ -1155,7 +1198,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   $scope.ShowDetail = false;
 
   $scope.FindMaincategories = function() {
-    $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}', {headers: headers}).then(function (response) {
+    $http.get(connServiceStringGateway + 'Get_EcomSubCategories?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "1"}').then(function (response) {
 
       $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
 
