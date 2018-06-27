@@ -5,8 +5,8 @@
 // var connServiceString = "https://cubeshop.herokuapp.com/";
 var connServiceString = "http://cube-mia.com/api/";
 
-var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
-// var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
+//var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
@@ -836,6 +836,13 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.myCart = myMemoryService.myCart;
 
+  $scope.CloseSession = function() {
+    $http.get(connServiceStringGateway + 'CloseSession?obj={"method":"CloseSession"}').then(function (response) {
+      $scope.UserName = '';
+      localStorage.UserName = '';
+    })
+  }
+
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
     $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
@@ -1294,6 +1301,13 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     return 0;
   }
 
+  $scope.CloseSession = function() {
+    $http.get(connServiceStringGateway + 'CloseSession?obj={"method":"CloseSession"}').then(function (response) {
+      $scope.UserName = '';
+      localStorage.UserName = '';
+    })
+  }
+
   var headers = {"Authorization": ServerAuth};
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
@@ -1454,6 +1468,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   // If Payment Informations Exists
   if (typeof localStorage.myPaymentsInfo != 'undefined' && localStorage.myPaymentsInfo != '' ){
+    console.log(localStorage.myPaymentsInfo);
     $scope.PaymentsInfo = JSON.parse(localStorage.myPaymentsInfo);
   }
   else{
