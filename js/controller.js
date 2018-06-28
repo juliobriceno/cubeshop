@@ -5,9 +5,9 @@
 // var connServiceString = "https://cubeshop.herokuapp.com/";
 var connServiceString = "http://cube-mia.com/api/";
 
-//ar connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
-var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
-//var connServiceString = "https://portal.cube-usa.com/api/";
+var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+// var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
+// var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
 var ServerAuth = "Basic Y3ViZXU6Y3ViZTIwMTc=";
@@ -123,7 +123,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
+    var imgPath = '';
+    if (source == 'productsType' || source == 'carrousel'){
+      imgPath = rowWithout64Img.CATIMAGE;
+    }
+    else{
+      imgPath = rowWithout64Img.HOMELOGO;
+    }
+
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -131,7 +139,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'carrousel'){
@@ -140,7 +148,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'masterpage'){
@@ -149,7 +157,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
         }
         else{
-          rowWithout64Img.HOMELOGO = response.data.imagedata;
+          rowWithout64Img.HOMELOGO = "data:image/png;base64, " + response.data.imagedata;
         }
       }
 
@@ -230,7 +238,20 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
               if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
                 localStorage.myPaymentsInfo = response.data.CubeFlexIntegration.DATA.DATA;
               }
-              window.location = 'index.html';
+
+              // Get User Credit Catrds Billings
+              $http.get(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "creditcardbilling"}').then(function (response) {
+                if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
+                  localStorage.myCreditCardsBilling = response.data.CubeFlexIntegration.DATA.DATA;
+                }
+                window.location = 'index.html';
+              })
+              .catch(function (data) {
+                console.log('Error 16');
+                console.log(data);
+                swal("Cube Service", "Unexpected error. Check console Error 16.");
+              });
+
             })
             .catch(function (data) {
               console.log('Error 16');
@@ -326,7 +347,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
+    var imgPath = '';
+    if (source == 'productsType' || source == 'carrousel'){
+      imgPath = rowWithout64Img.CATIMAGE;
+    }
+    else{
+      imgPath = rowWithout64Img.HOMELOGO;
+    }
+
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -334,7 +363,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'carrousel'){
@@ -343,7 +372,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'masterpage'){
@@ -352,7 +381,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
         }
         else{
-          rowWithout64Img.HOMELOGO = response.data.imagedata;
+          rowWithout64Img.HOMELOGO = "data:image/png;base64, " + response.data.imagedata;
         }
       }
 
@@ -627,7 +656,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $scope.GetBase64Image = function(rowWithout64Img, source){
 
-      $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
+      var imgPath = '';
+      if (source == 'productsType' || source == 'carrousel'){
+        imgPath = rowWithout64Img.CATIMAGE;
+      }
+      else{
+        imgPath = rowWithout64Img.HOMELOGO;
+      }
+
+      $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
 
         if (source == 'productsType'){
           if (response.data.imagedata == ''){
@@ -635,7 +672,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
           }
           else{
-            rowWithout64Img.CATIMAGE = response.data.imagedata;
+            rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
           }
         }
         else if (source == 'carrousel'){
@@ -644,7 +681,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
           }
           else{
-            rowWithout64Img.CATIMAGE = response.data.imagedata;
+            rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
           }
         }
         else if (source == 'masterpage'){
@@ -653,7 +690,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
           }
           else{
-            rowWithout64Img.HOMELOGO = response.data.imagedata;
+            rowWithout64Img.HOMELOGO = "data:image/png;base64, " + response.data.imagedata;
           }
         }
 
@@ -845,7 +882,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
+    var imgPath = '';
+    if (source == 'productsType' || source == 'carrousel'){
+      imgPath = rowWithout64Img.CATIMAGE;
+    }
+    else{
+      imgPath = rowWithout64Img.HOMELOGO;
+    }
+
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -853,7 +898,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'carrousel'){
@@ -862,7 +907,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'masterpage'){
@@ -871,7 +916,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
         }
         else{
-          rowWithout64Img.HOMELOGO = response.data.imagedata;
+          rowWithout64Img.HOMELOGO = "data:image/png;base64, " + response.data.imagedata;
         }
       }
 
@@ -1314,7 +1359,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
+    var imgPath = '';
+    if (source == 'productsType' || source == 'carrousel'){
+      imgPath = rowWithout64Img.CATIMAGE;
+    }
+    else{
+      imgPath = rowWithout64Img.HOMELOGO;
+    }
+
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -1322,7 +1375,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'carrousel'){
@@ -1331,7 +1384,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'masterpage'){
@@ -1340,7 +1393,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
         }
         else{
-          rowWithout64Img.HOMELOGO = response.data.imagedata;
+          rowWithout64Img.HOMELOGO = "data:image/png;base64, " + response.data.imagedata;
         }
       }
 
@@ -1586,7 +1639,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
+    var imgPath = '';
+    if (source == 'productsType' || source == 'carrousel'){
+      imgPath = rowWithout64Img.CATIMAGE;
+    }
+    else{
+      imgPath = rowWithout64Img.HOMELOGO;
+    }
+
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -1594,7 +1655,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'carrousel'){
@@ -1603,7 +1664,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'masterpage'){
@@ -1612,7 +1673,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
         }
         else{
-          rowWithout64Img.HOMELOGO = response.data.imagedata;
+          rowWithout64Img.HOMELOGO = "data:image/png;base64, " + response.data.imagedata;
         }
       }
 
@@ -1905,7 +1966,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}').then(function (response) {
+    var imgPath = '';
+    if (source == 'productsType' || source == 'carrousel'){
+      imgPath = rowWithout64Img.CATIMAGE;
+    }
+    else{
+      imgPath = rowWithout64Img.HOMELOGO;
+    }
+
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -1913,7 +1982,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'carrousel'){
@@ -1922,7 +1991,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'masterpage'){
@@ -1931,7 +2000,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
         }
         else{
-          rowWithout64Img.HOMELOGO = response.data.imagedata;
+          rowWithout64Img.HOMELOGO = "data:image/png;base64, " + response.data.imagedata;
         }
       }
 
@@ -2124,19 +2193,38 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   $scope.ShippingsInfo = [];
   $scope.ShippingSelected = {};
 
-  $scope.SaveShipping = function(){
-    $scope.newShipping.$setSubmitted();
-    if (!$scope.newShipping.$valid)
+  $scope.CloseSession = function() {
+    $http.get(connServiceStringGateway + 'CloseSession?obj={"method":"CloseSession"}').then(function (response) {
+      $scope.UserName = '';
+      localStorage.UserName = '';
+    })
+  }
+
+  // If Payment Informations Exists
+  if (typeof localStorage.myCreditCardsBilling != 'undefined' && localStorage.myCreditCardsBilling != '' ){
+    $scope.CreditCardsBilling = JSON.parse(localStorage.myCreditCardsBilling);
+  }
+  else{
+    $scope.CreditCardsBilling = [];
+  }
+
+  $scope.CreditCardSelected = {};
+
+  $scope.shownewItem = false;
+
+  $scope.SaveCreditCardBilling = function(){
+    $scope.newCreditCard.$setSubmitted();
+    if (!$scope.newCreditCard.$valid)
     {
       swal("Cube Shop", "There are invalid field. Please review.");
       return 0
     }
     // One one credit card same number
-    var ShippingsInfo = $scope.ShippingsInfo.filter(function(shipping){
-      return shipping.Address1 == $scope.Address1;
+    var CreditCardInfo = $scope.CreditCardsBilling.filter(function(creditcardbilling){
+      return creditcardbilling.Address1 == $scope.Address1;
     })
-    if (ShippingsInfo.length > 0 ){
-      swal("Cube Shop", "Shipping Address exists.");
+    if (CreditCardInfo.length > 0 ){
+      swal("Cube Shop", "Credit Card Billing Address exists.");
       return 0;
     }
     $scope.ShippingInfo = {Address1: $scope.Address1, Address2: $scope.Address2, City: $scope.City, State: $scope.State, Phone: $scope.Phone, Fax: $scope.Fax};
@@ -2167,7 +2255,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
 
-    $http.get(connServiceString + 'CubeFileDownload.ashx?obj={"filename": "/cubefilemng/cl_00000001/vendors/productCategories/6/6.PNG"}', {headers: headers}).then(function (response) {
+    var imgPath = '';
+    if (source == 'productsType' || source == 'carrousel'){
+      imgPath = rowWithout64Img.CATIMAGE;
+    }
+    else{
+      imgPath = rowWithout64Img.HOMELOGO;
+    }
+
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
 
       if (source == 'productsType'){
         if (response.data.imagedata == ''){
@@ -2175,7 +2271,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'carrousel'){
@@ -2184,7 +2280,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
         }
         else{
-          rowWithout64Img.CATIMAGE = response.data.imagedata;
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
         }
       }
       else if (source == 'masterpage'){
@@ -2193,7 +2289,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
         }
         else{
-          rowWithout64Img.HOMELOGO = response.data.imagedata;
+          rowWithout64Img.HOMELOGO = "data:image/png;base64, " + response.data.imagedata;
         }
       }
 
@@ -2215,7 +2311,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     })
   }
 
-  $http.get(connServiceString + 'CubeFlexIntegration.ashx?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}', {headers: headers}).then(function (response) {
+  $http.get(connServiceStringGateway + 'Get_EcomCustomerInformation?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}').then(function (response) {
 
     var MasterData = response.data.CubeFlexIntegration.DATA;
 

@@ -67,18 +67,20 @@
 								<li class="nav-text"> <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}</li>
 								<li><a href=""><i class="fas fa-question-circle"></i></a></li>
 
-								<li class="dropdown show">
-									<a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<i class="fas fa-user" aria-hidden="true"></i> My Account
-									</a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<a class="dropdown-item" href="#" style="color:#5A6268;">Close sesion</a>
-									</div>
-								</li>
+								<li ng-show="UserName!=''" class="dropdown show">
+                  <a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user" aria-hidden="true"></i> My Account
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Close sesion</a>
+                  </div>
+                </li>
 
-								<li class="">
-									<a class="" href="login.html"> Login/Register</a>
-								</li>
+                <li class="">
+                  <a class="" ng-show="UserName==''" href="login.html"> Login/Register</a>
+                </li>
+
+
 								<li class="carrito"><a  href="cart.html">
 									<i class="fas fa-cart-plus"></i> My Cart
 									<span class="badge badge-cart "> {{myCart.length}}</span>
@@ -138,7 +140,7 @@
     <h3>Credit Card billing address</h3>
     <a href="#jumpto" class="btn btn-secondary continue-shopping"><i class="fas fa-plus"></i> Add new Credit Card billing address</a>
   </div>
-  <div class="cart-shopping">
+  <div ng-show="!shownewItem" class="cart-shopping">
 		<table class="table">
 		  <thead>
 		    <tr  class="table-secondary">
@@ -153,13 +155,13 @@
 		  </thead>
 		  <tbody>
 
-				<tr ng-repeat="ShippingInfo in ShippingsInfo">
+				<tr ng-repeat="CreditCardBilling in CreditCardsBilling">
 		      <th scope="row"> <input ng-model="$parent.ShippingSelected" ng-value="ShippingInfo" type="radio" aria-label="Radio button for following text input"></th>
-		      <td>{{ShippingInfo.Address1}}</td>
-					<td>{{ShippingInfo.City}}</td>
-					<td>{{ShippingInfo.State}}</td>
-					<td>{{ShippingInfo.Phone}}</td>
-					<td><a ng-click="DeleteShipping(ShippingInfo.Address1);" class="btn "><i class="fas fa-times"></i></a></td>
+		      <td>{{CreditCardBilling.Address1}}</td>
+					<td>{{CreditCardBilling.City}}</td>
+					<td>{{CreditCardBilling.State}}</td>
+					<td>{{CreditCardBilling.Phone}}</td>
+					<td><a ng-click="DeleteCredirCardBilling(CreditCardBilling.Address1);" class="btn "><i class="fas fa-times"></i></a></td>
 		    </tr>
 
 
@@ -171,15 +173,11 @@
 			</div>
 		</div>
 
-		<div id="jumpto"> </div>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
+	  </div>
 
-		<form name="newShipping" style="margin-top:30px;">
+		<div ng-show="shownewItem">
+
+		<form name="newCreditCard" style="margin-top:30px;">
           <fieldset>
 
         <h6><strong>Shipping address</strong></h6>
@@ -224,11 +222,13 @@
 
 				<div class="row justify-content-end">
 					<div class="col-md-4 ">
-						<a><button ng-click="SaveShipping();" type="submit" class="btn btn-secondary btn-green btn-block">Save Credit Card Billing Address</button></a>
+						<a><button ng-click="SaveCreditCardBilling();" type="submit" class="btn btn-secondary btn-green btn-block">Save Credit Card Billing Address</button></a>
 					</div>
 				</div>
 
       </form>
+
+		</div>
 
 		<br>
 
