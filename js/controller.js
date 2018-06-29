@@ -5,8 +5,8 @@
 // var connServiceString = "https://cubeshop.herokuapp.com/";
 var connServiceString = "http://cube-mia.com/api/";
 
-// var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
-var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
+var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+// var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
@@ -1216,6 +1216,11 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   else {
 
       $http.get(connServiceStringGateway + 'Get_EcomParts?obj={"method":"Get_EcomParts","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}').then(function (response) {
+
+        if (typeof response.data.CubeFlexIntegration.DATA == 'undefined'){
+          swal("Cube Service", "There is not products in this category.");
+          return 0;
+        }
 
         $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
 
