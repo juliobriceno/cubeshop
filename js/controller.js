@@ -1123,8 +1123,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   if (typeof localStorage.cnnData2 != 'undefined'){
 
-    $loading.start('myloading');
-
     $scope.cnnData = cnnData;
 
     $scope.ProductCards = [];
@@ -1173,6 +1171,10 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   $scope.FindSubcategories = function(parentid, HasChild, Name) {
 
+    localStorage.productsparentid = parentid;
+    localStorage.productsHasChild = HasChild;
+    localStorage.productsName = Name;
+
     $scope.minimum = 0;
     $scope.maximum = 0;
 
@@ -1182,7 +1184,11 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       $scope.ShowTable = false;
       $scope.html = '<p>No results</p>';
 
+      $loading.start('myloading');
+
       $http.get(connServiceStringGateway + 'Get_EcomSubCategories?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}').then(function (response) {
+
+        $loading.finish('myloading');
 
         $scope.ProductCards = getArray(response.data.CubeFlexIntegration.DATA);
 
@@ -1215,7 +1221,11 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   else {
 
+      $loading.start('myloading');
+
       $http.get(connServiceStringGateway + 'Get_EcomParts?obj={"method":"Get_EcomParts","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}').then(function (response) {
+
+        $loading.finish('myloading');
 
         if (typeof response.data.CubeFlexIntegration.DATA == 'undefined'){
           swal("Cube Service", "There is not products in this category.");
@@ -1281,6 +1291,12 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       if (typeof localStorage.HomeCardCategoryID != 'undefined' && localStorage.HomeCardCategoryID != ''){
         $scope.FindSubcategories(localStorage.HomeCardCategoryID, localStorage.HomeCardHasChild, localStorage.HomeCardName)
         localStorage.HomeCardCategoryID = '';
+      }
+
+      // If User was in a subcategory return to it Else Mail categories
+      if (typeof localStorage.productsparentid != 'undefined'){
+        $scope.FindSubcategories(localStorage.productsparentid, localStorage.productsHasChild, localStorage.productsName);
+        return 0;
       }
 
       // Si viene de HOME con search
