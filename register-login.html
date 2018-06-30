@@ -72,7 +72,7 @@
 		<nav class="navbar navbar-expand-md navbar-light bg-light ">
 			<div class="container-fluid">
 				<!--logo -->
-				<a class="navbar-brand" href="index.html"><img ng-src="{{'/'+ MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
+				<a class="navbar-brand" href="index.html"><img ng-src="{{MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
@@ -190,9 +190,9 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="exampleInputEmail1">Customer type: </label>
-													<select class="form-control" name:"CustomerType" ng-class="{'is-invalid':selectedCustomerType == undefined}"
+													<select class="form-control"
 													ng-model="selectedCustomerType"
-													ng-options="CustomerType as CustomerType.CUSTOMERTYPE for CustomerType in CustomerTypes" ng-required="true">
+													ng-options="CustomerType as CustomerType.CUSTOMERTYPE for CustomerType in CustomerTypes" >
 												</select>
 											</div>
 										</div>
@@ -202,7 +202,7 @@
 										<input ng-model="StreetAddress1" name="StreetAddress1" type="text" class="form-control" ng-class="{'is-invalid':userForm.StreetAddress1.$invalid && userForm.StreetAddress1.$dirty}" placeholder="Street Address 1" ng-required="true">
 									</div>
 									<div class="form-group">
-										<input ng-model="StreetAddress2" name="StreetAddress2" type="text" class="form-control" ng-class="{'is-invalid':userForm.StreetAddress2.$invalid && userForm.StreetAddress2.$dirty}" placeholder="Street Address 2" ng-required="true">
+										<input ng-model="StreetAddress2" type="text" class="form-control" placeholder="Street Address 2">
 									</div>
 									<div class="row">
 										<div class="col-md-6">
@@ -249,10 +249,6 @@
 											<input ng-model="Fax" name="Fax" type="text" class="form-control" ng-class="{'is-invalid':userForm.Fax.$invalid && userForm.Fax.$dirty}" placeholder="Fax" ng-required="true">
 										</div>
 									</div>
-								</div>
-								<div class="form-group">
-									<label for="exampleInputPassword1">List ID: </label>
-									<input ng-model="List" name="List" type="text" class="form-control" ng-class="{'is-invalid':userForm.List.$invalid && userForm.List.$dirty}" placeholder="Fax" ng-required="true">
 								</div>
 							</fieldset>
 							<br>
@@ -308,10 +304,6 @@
 						<fieldset>
 							<h6> <strong>Users</strong></h6>
 							<hr>
-							<div class="form-group">
-								<label for="exampleInputEmail1">Company ID: </label>
-								<input ng-model="UserCompanyID" name="UserCompanyID" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserCompanyID.$invalid && newAccount.UserCompanyID.$dirty}" placeholder="Company ID" ng-required="true">
-							</div>
 							<div class="form-group">
 								<label for="exampleInputPassword1">First Name: </label>
 								<input ng-model="UserFirstName" name="UserFirstName" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserFirstName.$invalid && newAccount.UserFirstName.$dirty}" placeholder="First Name" ng-required="true">

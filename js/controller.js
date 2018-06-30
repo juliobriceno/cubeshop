@@ -5,8 +5,8 @@
 // var connServiceString = "https://cubeshop.herokuapp.com/";
 var connServiceString = "http://cube-mia.com/api/";
 
-// var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
-var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
+var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+// var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
@@ -306,13 +306,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     MasterData.forEach(function(el){
       MasterInfo.ID = MasterInfo.ID + 1;
-      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'Logo'){MasterInfo.HOMELOGO = el.VALUE};
       if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
-      $scope.GetBase64Image(el, 'masterpage');
     })
+
+    $scope.GetBase64Image(MasterInfo, 'masterpage');
+
 
     MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
 
@@ -354,6 +356,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     else{
       imgPath = rowWithout64Img.HOMELOGO;
     }
+
+    console.log(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}');
 
     $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
 
@@ -416,13 +420,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     MasterData.forEach(function(el){
       MasterInfo.ID = MasterInfo.ID + 1;
-      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'Logo'){MasterInfo.HOMELOGO = el.VALUE};
       if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
-      $scope.GetBase64Image(el, 'masterpage');
     })
+
+    $scope.GetBase64Image(MasterInfo, 'masterpage');
 
     MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
 
@@ -443,6 +448,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   $http.get(connServiceStringGateway + 'GetCustomerType?obj={"method":"GetCustomerType","conncode":"' + cnnData.DBNAME + '"}').then(function (response) {
 
     $scope.CustomerTypes = getArray(response.data.CubeFlexIntegration.DATA);
+    $scope.selectedCustomerType = $scope.CustomerTypes[0];
+
 
   })
   .catch(function (data) {
@@ -464,6 +471,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   });
 
   $scope.SaveCustomer = function() {
+
+    $scope.List = '1';
+
+    if ($scope.UserPassword != $scope.UserConfirmPassword)
+    {
+      swal("Cube Shop", "Password not match.");
+      return 0
+    }
+
     $scope.userForm.$setSubmitted();
 
     if (!$scope.userForm.$valid)
@@ -474,41 +490,64 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $loading.start('myloading');
 
+    var CustomerTypeID = 0;
+    if (typeof $scope.selectedCustomerType != 'undefined'){
+      CustomerTypeID = $scope.selectedCustomerType.ID;
+      console.log($scope.selectedCustomerType.ID);
+    }
+
     var strInsert = 'Insert_Customer?obj={"method":"Insert_Customer", "customername": "' + $scope.CustomerName + '", "address": "' + $scope.StreetAddress1 + '", "addressline2": "' + $scope.StreetAddress2 + '", "city": "' + $scope.City + '", "state": "' + $scope.State + '", "zip": "' +
     $scope.Zip + '", "country": "' + $scope.selectedCountry.CountryISO3 + '", "offphone": "' + $scope.selectedCountry.Phone + '", "offfax": "' + $scope.Fax + '", "listid": "' + $scope.List + '", "billingname": "' + $scope.BillingName + '", "billingaddress": "' +
-    $scope.BillingStreetAddress1 + '", "billingaddressline2": "' + $scope.BillingStreetAddress2 + '", "billingcity": "' + $scope.BillingCity + '", "billingstate": "' + $scope.BillingState + '", "billingzip": "' + $scope.BillingZip + '", "billingcountry": "' + $scope.selectedBillingCountry.CountryISO3 + '", "customertypeid": "' + $scope.selectedCustomerType.ID + '" }'
+    $scope.BillingStreetAddress1 + '", "billingaddressline2": "' + $scope.BillingStreetAddress2 + '", "billingcity": "' + $scope.BillingCity + '", "billingstate": "' + $scope.BillingState + '", "billingzip": "' + $scope.BillingZip + '", "billingcountry": "' + $scope.selectedBillingCountry.CountryISO3 + '", "customertypeid": "' + CustomerTypeID + '" }'
 
     // Save the Company
     $http.get(connServiceStringGateway + strInsert).then(function (response) {
 
-      if (typeof response.data.CubeFlexIntegration.DATA.Column1 != 'undefined'){
+      $scope.UserCompanyID = response.data.CubeFlexIntegration.DATA.Column1;
+      var CompanyCode = $scope.UserCompanyID;
 
-        $scope.CustomerName = '';
-        $scope.StreetAddress1 = '';
-        $scope.StreetAddress2 = '';
-        $scope.City = '';
-        $scope.State = '';
-        $scope.Zip = '';
-        $scope.selectedCountry = null;
-        $scope.Fax = '';
-        $scope.List = '';
-        $scope.BillingName = '';
-        $scope.BillingStreetAddress1 = '';
-        $scope.BillingStreetAddress2 = '';
-        $scope.BillingCity = '';
-        $scope.BillingState = '';
-        $scope.BillingZip = '';
-        $scope.selectedBillingCountry = null;
+      var strInsert = 'Insert_EComm_User?obj={"method":"Insert_EComm_User", "companyid": "' + $scope.UserCompanyID + '", "firstname": "' + $scope.UserFirstName + '", "lastname": "' + $scope.UserLastName + '", "email": "' + $scope.UserEmail + '", "password": "' + $scope.UserPassword + '", "passwordquestion": "' +
+      $scope.UserSecurityQuestion + '", "passwordanswer": "' + $scope.UserSecurityAnswer + '"}'
 
-        $scope.userForm.$setPristine()
+      // Save the User
+      $http.get(connServiceStringGateway + strInsert).then(function (response) {
+        if (typeof response.data.CubeFlexIntegration.DATA.ID != 'undefined'){
+          if (response.data.CubeFlexIntegration.DATA.ID != -1){
 
-        console.log(response);
+            $scope.CustomerName = '';
+            $scope.StreetAddress1 = '';
+            $scope.StreetAddress2 = '';
+            $scope.City = '';
+            $scope.State = '';
+            $scope.Zip = '';
+            $scope.selectedCountry = null;
+            $scope.Fax = '';
+            $scope.List = '';
+            $scope.BillingName = '';
+            $scope.BillingStreetAddress1 = '';
+            $scope.BillingStreetAddress2 = '';
+            $scope.BillingCity = '';
+            $scope.BillingState = '';
+            $scope.BillingZip = '';
+            $scope.selectedBillingCountry = null;
+            $scope.UserCompanyID = '';
+            $scope.UserFirstName = '';
+            $scope.UserLastName = '';
+            $scope.UserEmail = '';
+            $scope.UserPassword = '';
+            $scope.UserConfirmPassword = '';
+            $scope.UserSecurityQuestion = '';
+            $scope.UserSecurityAnswer = '';
 
-        swal("Cube Shop", "Your Company was created. Your COMPANY ID is: " + response.data.CubeFlexIntegration.DATA.Column1 + '. It will be required for create users.');
+            $scope.userForm.$setPristine()
 
-        $loading.finish('myloading');
+            swal("Cube Shop", "Your Company was created. Your COMPANY ID is: " + CompanyCode + '. It will be required for create users.');
 
-      }
+            $loading.finish('myloading');
+
+          }
+        }
+      });
 
     })
     .catch(function (data) {
@@ -762,13 +801,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
       MasterData.forEach(function(el){
         MasterInfo.ID = MasterInfo.ID + 1;
-        if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+        if (el.NAME == 'Logo'){MasterInfo.HOMELOGO = el.VALUE};
         if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
         if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
         if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
         if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
-        $scope.GetBase64Image(el, 'masterpage');
       })
+
+      $scope.GetBase64Image(MasterInfo, 'masterpage');
 
       MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
 
@@ -971,13 +1011,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     MasterData.forEach(function(el){
       MasterInfo.ID = MasterInfo.ID + 1;
-      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'Logo'){MasterInfo.HOMELOGO = el.VALUE};
       if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
-      $scope.GetBase64Image(el, 'masterpage');
     })
+
+    $scope.GetBase64Image(MasterInfo, 'masterpage');
+
 
     MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
 
@@ -1187,6 +1229,12 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       $loading.start('myloading');
 
       $http.get(connServiceStringGateway + 'Get_EcomSubCategories?obj={"method":"Get_EcomSubCategories","conncode":"' + cnnData.DBNAME + '", "parentid": "' + parentid + '"}').then(function (response) {
+
+        if (typeof response.data.CubeFlexIntegration.DATA == 'undefined'){
+          $loading.finish('myloading');
+          swal("Cube Service", "There is not more subcategories.");
+          return 0;
+        }
 
         $loading.finish('myloading');
 
@@ -1456,13 +1504,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     MasterData.forEach(function(el){
       MasterInfo.ID = MasterInfo.ID + 1;
-      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'Logo'){MasterInfo.HOMELOGO = el.VALUE};
       if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
-      $scope.GetBase64Image(el, 'masterpage');
     })
+
+    $scope.GetBase64Image(MasterInfo, 'masterpage');
+
 
     MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
 
@@ -1736,13 +1786,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     MasterData.forEach(function(el){
       MasterInfo.ID = MasterInfo.ID + 1;
-      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'Logo'){MasterInfo.HOMELOGO = el.VALUE};
       if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
-      $scope.GetBase64Image(el, 'masterpage');
     })
+
+    $scope.GetBase64Image(MasterInfo, 'masterpage');
+
 
     MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
 
@@ -2063,13 +2115,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     MasterData.forEach(function(el){
       MasterInfo.ID = MasterInfo.ID + 1;
-      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'Logo'){MasterInfo.HOMELOGO = el.VALUE};
       if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
-      $scope.GetBase64Image(el, 'masterpage');
     })
+
+    $scope.GetBase64Image(MasterInfo, 'masterpage');
+
 
     MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
 
@@ -2352,13 +2406,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     MasterData.forEach(function(el){
       MasterInfo.ID = MasterInfo.ID + 1;
-      if (el.NAME == 'CompanyLogo'){MasterInfo.HOMELOGO = 'img/' + el.VALUE};
+      if (el.NAME == 'Logo'){MasterInfo.HOMELOGO = el.VALUE};
       if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
-      $scope.GetBase64Image(el, 'masterpage');
     })
+
+    $scope.GetBase64Image(MasterInfo, 'masterpage');
 
     MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
 
