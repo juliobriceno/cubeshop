@@ -5,8 +5,8 @@
 // var connServiceString = "https://cubeshop.herokuapp.com/";
 var connServiceString = "http://cube-mia.com/api/";
 
-// var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
-var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
+var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+// var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
@@ -113,6 +113,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   $scope.myCart = myMemoryService.myCart;
 
   function getArray(object){
+      if (typeof object == 'undefined'){
+        return [];
+      }
       if (Array.isArray(object)){
         return object;
       }
@@ -311,6 +314,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      if (el.NAME == 'Color'){MasterInfo.BackColor = el.VALUE};
     })
 
     $scope.GetBase64Image(MasterInfo, 'masterpage');
@@ -339,6 +343,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   $scope.myCart = myMemoryService.myCart;
 
   function getArray(object){
+      if (typeof object == 'undefined'){
+        return [];
+      }
       if (Array.isArray(object)){
         return object;
       }
@@ -425,7 +432,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      if (el.NAME == 'Color'){MasterInfo.BackColor = el.VALUE};
     })
+
 
     $scope.GetBase64Image(MasterInfo, 'masterpage');
 
@@ -541,7 +550,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
             $scope.userForm.$setPristine()
 
-            swal("Cube Shop", "Your Company was created. Your COMPANY ID is: " + CompanyCode + '. It will be required for create users.');
+            swal("Cube Shop", "Your Company was created.");
+
+            window.location = 'index.html';
 
             $loading.finish('myloading');
 
@@ -675,6 +686,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   var cnnData = JSON.parse(localStorage.cnnData2);
 
   function getArray(object){
+      if (typeof object == 'undefined'){
+        return [];
+      }
       if (Array.isArray(object)){
         return object;
       }
@@ -806,7 +820,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
         if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
         if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+        if (el.NAME == 'Color'){MasterInfo.BackColor = el.VALUE};
       })
+
 
       $scope.GetBase64Image(MasterInfo, 'masterpage');
 
@@ -899,6 +915,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   // Fin de cosas de carousel
 
   function getArray(object){
+      if (typeof object == 'undefined'){
+        return [];
+      }
       if (Array.isArray(object)){
         return object;
       }
@@ -1016,7 +1035,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      if (el.NAME == 'Color'){MasterInfo.BackColor = el.VALUE};
     })
+
 
     $scope.GetBase64Image(MasterInfo, 'masterpage');
 
@@ -1155,6 +1176,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   }
 
   function getArray(object){
+      if (typeof object == 'undefined'){
+        return [];
+      }
       if (Array.isArray(object)){
         return object;
       }
@@ -1380,6 +1404,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   // Fin de cosas de carousel
 
   function getArray(object){
+      if (typeof object == 'undefined'){
+        return [];
+      }
       if (Array.isArray(object)){
         return object;
       }
@@ -1509,7 +1536,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      if (el.NAME == 'Color'){MasterInfo.BackColor = el.VALUE};
     })
+
 
     $scope.GetBase64Image(MasterInfo, 'masterpage');
 
@@ -1791,7 +1820,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      if (el.NAME == 'Color'){MasterInfo.BackColor = el.VALUE};
     })
+
 
     $scope.GetBase64Image(MasterInfo, 'masterpage');
 
@@ -2120,7 +2151,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      if (el.NAME == 'Color'){MasterInfo.BackColor = el.VALUE};
     })
+
 
     $scope.GetBase64Image(MasterInfo, 'masterpage');
 
@@ -2411,7 +2444,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
       if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
       if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      if (el.NAME == 'Color'){MasterInfo.BackColor = el.VALUE};
     })
+
 
     $scope.GetBase64Image(MasterInfo, 'masterpage');
 

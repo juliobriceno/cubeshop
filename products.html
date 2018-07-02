@@ -57,7 +57,7 @@
 <body ng-controller="ctrlCubeShopHomeProducts">
 	<div class="sticky-top">
 
-		<nav class="top-menu sticky-top">
+		<nav class="top-menu sticky-top" ng-style="{'background-color':1 == 1 ?  MasterInfo[0].BackColor: MasterInfo[0].BackColor}"/>
 			<div class="container-fluid">
 				<div class="row">
 
@@ -69,7 +69,7 @@
 
 								<li ng-show="UserName!=''" class="dropdown show">
                   <a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user" aria-hidden="true"></i> My Account
+                    <i class="fas fa-user" aria-hidden="true"></i> {{ "Hello: " + UserName }}
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Close sesion</a>
@@ -81,7 +81,7 @@
                 </li>
 
 
-								<li class="carrito"><a  href="cart.html">
+								<li class="carrito" ng-style="{'background-color':1 == 1 ?  MasterInfo[0].BackColor: MasterInfo[0].BackColor}"><a  href="cart.html">
 									<i class="fas fa-cart-plus"></i> My Cart
 									<span class="badge badge-cart "> {{myCart.length}}</span>
 								</a></li>
