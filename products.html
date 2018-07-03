@@ -183,7 +183,7 @@
 								</div>
 							</div>
 							<div ng-show="!ShowTable">
-								<div ng-show="!ShowDetail" class="row" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'" style="margin-bottom:20px;">
+								<div ng-show="!ShowDetail" class="card-group" ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'" style="margin-bottom:20px;">
 									<div ng-repeat="ProductCardsItem in value" class="card-deck col-xs-12 col-sm-12 col-md-4 col-lg-4">
 										<div class="card">
 											<img class="card-img-top" ng-src="{{ProductCardsItem.CATIMAGE}}" alt="products-cube-image" width="400" height="200">
