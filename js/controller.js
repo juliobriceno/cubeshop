@@ -5,8 +5,8 @@
 // var connServiceString = "https://cubeshop.herokuapp.com/";
 var connServiceString = "http://cube-mia.com/api/";
 
-// var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
-var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
+var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+// var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
@@ -336,6 +336,16 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 .controller('ctrlCubeShopLoginRegister', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
 
+  $scope.sameaddress = false;
+
+  $scope.UserName = '';
+
+  if (typeof localStorage.UserName != 'undefined'){
+    if (typeof localStorage.UserName != ''){
+      $scope.UserName = localStorage.UserName;
+    }
+  }
+
   var headers = {"Authorization": ServerAuth};
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
@@ -352,6 +362,17 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       else{
         return [object]
       }
+  }
+
+  $scope.changevalue = function(){
+    if ($scope.sameaddress == true){
+      $scope.BillingStreetAddress1 = $scope.StreetAddress1;
+      $scope.BillingStreetAddress2 = $scope.StreetAddress2;
+      $scope.BillingCity = $scope.City;
+      $scope.BillingState = $scope.State;
+      $scope.BillingZip = $scope.Zip;
+      $scope.selectedBillingCountry = $scope.selectedCountry;
+    }
   }
 
   $scope.GetBase64Image = function(rowWithout64Img, source){
@@ -930,6 +951,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 .controller('ctrlCubeShopHomeProducts', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
 
+  $scope.UserName = '';
+
+  if (typeof localStorage.UserName != 'undefined'){
+    if (typeof localStorage.UserName != ''){
+      $scope.UserName = localStorage.UserName;
+    }
+  }
+
   $scope.myCart = myMemoryService.myCart;
 
   $scope.CloseSession = function() {
@@ -1418,6 +1447,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 }])
 
 .controller('ctrlCubeShopHomeProductDetail', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
+
+  $scope.UserName = '';
+
+  if (typeof localStorage.UserName != 'undefined'){
+    if (typeof localStorage.UserName != ''){
+      $scope.UserName = localStorage.UserName;
+    }
+  }
+
   $scope.myCart = myMemoryService.myCart;
   $scope.ProductCardsItem = JSON.parse(localStorage.ActiveProductCardsItem);
   $scope.AddToCart = function(ProductCardsItem) {
@@ -1435,6 +1473,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 }])
 
 .controller('ctrlCubeShopHomeProductCart', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+
+  $scope.UserName = '';
+
+  if (typeof localStorage.UserName != 'undefined'){
+    if (typeof localStorage.UserName != ''){
+      $scope.UserName = localStorage.UserName;
+    }
+  }
 
   // If user is not authenticate
   if (typeof localStorage.ActiveUserID == 'undefined' || localStorage.ActiveUserID =='' ){
@@ -1614,6 +1660,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 }])
 
 .controller('ctrlCubeShopHomePaymentInformation', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
+
+  $scope.UserName = '';
+
+  if (typeof localStorage.UserName != 'undefined'){
+    if (typeof localStorage.UserName != ''){
+      $scope.UserName = localStorage.UserName;
+    }
+  }
 
   var headers = {"Authorization": ServerAuth};
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
@@ -1963,6 +2017,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 .controller('ctrlCubeShopHomeShippingInformation', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
 
+  $scope.UserName = '';
+
+  if (typeof localStorage.UserName != 'undefined'){
+    if (typeof localStorage.UserName != ''){
+      $scope.UserName = localStorage.UserName;
+    }
+  }
+
   var headers = {"Authorization": ServerAuth};
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
@@ -2297,6 +2359,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   var headers = {"Authorization": ServerAuth};
   localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
   var cnnData = JSON.parse(localStorage.cnnData2);
+
+  $scope.UserName = '';
+
+  if (typeof localStorage.UserName != 'undefined'){
+    if (typeof localStorage.UserName != ''){
+      $scope.UserName = localStorage.UserName;
+    }
+  }
 
   $scope.ShippingsInfo = [];
   $scope.ShippingSelected = {};

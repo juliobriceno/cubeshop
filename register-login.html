@@ -145,23 +145,23 @@
 									</div>
 									<div class="form-group">
 										<label for="exampleInputPassword1">Email: </label>
-										<input ng-model="UserEmail" name="UserEmail" type="email" class="form-control" ng-class="{'is-invalid':newAccount.UserEmail.$invalid && newAccount.UserEmail.$dirty}" placeholder="Last Name" ng-required="true">
+										<input ng-model="UserEmail" name="UserEmail" type="email" class="form-control" ng-class="{'is-invalid':newAccount.UserEmail.$invalid && newAccount.UserEmail.$dirty}" placeholder="Email" ng-required="true">
 									</div>
 									<div class="form-group">
 										<label for="exampleInputPassword1">Password: </label>
-										<input ng-model="UserPassword" name="UserPassword" type="password" class="form-control" ng-class="{'is-invalid':newAccount.UserPassword.$invalid && newAccount.UserPassword.$dirty}" placeholder="Last Name" ng-required="true">
+										<input ng-model="UserPassword" name="UserPassword" type="password" class="form-control" ng-class="{'is-invalid':newAccount.UserPassword.$invalid && newAccount.UserPassword.$dirty}" placeholder="Password" ng-required="true">
 									</div>
 									<div class="form-group">
 										<label for="exampleInputPassword1">Confirm Password: </label>
-										<input ng-model="UserConfirmPassword" name="UserConfirmPassword" type="password" class="form-control" ng-class="{'is-invalid':newAccount.UserConfirmPassword.$invalid && newAccount.UserConfirmPassword.$dirty}" placeholder="Last Name" ng-required="true">
+										<input ng-model="UserConfirmPassword" name="UserConfirmPassword" type="password" class="form-control" ng-class="{'is-invalid':newAccount.UserConfirmPassword.$invalid && newAccount.UserConfirmPassword.$dirty}" placeholder="Confirm Password" ng-required="true">
 									</div>
 									<div class="form-group">
 										<label for="exampleInputPassword1">Security Question: </label>
-										<input ng-model="UserSecurityQuestion" name="UserSecurityQuestion" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityQuestion.$invalid && newAccount.UserSecurityQuestion.$dirty}" placeholder="Last Name" ng-required="true">
+										<input ng-model="UserSecurityQuestion" name="UserSecurityQuestion" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityQuestion.$invalid && newAccount.UserSecurityQuestion.$dirty}" placeholder="Security Question" ng-required="true">
 									</div>
 									<div class="form-group">
 										<label for="exampleInputPassword1">Security Answer: </label>
-										<input ng-model="UserSecurityAnswer" name="UserSecurityAnswer" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityAnswer.$invalid && newAccount.UserSecurityAnswer.$dirty}" placeholder="Last Name" ng-required="true">
+										<input ng-model="UserSecurityAnswer" name="UserSecurityAnswer" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityAnswer.$invalid && newAccount.UserSecurityAnswer.$dirty}" placeholder="Security Answer" ng-required="true">
 									</div>
 									<a href="products.html"><button ng-click="SaveUser();" type="submit" class="btn btn-secondary btn-green btn-block">Create user</button></a>
 								</form>
@@ -199,22 +199,22 @@
 									</div>
 									<div class="form-group">
 										<label for="exampleInputEmail1">Street Address 1: </label>
-										<input ng-model="StreetAddress1" name="StreetAddress1" type="text" class="form-control" ng-class="{'is-invalid':userForm.StreetAddress1.$invalid && userForm.StreetAddress1.$dirty}" placeholder="Street Address 1" ng-required="true">
+										<input ng-change="changevalue()" ng-model="StreetAddress1" name="StreetAddress1" type="text" class="form-control" ng-class="{'is-invalid':userForm.StreetAddress1.$invalid && userForm.StreetAddress1.$dirty}" placeholder="Street Address 1" ng-required="true">
 									</div>
 									<div class="form-group">
-										<input ng-model="StreetAddress2" type="text" class="form-control" placeholder="Street Address 2">
+										<input ng-change="changevalue()" ng-model="StreetAddress2" type="text" class="form-control" placeholder="Street Address 2">
 									</div>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="exampleInputPassword1">  City: </label>
-												<input ng-model="City" name="City" type="text" class="form-control" ng-class="{'is-invalid':userForm.City.$invalid && userForm.City.$dirty}" placeholder="City" ng-required="true">
+												<input ng-change="changevalue()" ng-model="City" name="City" type="text" class="form-control" ng-class="{'is-invalid':userForm.City.$invalid && userForm.City.$dirty}" placeholder="City" ng-required="true">
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="exampleInputPassword1">  State:</label>
-												<input ng-model="State" name="State" type="text" class="form-control" ng-class="{'is-invalid':userForm.State.$invalid && userForm.State.$dirty}" placeholder="State" ng-required="true">
+												<input ng-model="State" ng-change="changevalue()"  name="State" type="text" class="form-control" ng-class="{'is-invalid':userForm.State.$invalid && userForm.State.$dirty}" placeholder="State" ng-required="true">
 											</div>
 										</div>
 									</div>
@@ -222,14 +222,14 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="exampleInputPassword1"> Zip: </label>
-												<input ng-model="Zip" name="Zip" type="text" class="form-control" ng-class="{'is-invalid':userForm.Zip.$invalid && userForm.Zip.$dirty}" placeholder="Zip" ng-required="true">
+												<input ng-model="Zip" ng-change="changevalue()"  name="Zip" type="text" class="form-control" ng-class="{'is-invalid':userForm.Zip.$invalid && userForm.Zip.$dirty}" placeholder="Zip" ng-required="true">
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="exampleInputPassword1"> Country:</label>
 
-												<select class="form-control" name:"CustomerType" ng-class="{'is-invalid':selectedCountry == undefined}"
+												<select class="form-control" ng-change="changevalue()"  name:"CustomerType" ng-class="{'is-invalid':selectedCountry == undefined}"
 												ng-model="selectedCountry"
 												ng-options="Country as Country.COUNTYNAME for Country in Countries" ng-required="true">
 											</select>
@@ -246,7 +246,7 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="exampleInputPassword1">  Fax: </label>
-											<input ng-model="Fax" name="Fax" type="text" class="form-control" ng-class="{'is-invalid':userForm.Fax.$invalid && userForm.Fax.$dirty}" placeholder="Fax" ng-required="true">
+											<input ng-model="Fax" name="Fax" type="text" class="form-control" ng-class="{'is-invalid':userForm.Fax.$invalid && userForm.Fax.$dirty}" placeholder="Fax" >
 										</div>
 									</div>
 								</div>
@@ -260,24 +260,27 @@
 									<input ng-model="BillingName" name="BillingName" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingName.$invalid && userForm.BillingName.$dirty}" placeholder="Billing Name" ng-required="true">
 								</div>
 								<div class="form-group">
+									<label>Billing address same as my address: <input ng-change="changevalue()" type="checkbox" ng-model="sameaddress"></label>
+								</div>
+								<div class="form-group">
 									<label for="exampleInputEmail1">Street Address 1: </label>
-									<input ng-model="BillingStreetAddress1" name="BillingStreetAddress1" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingStreetAddress1.$invalid && userForm.BillingStreetAddress1.$dirty}" placeholder="Street Address1" ng-required="true">
+									<input ng-disabled="sameaddress" ng-model="BillingStreetAddress1" name="BillingStreetAddress1" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingStreetAddress1.$invalid && userForm.BillingStreetAddress1.$dirty}" placeholder="Street Address1" ng-required="true">
 								</div>
 								<div class="form-group">
 									<label for="exampleInputPassword1">Street Address 2: </label>
-									<input ng-model="BillingStreetAddress2" name="BillingStreetAddress2" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingStreetAddress2.$invalid && userForm.BillingStreetAddress1.$dirty}" placeholder="Street Address2" ng-required="true">
+									<input ng-disabled="sameaddress" ng-model="BillingStreetAddress2" name="BillingStreetAddress2" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingStreetAddress2.$invalid && userForm.BillingStreetAddress1.$dirty}" placeholder="Street Address2" >
 								</div>
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="exampleInputPassword1">  City: </label>
-											<input ng-model="BillingCity" name="BillingCity" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingCity.$invalid && userForm.BillingCity.$dirty}" placeholder="City" ng-required="true">
+											<input ng-disabled="sameaddress" ng-model="BillingCity" name="BillingCity" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingCity.$invalid && userForm.BillingCity.$dirty}" placeholder="City" ng-required="true">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="exampleInputPassword1">  State:</label>
-											<input ng-model="BillingState" name="BillingState" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingState.$invalid && userForm.BillingState.$dirty}" placeholder="State" ng-required="true">
+											<input ng-disabled="sameaddress" ng-model="BillingState" name="BillingState" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingState.$invalid && userForm.BillingState.$dirty}" placeholder="State" ng-required="true">
 										</div>
 									</div>
 								</div>
@@ -285,14 +288,14 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="exampleInputPassword1">  Zip: </label>
-											<input ng-model="BillingZip" name="BillingZip" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingZip.$invalid && userForm.BillingZip.$dirty}" placeholder="Zip" ng-required="true">
+											<input ng-disabled="sameaddress" ng-model="BillingZip" name="BillingZip" type="text" class="form-control" ng-class="{'is-invalid':userForm.BillingZip.$invalid && userForm.BillingZip.$dirty}" placeholder="Zip" ng-required="true">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="exampleInputPassword1">  Country: </label>
 
-											<select class="form-control" name:"CustomerType" ng-class="{'is-invalid':selectedBillingCountry == undefined}"
+											<select ng-disabled="sameaddress" class="form-control" name:"CustomerType" ng-class="{'is-invalid':selectedBillingCountry == undefined}"
 											ng-model="selectedBillingCountry"
 											ng-options="Country as Country.COUNTYNAME for Country in Countries" ng-required="true">
 										</select>
@@ -314,23 +317,23 @@
 							</div>
 							<div class="form-group">
 								<label for="exampleInputPassword1">Email: </label>
-								<input ng-model="UserEmail" name="UserEmail" type="email" class="form-control" ng-class="{'is-invalid':newAccount.UserEmail.$invalid && newAccount.UserEmail.$dirty}" placeholder="Last Name" ng-required="true">
+								<input ng-model="UserEmail" name="UserEmail" type="email" class="form-control" ng-class="{'is-invalid':newAccount.UserEmail.$invalid && newAccount.UserEmail.$dirty}" placeholder="Email" ng-required="true">
 							</div>
 							<div class="form-group">
 								<label for="exampleInputPassword1">Password: </label>
-								<input ng-model="UserPassword" name="UserPassword" type="password" class="form-control" ng-class="{'is-invalid':newAccount.UserPassword.$invalid && newAccount.UserPassword.$dirty}" placeholder="Last Name" ng-required="true">
+								<input ng-model="UserPassword" name="UserPassword" type="password" class="form-control" ng-class="{'is-invalid':newAccount.UserPassword.$invalid && newAccount.UserPassword.$dirty}" placeholder="Password" ng-required="true">
 							</div>
 							<div class="form-group">
 								<label for="exampleInputPassword1">Confirm Password: </label>
-								<input ng-model="UserConfirmPassword" name="UserConfirmPassword" type="password" class="form-control" ng-class="{'is-invalid':newAccount.UserConfirmPassword.$invalid && newAccount.UserConfirmPassword.$dirty}" placeholder="Last Name" ng-required="true">
+								<input ng-model="UserConfirmPassword" name="UserConfirmPassword" type="password" class="form-control" ng-class="{'is-invalid':newAccount.UserConfirmPassword.$invalid && newAccount.UserConfirmPassword.$dirty}" placeholder="Confirm Password" ng-required="true">
 							</div>
 							<div class="form-group">
 								<label for="exampleInputPassword1">Security Question: </label>
-								<input ng-model="UserSecurityQuestion" name="UserSecurityQuestion" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityQuestion.$invalid && newAccount.UserSecurityQuestion.$dirty}" placeholder="Last Name" ng-required="true">
+								<input ng-model="UserSecurityQuestion" name="UserSecurityQuestion" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityQuestion.$invalid && newAccount.UserSecurityQuestion.$dirty}" placeholder="Security Question" ng-required="true">
 							</div>
 							<div class="form-group">
 								<label for="exampleInputPassword1">Security Answer: </label>
-								<input ng-model="UserSecurityAnswer" name="UserSecurityAnswer" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityAnswer.$invalid && newAccount.UserSecurityAnswer.$dirty}" placeholder="Last Name" ng-required="true">
+								<input ng-model="UserSecurityAnswer" name="UserSecurityAnswer" type="text" class="form-control" ng-class="{'is-invalid':newAccount.UserSecurityAnswer.$invalid && newAccount.UserSecurityAnswer.$dirty}" placeholder="Security Answer" ng-required="true">
 							</div>
 						</fieldset>
 						<button ng-click="SaveCustomer();" class="btn btn-secondary btn-green btn-block">Create company</button></a>
