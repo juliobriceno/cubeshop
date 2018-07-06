@@ -57,7 +57,7 @@
 	<script src="js/lodash.min.js"></script>
 </head>
 
-<body >
+<body ng-controller="ctrlCubeShopHomeCArdCheckOut">
 	<div class="sticky-top">
 
 		<nav class="top-menu sticky-top" ng-style="{'background-color':1 == 1 ?  MasterInfo[0].BackColor: MasterInfo[0].BackColor}"/>
@@ -171,34 +171,14 @@
 													<th> </th>
 												</thead>
 												<tbody>
-													<tr>
-														<td class="cart_item_img"><img src="https://placehold.it/50x50" /></td>
-														<td>BA/10K-2-H310-O-EU</td>
+													<tr ng-repeat="ProductCardsItem in myCart">
+														<td class="cart_item_img"><img style="width:50px; height:50px" ng-src="{{ProductCardsItem.CATIMAGE}}" /></td>
+														<td>{{ProductCardsItem.NUM}}</td>
 														<td >
 															<input ng-change="CalcPrices()" ng-model="ProductCardsItem.QTY" type="text"  class="qty" placeholder="1"/>
 														</td>
-														<td class="cart_item_price">$202.5</td>
-														<td class="cart_item_tprice">$202.5</td>
-														<td><a ng-click="removeCart(ProductCardsItem.NUM);" href="#" class="remove">x</a></td>
-													</tr>
-													<tr>
-														<td class="cart_item_img"><img src="https://placehold.it/50x50" /></td>
-														<td>BA/10K-2-H310-O-EU</td>
-														<td>
-															<input ng-change="CalcPrices()" ng-model="ProductCardsItem.QTY" type="text"  class="qty" placeholder="1"/>
-														</td>
-														<td class="cart_item_price">$202.5</td>
-														<td class="cart_item_tprice">$202.5</td>
-														<td><a ng-click="removeCart(ProductCardsItem.NUM);" href="#" class="remove">x</a></td>
-													</tr>
-													<tr>
-														<td class="cart_item_img"><img src="https://placehold.it/50x50" /></td>
-														<td>BA/10K-2-H310-O-EU</td>
-														<td>
-															<input ng-change="CalcPrices()" ng-model="ProductCardsItem.QTY" type="text"  class="qty" placeholder="1"/>
-														</td>
-														<td class="cart_item_price">$202.5</td>
-														<td class="cart_item_tprice">$202.5</td>
+														<td class="cart_item_price">${{ProductCardsItem.PRICE}}</td>
+														<td class="cart_item_tprice">${{ProductCardsItem.PRICE * ProductCardsItem.QTY}}</td>
 														<td><a ng-click="removeCart(ProductCardsItem.NUM);" href="#" class="remove">x</a></td>
 													</tr>
 												</tbody>
@@ -215,10 +195,10 @@
 									</div>
 									<div class="card-body">
 										<ul>
-											<li class="totalRow"><span class="label">Subtotal</span><span class="value">$2</span></li>
-											<li class="totalRow"><span class="label">Tax</span><span class="value">$132.75</span></li>
-											<li class="totalRow final"><span class="label">Total</span><span class="value">$432.75</span></li>
-											<li class="totalRow"><a href="payment-information.html" class="btn btn-secondary btn-green btn-block ">Place order</a></li>
+											<li class="totalRow"><span class="label">Subtotal</span><span class="value">{{AllPrice| currency}}</span></li>
+											<li class="totalRow"><span class="label">Tax</span><span class="value">$0</span></li>
+											<li class="totalRow final"><span class="label">Total</span><span class="value">{{AllPrice| currency}}</span></li>
+											<li class="totalRow"><a ng-click="PlaceOrder();" class="btn btn-secondary btn-green btn-block ">Place order</a></li>
 										</ul>
 									</div>
 								</div>
@@ -244,70 +224,34 @@
 										</div>
 										<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
 											<div class="card-body">
-												<div class="row">
-													<div class="col-md-3">
+												<div ng-repeat="(key, value) in PaymentsInfo | groupBy: 'Fila'" class="row">
+													<div ng-repeat="PaymentInfo in value" class="col-md-3">
 														<div class="card">
 															<div class="card-body">
 																<div class="form-check">
-																	<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+																	<input class="form-check-input" type="radio" ng-model="CreditCardSelected.CreditCardNumber" ng-value="PaymentInfo.CreditCardNumber">
 																	<label class="form-check-label" for="exampleRadios1">
-																		<p class="black"><strong>Visa</strong> card ending in <strong>1234</strong></p>
+																		<p class="black"><strong>{{PaymentInfo.CreditCardType}}</strong> card ending in <strong>{{PaymentInfo.CreditCardNumber.slice(-4);}}</strong></p>
 																	</label>
 																</div>
 															</div>
 														</div>
-													</div>
-													<div class="col-md-3">
-														<div class="card">
-															<div class="card-body">
-																<div class="form-check">
-																	<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-																	<label class="form-check-label" for="exampleRadios1">
-																		<p class="black"><strong>Visa</strong> card ending in <strong>1235</strong></p>
-																	</label>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-md-3">
-														<div class="card">
-															<div class="card-body">
-																<div class="form-check">
-																	<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-																	<label class="form-check-label" for="exampleRadios1">
-																		<p class="black"><strong>Visa</strong> card ending in <strong>1236</strong></p>
-																	</label>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="col-md-3">
-														<div class="card">
-															<div class="card-body">
-																<div class="form-check">
-																	<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-																	<label class="form-check-label" for="exampleRadios1">
-																		<p class="black"><strong>Visa</strong> card ending in <strong>1237</strong></p>
-																	</label>
-																</div>
-															</div>
-														</div>
+														</br>
 													</div>
 												</div>
 												<br>
 												<div class="card" style="border:none">
 													<div class="card-body" >
 														<div class="form-check">
-															<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+															<input class="form-check-input" type="radio" name="radioCreditCard" ng-model="CreditCardSelected.CreditCardNumber" value="NA" >
 															<label class="form-check-label black" for="exampleRadios1">
 																Use a different credit card
 															</label>
 														</div>
 													</div>
-
 												</div>
 
-												<form  style="margin-top:30px;">
+												<form name="newCreditCard" ng-show = "CreditCardSelected.CreditCardNumber == 'NA'" style="margin-top:30px;">
 													<div class="row">
 														<div class="col-md-6">
 															<div class="form-group">
@@ -378,40 +322,30 @@
 												</h5>
 											</div>
 											<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+
+
 												<div class="card-body">
 
-													<div class="row">
-														<div class="col-md-6">
+													<div ng-repeat="(key, value) in ShippingsInfo | groupBy: 'Fila'" class="row">
+														<div ng-repeat="myShippingInfo in value" class="col-md-6">
 															<div class="card">
 																<div class="card-body">
 																	<div class="form-check">
-																		<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+																		<input class="form-check-input" type="radio" name="radioShipping" ng-model="ShippingSelected.Address1" ng-value="myShippingInfo.Address1">
 																		<label class="form-check-label" for="exampleRadios1">
-																			<p class="black"><strong>Juan Perez </strong><br>2250 NW 114TH AVE UNIT 1N <br>MIAMI,FL 33172-3652 <br> United States <br>Phone 7862626</p>
+																			<p class="black"><strong>{{myShippingInfo.Address1}} </strong><br>{{myShippingInfo.Address2}} <br>{{myShippingInfo.City + ', ' + myShippingInfo.State}} <br> {{myShippingInfo.Phone}} </p>
 
 																		</label>
 																	</div>
 																</div>
 															</div>
 														</div>
-														<div class="col-md-6">
-															<div class="card">
-																<div class="card-body">
-																	<div class="form-check">
-																		<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-																		<label class="form-check-label" for="exampleRadios1">
-																			<p class="black"><strong>Mario Martinez </strong><br>2254 NW 116TH AVE UNIT 1N <br>MIAMI,FL 33172-3654 <br> United States <br>Phone 7862689</p>
 
-																		</label>
-																	</div>
-																</div>
-															</div>
-														</div>
 													</div>
 													<div class="card" style="border:none">
 														<div class="card-body" >
 															<div class="form-check">
-																<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+																<input class="form-check-input" type="radio" name="radioShipping" ng-model="ShippingSelected.Address1" value="NA">
 																<label class="form-check-label black" for="exampleRadios1">
 																	Use a different shipping address
 																</label>
@@ -421,7 +355,7 @@
 													</div>
 
 
-													<form  name="newShipping" style="margin-top:30px;">
+													<form ng-show = "ShippingSelected.Address1 == 'NA'" name="newShipping" >
 														<fieldset>
 
 
@@ -465,6 +399,9 @@
 
 													</form>
 												</div>
+
+
+
 											</div>
 										</div>
 										<div class="card">
@@ -476,67 +413,62 @@
 												</h5>
 											</div>
 											<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+
+
 												<div class="card-body">
-													<div class="row">
-														<div class="col-md-6">
+
+													<div ng-repeat="(key, value) in myCreditCardsBilling | groupBy: 'Fila'" class="row">
+														<div ng-repeat="myCreditCardBilling in value" class="col-md-6">
 															<div class="card">
 																<div class="card-body">
 																	<div class="form-check">
-																		<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+																		<input class="form-check-input" type="radio" name="radioBilling" ng-model="CreditBillingSelected.Address1" ng-value="myCreditCardBilling.Address1">
 																		<label class="form-check-label" for="exampleRadios1">
-																			<p class="black"><strong>Juan Perez </strong><br>2250 NW 114TH AVE UNIT 1N <br>MIAMI,FL 33172-3652 <br> United States <br>Phone 7862626</p>
+																			<p class="black"><strong>{{myCreditCardBilling.Address1}} </strong><br>{{myCreditCardBilling.Address2}} <br>{{myCreditCardBilling.City + ', ' + myCreditCardBilling.State}} <br> {{myCreditCardBilling.Phone}} </p>
 
 																		</label>
 																	</div>
 																</div>
 															</div>
 														</div>
-														<div class="col-md-6">
-															<div class="card">
-																<div class="card-body">
-																	<div class="form-check">
-																		<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-																		<label class="form-check-label" for="exampleRadios1">
-																			<p class="black"><strong>Mario Martinez </strong><br>2254 NW 116TH AVE UNIT 1N <br>MIAMI,FL 33172-3654 <br> United States <br>Phone 7862689</p>
 
-																		</label>
-																	</div>
-																</div>
-															</div>
-														</div>
 													</div>
 													<div class="card" style="border:none">
 														<div class="card-body" >
 															<div class="form-check">
-																<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+																<input class="form-check-input" type="radio" name="radioBilling" ng-model="CreditBillingSelected.Address1" value="NA">
 																<label class="form-check-label black" for="exampleRadios1">
-																	Use a different billing address
+																	Use a different shipping address
 																</label>
 															</div>
 														</div>
 
 													</div>
-													<form name="newCreditCard" style="margin-top:30px;">
+
+
+													<form ng-show = "CreditBillingSelected.Address1 == 'NA'" name="newBilling" >
 														<fieldset>
+
+
 															<div class="form-group">
 																<label for="exampleInputEmail1">Street Address 1: </label>
-																<input ng-model="Address1" name="Address1" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address1.$invalid && newShipping.Address1.$dirty}" ng-required="true" >
+																<input ng-model="BillingAddress1" name="Address1" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address1.$invalid && newShipping.Address1.$dirty}" ng-required="true" >
 															</div>
 															<div class="form-group">
 																<label for="exampleInputPassword1">Street Address 2: </label>
-																<input ng-model="Address2" name="Address2" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address2.$invalid && newShipping.Address2.$dirty}" ng-required="true" >
+																<input ng-model="BillingAddress2" name="Address2" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address2.$invalid && newShipping.Address2.$dirty}" ng-required="true" >
 															</div>
 															<div class="row">
 																<div class="col-md-6">
 																	<div class="form-group">
 																		<label for="exampleInputPassword1">  City: </label>
-																		<input ng-model="City" name="City" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.City.$invalid && newShipping.City.$dirty}" ng-required="true" >
+																		<input ng-model="BillingCity" name="City" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.City.$invalid && newShipping.City.$dirty}" ng-required="true" >
 																	</div>
 																</div>
 																<div class="col-md-6">
 																	<div class="form-group">
 																		<label for="exampleInputPassword1">  State:</label>
-																		<input ng-model="State" name="State" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.State.$invalid && newShipping.State.$dirty}" ng-required="true" >
+																		<input ng-model="BillingState" name="State" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.State.$invalid && newShipping.State.$dirty}" ng-required="true" >
 																	</div>
 																</div>
 															</div>
@@ -544,29 +476,30 @@
 																<div class="col-md-6">
 																	<div class="form-group">
 																		<label for="exampleInputPassword1">  Phone: </label>
-																		<input ng-model="Phone" name="Phone" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Phone.$invalid && newShipping.Phone.$dirty}" ng-required="true" >
+																		<input ng-model="BillingPhone" name="Phone" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Phone.$invalid && newShipping.Phone.$dirty}" ng-required="true" >
 																	</div>
 																</div>
 																<div class="col-md-6">
 																	<div class="form-group">
 																		<label for="exampleInputPassword1">  Fax: </label>
-																		<input ng-model="Fax" name="Fax" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Fax.$invalid && newShipping.Fax.$dirty}" ng-required="true" >
+																		<input ng-model="BillingFax" name="Fax" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Fax.$invalid && newShipping.Fax.$dirty}" ng-required="true" >
 																	</div>
 																</div>
 															</div>
 														</fieldset>
 
-
-
 													</form>
 												</div>
+
+
+
 											</div>
 										</div>
 									</div><!-- /accordion -->
 									<br>
 									<div class="row justify-content-end">
 										<div class="col-md-4 ">
-											<a><button ng-click="SaveCreditCardBilling();" type="submit" class="btn btn-secondary btn-green btn-block">Place order</button></a>
+											<a><button ng-click="PlaceOrder();" type="submit" class="btn btn-secondary btn-green btn-block">Place order</button></a>
 										</div>
 									</div>
 								</div>
@@ -634,6 +567,9 @@
 
 <!-- Librería de controlador principal -->
 <script src="js/controller.js"></script>
+
+<div dw-loading="myloading" dw-loading-options="{text: 'Working...'}">
+</div><!-- ./loading -->
 
 </body>
 </html>
