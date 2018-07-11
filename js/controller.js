@@ -5,7 +5,7 @@
 // var connServiceString = "https://cubeshop.herokuapp.com/";
 var connServiceString = "http://cube-mia.com/api/";
 
-//var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+// var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
 var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
@@ -206,25 +206,32 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
       if (typeof response.data.CubeAuthentication.DATA != 'undefined'){
 
-        console.log(response);
-
         var lActiveUserID = response.data.CubeAuthentication.DATA.ID;
         localStorage.UserName = response.data.CubeAuthentication.DATA.Name;
 
         // Call service to get temp cart
-        $http.get(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "cart"}').then(function (response) {
-
-          console.log('SIIIIIIII');
-          console.log(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "cart"}');
-          console.log(response);
+        $http.get(connServiceStringGateway + 'Get_Ecom_TempCart?obj={"method":"Get_Ecom_TempCart","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '"}').then(function (response) {
 
           $scope.myCart = [];
 
           if (typeof response.data.CubeFlexIntegration.DATA != 'undefined' && response.data.CubeFlexIntegration.DATA.DATA != ''){
-            var myCartBack = response.data.CubeFlexIntegration.DATA.DATA;
-            $scope.myCart = JSON.parse( myCartBack );
-            var myCartStr = RemoveQuote($scope.myCart);
-            $scope.myCart = JSON.parse( myCartStr );
+              response.data.CubeFlexIntegration.DATA.forEach(function(eachProduct){
+                var ProductCart = {};
+                ProductCart.TEMPORDERID = eachProduct.TempOrderID;
+                ProductCart.PARTID = eachProduct.ProductID;
+                ProductCart.NUM = eachProduct.ProductID;
+                ProductCart.DESCRIPTION = eachProduct.DESCRIPTION;
+                ProductCart.DETAILS = eachProduct.DETAILS;
+                ProductCart.WEIGHT = eachProduct.WEIGHT;
+                ProductCart.WIDTH = eachProduct.WIDTH;
+                ProductCart.HEIGHT = eachProduct.HEIGHT;
+                ProductCart.LEN = eachProduct.LEN;
+                ProductCart.PRODUCTTREEID = "0";
+                ProductCart.PRICE = eachProduct.Price;
+                ProductCart.CATIMAGE = eachProduct.CATIMAGE;
+                ProductCart.QTY = eachProduct.Quantity;
+                $scope.myCart.push(ProductCart);
+              })
           }
 
           localStorage.myCart = JSON.stringify($scope.myCart);
@@ -237,23 +244,21 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
             }
 
             // Get User Shippings
-            $http.get(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "shipping"}').then(function (response) {
+            $http.get(connServiceStringGateway + 'Get_Ecom_CustomerShipTo?obj={"method":"Get_Ecom_CustomerShipTo","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '"}').then(function (response) {
               if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
-                localStorage.myPaymentsInfo = response.data.CubeFlexIntegration.DATA.DATA;
+                var myshippingstring = '';
+                response.data.CubeFlexIntegration.DATA = getArray(response.data.CubeFlexIntegration.DATA);
+                response.data.CubeFlexIntegration.DATA.forEach(function(eachShipment){
+                  if (myshippingstring != ''){
+                    myshippingstring = myshippingstring + ', ' + '{"Address1":"' + eachShipment.ADDRESS + '","Address2":"' + eachShipment.ADDRESSLINE2 + '","City":"' + eachShipment.CITY + '","State":"' + eachShipment.STATE + '"}';
+                  }
+                  else{
+                    myshippingstring = '{"Address1":"' + eachShipment.ADDRESS + '","Address2":"' + eachShipment.ADDRESSLINE2 + '","City":"' + eachShipment.CITY + '","State":"' + eachShipment.STATE + '"}';
+                  }
+                })
+                localStorage.myShippingsInfo = '[' + myshippingstring + ']';
               }
-
-              // Get User Credit Catrds Billings
-              $http.get(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "creditcardbilling"}').then(function (response) {
-                if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
-                  localStorage.myCreditCardsBilling = response.data.CubeFlexIntegration.DATA.DATA;
-                }
-                window.location = 'index.html';
-              })
-              .catch(function (data) {
-                console.log('Error 16');
-                console.log(data);
-                swal("Cube Service", "Unexpected error. Check console Error 16.");
-              });
+              window.location = 'index.html';
 
             })
             .catch(function (data) {
@@ -541,6 +546,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
       // Save the User
       $http.get(connServiceStringGateway + strInsert).then(function (response) {
+
+        console.log('Este es el usuario');
+        console.log(response);
 
         localStorage.UserName = $scope.UserLastName + ',' + $scope.UserFirstName;
 
@@ -1144,7 +1152,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     var myCartLocal = $scope.myCart;
     var myCartStr = RemoveQuote($scope.myCart);
 
-    $http.get(connServiceStringGateway + 'Save_Ecom_Temp?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "cart", "id": "0", "data": ' + myCartStr + '}').then(function (response) {
+    $http.get(connServiceStringGateway + 'Save_Ecom_TempCart?obj={"method":"Save_Ecom_TempCart","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "productid": "' + ProductCardsItem.PARTID + '", "quantity": "' + ProductCardsItem.QTY + '", "price": ' + ProductCardsItem.PRICE  + '}').then(function (response) {
       localStorage.myCart = JSON.stringify(myCartLocal);
     })
     .catch(function (data) {
@@ -2768,6 +2776,22 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
   }
 
+  // Trae los datos de billing address
+  $http.get(connServiceStringGateway + 'Get_Ecom_CustomerBillTo?obj={"method":"Get_Ecom_CustomerBillTo","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '"}').then(function (response) {
+    if (typeof response.data.CubeFlexIntegration != 'undefined'){
+      var BillingAddressInfo = response.data.CubeFlexIntegration.DATA;
+      $scope.BillingAddress1 = BillingAddressInfo.ADDRESS;
+      $scope.BillingAddress2 = BillingAddressInfo.ADDRESSLINE2;
+      $scope.BillingCity = BillingAddressInfo.CITY;
+      $scope.BillingState = BillingAddressInfo.STATE;
+    }
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
   // Add Fila Field to each array passed interval
   $scope.AddFila = function(arr, eachmany){
     var lFila = 1;
@@ -2848,7 +2872,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     if ($scope.SaveItemsCount == 0){
       $scope.CreditCardSelected.CreditCardNumber = $scope.PaymentsInfo[0].CreditCardNumber;
       $scope.ShippingSelected.Address1 = $scope.ShippingsInfo[0].Address1;
-      $scope.CreditBillingSelected.Address1 = $scope.myCreditCardsBilling[0].Address1;
       swal("Cube Shop", "EXAMPLE MESSAGE. Data of new credit card or billing address or shippring address was Saved. Her call a service to process real order");
       $loading.finish('myloading');
     }
@@ -2891,80 +2914,67 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $loading.start('myloading');
 
-    $scope.PaymentInfo = {FirstName: $scope.FirstName, LastName: $scope.LastName, CreditCardType: $scope.CreditCardType, CreditCardNumber: $scope.CreditCardNumber, CreditCardCode: $scope.CreditCardCode, ExpirationDate: $scope.ExpirationDate};
-    $scope.PaymentsInfo.push($scope.PaymentInfo);
-    $scope.FirstName = '';
-    $scope.LastName = '';
-    $scope.CreditCardType = '';
-    $scope.CreditCardNumber = '';
-    $scope.CreditCardCode = '';
-    $scope.ExpirationDate = '';
-    $scope.newCreditCard.$setPristine()
+    if ($scope.CreditCardSelected.CreditCardNumber == 'NA'){
 
-    // Save cart in server
-    var myPaymentInfoLocal = $scope.PaymentsInfo;
-    var myPaymentInfoStr = RemoveQuote($scope.PaymentsInfo);
+      $scope.PaymentInfo = {FirstName: $scope.FirstName, LastName: $scope.LastName, CreditCardType: $scope.CreditCardType, CreditCardNumber: $scope.CreditCardNumber, CreditCardCode: $scope.CreditCardCode, ExpirationDate: $scope.ExpirationDate};
+      $scope.PaymentsInfo.push($scope.PaymentInfo);
+      $scope.FirstName = '';
+      $scope.LastName = '';
+      $scope.CreditCardType = '';
+      $scope.CreditCardNumber = '';
+      $scope.CreditCardCode = '';
+      $scope.ExpirationDate = '';
+      $scope.newCreditCard.$setPristine()
 
-    $http.get(connServiceStringGateway + 'Save_Ecom_Temp?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": ' + myPaymentInfoStr + '}').then(function (response) {
-      localStorage.myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
-      $scope.AddFila($scope.PaymentsInfo, 4);
-      $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
-      $scope.FinishSave();
-    })
-    .catch(function (data) {
-      console.log('Error 16');
-      console.log(data);
-      swal("Cube Service", "Unexpected error. Check console Error 16.");
-    });
+      // Save cart in server
+      var myPaymentInfoLocal = $scope.PaymentsInfo;
+      var myPaymentInfoStr = RemoveQuote($scope.PaymentsInfo);
 
-    $scope.ShippingInfo = {};
-    $scope.ShippingInfo = {Address1: $scope.Address1, Address2: $scope.Address2, City: $scope.City, State: $scope.State, Phone: $scope.Phone, Fax: $scope.Fax};
-    $scope.ShippingsInfo.push($scope.ShippingInfo);
-    $scope.Address1 = '';
-    $scope.Address2 = '';
-    $scope.City = '';
-    $scope.State = '';
-    $scope.Phone = '';
-    $scope.Fax = '';
-    $scope.newShipping.$setPristine();
+      $http.get(connServiceStringGateway + 'Save_Ecom_Temp?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": ' + myPaymentInfoStr + '}').then(function (response) {
+        localStorage.myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
+        $scope.AddFila($scope.PaymentsInfo, 4);
+        $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
+        $scope.FinishSave();
+      })
+      .catch(function (data) {
+        console.log('Error 16');
+        console.log(data);
+        swal("Cube Service", "Unexpected error. Check console Error 16.");
+      });
+    }
 
-    // Save card at server
-    var myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
-    var myShippingsInfoBack = myShippingsInfo.replaceAll("'", "@@");
-    myShippingsInfoBack = myShippingsInfoBack.replaceAll('"', '@@@');
+    // Save shipping address
+    if ($scope.ShippingSelected.Address1 == 'NA'){
 
+      $scope.ShippingInfo = {};
+      $scope.ShippingInfo = {Address1: $scope.Address1, Address2: $scope.Address2, City: $scope.City, State: $scope.State, Phone: $scope.Phone, Fax: $scope.Fax};
+      $scope.ShippingsInfo.push($scope.ShippingInfo);
 
-    $http.get(connServiceStringGateway + 'Save_Ecom_Temp?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": "' + myShippingsInfoBack + '"}').then(function (response) {
-      localStorage.myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
-      $scope.AddFila($scope.ShippingsInfo, 2);
-      $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
-      $scope.FinishSave();
-    })
-    .catch(function (data) {
-      console.log('Error 16');
-      console.log(data);
-      swal("Cube Service", "Unexpected error. Check console Error 16.");
-    });
+      $http.get(connServiceStringGateway + 'Save_Ecom_CustomerShipTo?obj={"method":"Save_Ecom_CustomerShipTo","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "address": "' + $scope.Address1 + '", "addressline2": "' +
+      $scope.Address2 + '", "city": "' + $scope.City + '", "state": "' + $scope.State + '", "name": "NAME", "zip": "ZIP", "country": "COUNTRY"}').then(function (response) {
 
-    $scope.BillingInfo = {};
-    $scope.BillingInfo = {Address1: $scope.BillingAddress1, Address2: $scope.BillingAddress2, City: $scope.BillingCity, State: $scope.BillingState, Phone: $scope.BillingPhone, Fax: $scope.BillingFax};
-    $scope.myCreditCardsBilling.push($scope.BillingInfo);
-    $scope.BillingAddress1 = '';
-    $scope.BillingAddress2 = '';
-    $scope.BillingCity = '';
-    $scope.BillingState = '';
-    $scope.BillingPhone = '';
-    $scope.BillingFax = '';
+        $scope.Address1 = '';
+        $scope.Address2 = '';
+        $scope.City = '';
+        $scope.State = '';
+        $scope.newShipping.$setPristine();
+        localStorage.myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
+        $scope.AddFila($scope.ShippingsInfo, 2);
+        $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
+        $scope.FinishSave();
+      })
+      .catch(function (data) {
+        console.log('Error 16');
+        console.log(data);
+        swal("Cube Service", "Unexpected error. Check console Error 16.");
+      });
+    }
+
     $scope.newBilling.$setPristine();
 
-    // Save card at server
-    var myBillingsInfo = JSON.stringify($scope.myCreditCardsBilling);
-    var myBillingsInfoBack = myBillingsInfo.replaceAll("'", "@@");
-    myBillingsInfoBack = myBillingsInfoBack.replaceAll('"', '@@@');
-
-    $http.get(connServiceStringGateway + 'Save_Ecom_Temp?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcardbilling", "id": "0", "data": "' + myBillingsInfoBack + '"}').then(function (response) {
-      localStorage.myCreditCardsBilling = JSON.stringify($scope.myCreditCardsBilling);
-      $scope.AddFila($scope.myCreditCardsBilling, 2);
+    // Save card billing at server
+    $http.get(connServiceStringGateway + 'Update_CustomerBAddress?obj={"method":"Update_CustomerBAddress","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "billingname": "NA", "billingaddress": "' + $scope.BillingAddress1 + '", "billingaddressline2": "' +
+    $scope.BillingAddress2 + '", "billingcity": "' + $scope.BillingCity + '", "billingstate": "' + $scope.BillingState + '", "billingzip": "Changes", "billingcountry": "Changes"}' ).then(function (response) {
       $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
       $scope.FinishSave();
     })
