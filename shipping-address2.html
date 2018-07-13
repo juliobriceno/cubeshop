@@ -164,8 +164,9 @@
 										<div class="table-responsive">
 											<table class="table">
 												<thead>
+
 													<th colspan="2">Product</th>
-													<th class="cart_item_qty">Quantity</th>
+													<th >Quantity</th>
 													<th class="cart_item_price">Unit price</th>
 													<th class="cart_item_tprice">Subtotal</th>
 													<th> </th>
@@ -175,7 +176,7 @@
 														<td class="cart_item_img"><img style="width:50px; height:50px" ng-src="{{ProductCardsItem.CATIMAGE}}" /></td>
 														<td>{{ProductCardsItem.NUM}}</td>
 														<td >
-															<input ng-change="CalcPrices()" ng-model="ProductCardsItem.QTY" type="text"  class="qty" placeholder="1"/>
+														<input ng-change="CalcPrices()" ng-model="ProductCardsItem.QTY" type="text"  class="qty" placeholder="1"/>
 														</td>
 														<td class="cart_item_price">${{ProductCardsItem.PRICE | currency }}</td>
 														<td class="cart_item_tprice">${{ProductCardsItem.PRICE * ProductCardsItem.QTY | currency }}</td>
@@ -277,11 +278,13 @@
 																</select>
 															</div>
 														</div>
-
 														<div class="col-md-6">
-															<div class="form-group">
-																<label for="exampleInputPassword1">Credit Card Number: </label>
-																<input ng-model="CreditCardNumber" name="CreditCardNumber" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newCreditCard.CreditCardNumber.$invalid && newCreditCard.CreditCardNumber.$dirty}" ng-required="true" >
+															<label for="exampleInputPassword1">Credit Card Number: </label>
+															<div class="input-group mb-2">
+																<div class="input-group-prepend">
+																	<div class="input-group-text"><i class="far fa-credit-card" ></i></div>
+																</div>
+																<input ng-model="CreditCardNumber" name="CreditCardNumber" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newCreditCard.CreditCardNumber.$invalid && newCreditCard.CreditCardNumber.$dirty}" ng-required="true">
 															</div>
 														</div>
 													</div>
@@ -308,6 +311,11 @@
 															</div>
 														</div>
 
+													</div>
+													<div class="row justify-content-end">
+														<div class="col-md-3">
+															<a class="btn btn-secondary btn-green btn-block " style="color:white">Add new Credit Card </a>
+														</div>
 													</div>
 
 												</form>
@@ -381,6 +389,12 @@
 																	</div>
 																</div>
 															</div>
+															<div class="row justify-content-end">
+																<div class="col-md-3">
+																	<a class="btn btn-secondary btn-green btn-block " style="color:white">Add new shipping address </a>
+																</div>
+															</div>
+
 														</fieldset>
 
 													</form>
