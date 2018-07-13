@@ -179,7 +179,7 @@
 														</td>
 														<td class="cart_item_price">${{ProductCardsItem.PRICE | currency }}</td>
 														<td class="cart_item_tprice">${{ProductCardsItem.PRICE * ProductCardsItem.QTY | currency }}</td>
-														<td><a ng-click="removeCart(ProductCardsItem.NUM);" href="#" class="remove">x</a></td>
+														<td><a ng-click="removeCart(ProductCardsItem.TEMPORDERID);" href="#" class="remove">x</a></td>
 													</tr>
 												</tbody>
 

@@ -2,11 +2,11 @@
 // Cube Service Parameters
 // URL Cube Service String
 // var connServiceString = "http://localhost:9097/";
-// var connServiceString = "https://cubeshop.herokuapp.com/";
-var connServiceString = "http://cube-mia.com/api/";
+var connServiceString = "https://cubeshop.herokuapp.com/";
+// var connServiceString = "http://cube-mia.com/api/";
 
-// var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
-var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
+var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+// var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
@@ -215,6 +215,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
           $scope.myCart = [];
 
           if (typeof response.data.CubeFlexIntegration.DATA != 'undefined' && response.data.CubeFlexIntegration.DATA.DATA != ''){
+              response.data.CubeFlexIntegration.DATA = getArray(response.data.CubeFlexIntegration.DATA);
               response.data.CubeFlexIntegration.DATA.forEach(function(eachProduct){
                 var ProductCart = {};
                 ProductCart.TEMPORDERID = eachProduct.TempOrderID;
@@ -975,6 +976,11 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     }
   }
 
+  String.prototype.replaceAll = function(search, replacement) {
+      var target = this;
+      return target.replace(new RegExp(search, 'g'), replacement);
+  };
+
   $scope.myCart = myMemoryService.myCart;
 
   $scope.CloseSession = function() {
@@ -1144,15 +1150,17 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       return 0;
     }
 
-    ProductCardsItem.Identifer = $scope.myCart.length + 1;
-    ProductCardsItem.QTY = 1;
-    $scope.myCart.push(ProductCardsItem);
-
     // Save cart in server
     var myCartLocal = $scope.myCart;
     var myCartStr = RemoveQuote($scope.myCart);
 
-    $http.get(connServiceStringGateway + 'Save_Ecom_TempCart?obj={"method":"Save_Ecom_TempCart","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "productid": "' + ProductCardsItem.PARTID + '", "quantity": "' + ProductCardsItem.QTY + '", "price": ' + ProductCardsItem.PRICE  + '}').then(function (response) {
+    ProductCardsItem.Identifer = $scope.myCart.length + 1;
+    ProductCardsItem.QTY = 1;
+
+    $http.get(connServiceStringGateway + 'Save_Ecom_TempCart?obj={"method":"Save_Ecom_TempCart","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "productid": "' + ProductCardsItem.PARTID + '", "quantity": "' + ProductCardsItem.QTY + '", "price": "' + ProductCardsItem.PRICE  + '"}').then(function (response) {
+      console.log(response);
+      ProductCardsItem.TEMPORDERID = response.data.CubeFlexIntegration.DATA.ID;
+      $scope.myCart.push(ProductCardsItem);
       localStorage.myCart = JSON.stringify(myCartLocal);
     })
     .catch(function (data) {
@@ -3075,17 +3083,15 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     return myarrayStr;
   }
 
-  $scope.removeCart = function(NUM) {
+  $scope.removeCart = function(TEMPORDERID) {
     $scope.myCart = $scope.myCart.filter(function(el){
-      return el.NUM != NUM
+      return el.TEMPORDERID != TEMPORDERID
     })
 
-    // Save cart in server
-    var myCartLocal = $scope.myCart;
-    var myCartStr = RemoveQuote($scope.myCart);
-
-    $http.get(connServiceStringGateway + 'Save_Ecom_Temp?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "cart", "id": "0", "data": ' + myCartStr + '}').then(function (response) {
+    // Remove from cart al server
+    $http.get(connServiceStringGateway + 'Delete_Ecom_TempCartItem?obj={"method":"Delete_Ecom_TempCartItem","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "id": "' + TEMPORDERID + '"}').then(function (response) {
       localStorage.myCart = JSON.stringify($scope.myCart);
+      $scope.CalcPrices();
     })
     .catch(function (data) {
       console.log('Error 16');
