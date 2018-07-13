@@ -2888,15 +2888,19 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   $scope.PlaceOrder = function(){
 
     if ($scope.CreditCardSelected.CreditCardNumber == 'NA'){
-      $scope.newCreditCard.$setSubmitted();
 
-      if (!$scope.newCreditCard.$valid)
-      {
-        swal("Cube Shop", "There are invalid field in credit card data. Please check.");
-        return 0
-      }
+      swal("Cube Shop", "You must select a payment method.");
+      return 0
 
-      $scope.SaveItemsCount = $scope.SaveItemsCount + 1;
+      // $scope.newCreditCard.$setSubmitted();
+      //
+      // if (!$scope.newCreditCard.$valid)
+      // {
+      //   swal("Cube Shop", "There are invalid field in credit card data. Please check.");
+      //   return 0
+      // }
+      //
+      // $scope.SaveItemsCount = $scope.SaveItemsCount + 1;
 
     }
 
@@ -2922,62 +2926,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $loading.start('myloading');
 
-    if ($scope.CreditCardSelected.CreditCardNumber == 'NA'){
-
-      $scope.PaymentInfo = {FirstName: $scope.FirstName, LastName: $scope.LastName, CreditCardType: $scope.CreditCardType, CreditCardNumber: $scope.CreditCardNumber, CreditCardCode: $scope.CreditCardCode, ExpirationDate: $scope.ExpirationDate};
-      $scope.PaymentsInfo.push($scope.PaymentInfo);
-      $scope.FirstName = '';
-      $scope.LastName = '';
-      $scope.CreditCardType = '';
-      $scope.CreditCardNumber = '';
-      $scope.CreditCardCode = '';
-      $scope.ExpirationDate = '';
-      $scope.newCreditCard.$setPristine()
-
-      // Save cart in server
-      var myPaymentInfoLocal = $scope.PaymentsInfo;
-      var myPaymentInfoStr = RemoveQuote($scope.PaymentsInfo);
-
-      $http.get(connServiceStringGateway + 'Save_Ecom_Temp?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": ' + myPaymentInfoStr + '}').then(function (response) {
-        localStorage.myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
-        $scope.AddFila($scope.PaymentsInfo, 4);
-        $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
-        $scope.FinishSave();
-      })
-      .catch(function (data) {
-        console.log('Error 16');
-        console.log(data);
-        swal("Cube Service", "Unexpected error. Check console Error 16.");
-      });
-    }
-
-    // Save shipping address
-    if ($scope.ShippingSelected.Address1 == 'NA'){
-
-      $scope.ShippingInfo = {};
-      $scope.ShippingInfo = {Address1: $scope.Address1, Address2: $scope.Address2, City: $scope.City, State: $scope.State, Phone: $scope.Phone, Fax: $scope.Fax};
-      $scope.ShippingsInfo.push($scope.ShippingInfo);
-
-      $http.get(connServiceStringGateway + 'Save_Ecom_CustomerShipTo?obj={"method":"Save_Ecom_CustomerShipTo","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "address": "' + $scope.Address1 + '", "addressline2": "' +
-      $scope.Address2 + '", "city": "' + $scope.City + '", "state": "' + $scope.State + '", "name": "NAME", "zip": "ZIP", "country": "COUNTRY"}').then(function (response) {
-
-        $scope.Address1 = '';
-        $scope.Address2 = '';
-        $scope.City = '';
-        $scope.State = '';
-        $scope.newShipping.$setPristine();
-        localStorage.myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
-        $scope.AddFila($scope.ShippingsInfo, 2);
-        $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
-        $scope.FinishSave();
-      })
-      .catch(function (data) {
-        console.log('Error 16');
-        console.log(data);
-        swal("Cube Service", "Unexpected error. Check console Error 16.");
-      });
-    }
-
     $scope.newBilling.$setPristine();
 
     // Save card billing at server
@@ -2994,6 +2942,76 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
     $scope.FinishSave();
 
+  }
+
+  $scope.SaveCreditCard = function(){
+
+    if ($scope.CreditCardSelected.CreditCardNumber == 'NA'){
+
+      $scope.newCreditCard.$setSubmitted();
+
+      if (!$scope.newCreditCard.$valid)
+      {
+        swal("Cube Shop", "There are invalid field in credit card data. Please check.");
+        return 0
+      }
+
+      $scope.PaymentInfo = {FirstName: $scope.FirstName, LastName: $scope.LastName, CreditCardType: $scope.CreditCardType, CreditCardNumber: $scope.CreditCardNumber, CreditCardCode: $scope.CreditCardCode, ExpirationDate: $scope.ExpirationDate};
+      $scope.PaymentsInfo.push($scope.PaymentInfo);
+      $scope.CreditCardSelected.CreditCardNumber = $scope.CreditCardNumber;
+      $scope.AddFila($scope.PaymentsInfo, 4);
+      $scope.FirstName = '';
+      $scope.LastName = '';
+      $scope.CreditCardType = '';
+      $scope.CreditCardNumber = '';
+      $scope.CreditCardCode = '';
+      $scope.ExpirationDate = '';
+      $scope.newCreditCard.$setPristine()
+
+      // Save cart in server
+      var myPaymentInfoLocal = $scope.PaymentsInfo;
+      var myPaymentInfoStr = RemoveQuote($scope.PaymentsInfo);
+
+      $http.get(connServiceStringGateway + 'Save_Ecom_Temp?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": ' + myPaymentInfoStr + '}').then(function (response) {
+        localStorage.myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
+        $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
+      })
+      .catch(function (data) {
+        console.log('Error 16');
+        console.log(data);
+        swal("Cube Service", "Unexpected error. Check console Error 16.");
+      });
+    }
+  }
+
+  $scope.SaveShippingAddress = function(){
+    // Save shipping address
+    if ($scope.ShippingSelected.Address1 == 'NA'){
+
+      $scope.ShippingInfo = {};
+      $scope.ShippingInfo = {Address1: $scope.Address1, Address2: $scope.Address2, City: $scope.City, State: $scope.State, Phone: $scope.Phone, Fax: $scope.Fax};
+      $scope.ShippingsInfo.push($scope.ShippingInfo);
+      $scope.ShippingSelected.Address1 = $scope.Address1;
+      $scope.AddFila($scope.ShippingsInfo, 2);
+
+      $http.get(connServiceStringGateway + 'Save_Ecom_CustomerShipTo?obj={"method":"Save_Ecom_CustomerShipTo","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "address": "' + $scope.Address1 + '", "addressline2": "' +
+      $scope.Address2 + '", "city": "' + $scope.City + '", "state": "' + $scope.State + '", "name": "NAME", "zip": "ZIP", "country": "COUNTRY"}').then(function (response) {
+
+        $scope.Address1 = '';
+        $scope.Address2 = '';
+        $scope.City = '';
+        $scope.State = '';
+        $scope.newShipping.$setPristine();
+        localStorage.myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
+        $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
+        $scope.FinishSave();
+      })
+      .catch(function (data) {
+        console.log('Error 16');
+        console.log(data);
+        swal("Cube Service", "Unexpected error. Check console Error 16.");
+      });
+    }
   }
 
   $scope.CalcPrices = function(){
