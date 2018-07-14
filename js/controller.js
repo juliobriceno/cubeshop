@@ -2931,7 +2931,11 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
       // Call Place order finish
       $http.get(connServiceStringGateway + 'Insert_EcomOrder?obj={"method":"Insert_EcomOrder","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "shiptoid": "' + $scope.ShippingSelected.Address1 + '"}' ).then(function (response) {
-        $scope.FinishSave();
+        $scope.CreditCardSelected.CreditCardNumber = $scope.PaymentsInfo[0].CreditCardNumber;
+        $scope.ShippingSelected.Address1 = $scope.ShippingsInfo[0].Address1;
+        swal("Cube Shop", "EXAMPLE MESSAGE. Data of new credit card or billing address or shippring address was Saved. Her call a service to process real order");
+        $loading.finish('myloading');
+        // $scope.FinishSave();
       })
       .catch(function (data) {
         console.log('Error 16');
@@ -2946,7 +2950,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       swal("Cube Service", "Unexpected error. Check console Error 16.");
     });
 
-    $scope.FinishSave();
+    // $scope.FinishSave();
 
   }
 
