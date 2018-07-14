@@ -5,8 +5,8 @@
 var connServiceString = "https://cubeshop.herokuapp.com/";
 // var connServiceString = "http://cube-mia.com/api/";
 
-// var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
-var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
+var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+// var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
@@ -2905,13 +2905,10 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     }
 
     if ($scope.ShippingSelected.Address1 == 'NA'){
-      $scope.newShipping.$setSubmitted();
-      if (!$scope.newShipping.$valid)
-      {
-        swal("Cube Shop", "There are invalid field in credit shipping address data. Please check.");
-        return 0
-      }
-      $scope.SaveItemsCount = $scope.SaveItemsCount + 1;
+
+      swal("Cube Shop", "You must select a shipping address.");
+      return 0
+      // $scope.SaveItemsCount = $scope.SaveItemsCount + 1;
     }
 
     if ($scope.CreditBillingSelected.Address1 == 'NA'){
@@ -2931,8 +2928,17 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     // Save card billing at server
     $http.get(connServiceStringGateway + 'Update_CustomerBAddress?obj={"method":"Update_CustomerBAddress","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "billingname": "NA", "billingaddress": "' + $scope.BillingAddress1 + '", "billingaddressline2": "' +
     $scope.BillingAddress2 + '", "billingcity": "' + $scope.BillingCity + '", "billingstate": "' + $scope.BillingState + '", "billingzip": "Changes", "billingcountry": "Changes"}' ).then(function (response) {
-      $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
-      $scope.FinishSave();
+
+      // Call Place order finish
+      $http.get(connServiceStringGateway + 'Insert_EcomOrder?obj={"method":"Insert_EcomOrder","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "shiptoid": "' + $scope.ShippingSelected.Address1 + '"}' ).then(function (response) {
+        $scope.FinishSave();
+      })
+      .catch(function (data) {
+        console.log('Error 16');
+        console.log(data);
+        swal("Cube Service", "Unexpected error. Check console Error 16.");
+      });
+
     })
     .catch(function (data) {
       console.log('Error 16');
@@ -2974,7 +2980,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
       $http.get(connServiceStringGateway + 'Save_Ecom_Temp?obj={"method":"Save_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "datatype": "creditcard", "id": "0", "data": ' + myPaymentInfoStr + '}').then(function (response) {
         localStorage.myPaymentsInfo = JSON.stringify($scope.PaymentsInfo);
-        $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
       })
       .catch(function (data) {
         console.log('Error 16');
@@ -2985,6 +2990,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
   }
 
   $scope.SaveShippingAddress = function(){
+
+    $scope.newShipping.$setSubmitted();
+    if (!$scope.newShipping.$valid)
+    {
+      swal("Cube Shop", "There are invalid field in credit shipping address data. Please check.");
+      return 0
+    }
+
     // Save shipping address
     if ($scope.ShippingSelected.Address1 == 'NA'){
 
@@ -2997,6 +3010,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       $http.get(connServiceStringGateway + 'Save_Ecom_CustomerShipTo?obj={"method":"Save_Ecom_CustomerShipTo","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "address": "' + $scope.Address1 + '", "addressline2": "' +
       $scope.Address2 + '", "city": "' + $scope.City + '", "state": "' + $scope.State + '", "name": "NAME", "zip": "ZIP", "country": "COUNTRY"}').then(function (response) {
 
+        console.log(response);
+
         $scope.Address1 = '';
         $scope.Address2 = '';
         $scope.City = '';
@@ -3004,7 +3019,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         $scope.newShipping.$setPristine();
         localStorage.myShippingsInfo = JSON.stringify($scope.ShippingsInfo);
         $scope.SaveItemsCount = $scope.SaveItemsCount - 1;
-        $scope.FinishSave();
       })
       .catch(function (data) {
         console.log('Error 16');
