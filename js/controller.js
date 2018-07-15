@@ -5,8 +5,8 @@
 var connServiceString = "https://cubeshop.herokuapp.com/";
 // var connServiceString = "http://cube-mia.com/api/";
 
-// var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
-var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
+var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
+//var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
 
 // Server Authorization
