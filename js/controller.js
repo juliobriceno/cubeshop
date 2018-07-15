@@ -249,12 +249,13 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
               if (typeof response.data.CubeFlexIntegration.DATA != 'undefined'){
                 var myshippingstring = '';
                 response.data.CubeFlexIntegration.DATA = getArray(response.data.CubeFlexIntegration.DATA);
+
                 response.data.CubeFlexIntegration.DATA.forEach(function(eachShipment){
                   if (myshippingstring != ''){
-                    myshippingstring = myshippingstring + ', ' + '{"Address1":"' + eachShipment.ADDRESS + '","Address2":"' + eachShipment.ADDRESSLINE2 + '","City":"' + eachShipment.CITY + '","State":"' + eachShipment.STATE + '"}';
+                    myshippingstring = myshippingstring + ', ' + '{"ID": "' + eachShipment.ID + '", "Address1":"' + eachShipment.ADDRESS + '","Address2":"' + eachShipment.ADDRESSLINE2 + '","City":"' + eachShipment.CITY + '","State":"' + eachShipment.STATE + '"}';
                   }
                   else{
-                    myshippingstring = '{"Address1":"' + eachShipment.ADDRESS + '","Address2":"' + eachShipment.ADDRESSLINE2 + '","City":"' + eachShipment.CITY + '","State":"' + eachShipment.STATE + '"}';
+                    myshippingstring = '{"ID": "' + eachShipment.ID + '", "Address1":"' + eachShipment.ADDRESS + '","Address2":"' + eachShipment.ADDRESSLINE2 + '","City":"' + eachShipment.CITY + '","State":"' + eachShipment.STATE + '"}';
                   }
                 })
                 localStorage.myShippingsInfo = '[' + myshippingstring + ']';
@@ -1477,6 +1478,56 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
 .controller('ctrlCubeShopHomeProductDetail', ['$scope', '$http', '$loading', '$uibModal', 'myMemoryService', function ($scope, $http, $loading, $uibModal, myMemoryService) {
 
+  function RemoveQuote(arrayObj){
+    var myarrayObj = _.cloneDeep(arrayObj);
+    myarrayObj.forEach(function(eachRecord){
+      var keys = Object.keys(eachRecord);
+      keys.forEach(function(eachKey){
+        if (typeof eachRecord[eachKey] == 'string'){
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll('"', '@@')
+          eachRecord[eachKey] = eachRecord[eachKey].replaceAll("'", '@@@')
+        }
+      })
+    })
+    var myarrayStr = "'" + JSON.stringify(myarrayObj) + "'"
+    return myarrayStr;
+  }
+
+  $scope.AddToCart = function(ProductCardsItem) {
+    // Check if user is connected
+    if (typeof localStorage.ActiveUserID == 'undefined' || localStorage.ActiveUserID =='' ){
+      window.location = 'login.html';
+      return 0;
+    }
+
+    $scope.myCarttmp = $scope.myCart.filter(function(el){
+      return el.NUM == ProductCardsItem.NUM;
+    })
+
+    if ($scope.myCarttmp.length > 0){
+      return 0;
+    }
+
+    // Save cart in server
+    var myCartLocal = $scope.myCart;
+    var myCartStr = RemoveQuote($scope.myCart);
+
+    ProductCardsItem.Identifer = $scope.myCart.length + 1;
+    ProductCardsItem.QTY = 1;
+
+    $http.get(connServiceStringGateway + 'Save_Ecom_TempCart?obj={"method":"Save_Ecom_TempCart","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "productid": "' + ProductCardsItem.PARTID + '", "quantity": "' + ProductCardsItem.QTY + '", "price": "' + ProductCardsItem.PRICE  + '"}').then(function (response) {
+      console.log(response);
+      ProductCardsItem.TEMPORDERID = response.data.CubeFlexIntegration.DATA.ID;
+      $scope.myCart.push(ProductCardsItem);
+      localStorage.myCart = JSON.stringify(myCartLocal);
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+  }
+
   $scope.UserName = '';
 
   if (typeof localStorage.UserName != 'undefined'){
@@ -1485,20 +1536,145 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     }
   }
 
+  String.prototype.replaceAll = function(search, replacement) {
+      var target = this;
+      return target.replace(new RegExp(search, 'g'), replacement);
+  };
+
   $scope.myCart = myMemoryService.myCart;
-  $scope.ProductCardsItem = JSON.parse(localStorage.ActiveProductCardsItem);
-  $scope.AddToCart = function(ProductCardsItem) {
-    $scope.myCarttmp = $scope.myCart.filter(function(el){
-      return el.NUM == ProductCardsItem.NUM;
+
+  $scope.CloseSession = function() {
+    $http.get(connServiceStringGateway + 'CloseSession?obj={"method":"CloseSession"}').then(function (response) {
+      $scope.UserName = '';
+      localStorage.UserName = '';
+      localStorage.myCreditCardsBilling = [];
+      localStorage.myPaymentsInfo = [];
+      localStorage.myShippingsInfo = [];
+      localStorage.myCart = [];
+      window.location = 'index.html';
     })
-    if ($scope.myCarttmp.length > 0){
-      return 0;
-    }
-    ProductCardsItem.Identifer = $scope.myCart.length + 1;
-    ProductCardsItem.QTY = 0;
-    $scope.myCart.push(ProductCardsItem);
-    localStorage.myCart = JSON.stringify($scope.myCart);
   }
+
+  $scope.GetBase64Image = function(rowWithout64Img, source){
+
+    var imgPath = '';
+    if (source == 'productsType' || source == 'carrousel'){
+      imgPath = rowWithout64Img.CATIMAGE;
+    }
+    else{
+      imgPath = rowWithout64Img.HOMELOGO;
+    }
+
+    $http.get(connServiceStringGateway + 'CubeFileDownload?obj={"filename": "' + imgPath + '"}').then(function (response) {
+
+      if (source == 'productsType'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "/img/SCNoImage.jpg";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
+        }
+      }
+      else if (source == 'carrousel'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.CATIMAGE = "img/cameras1100x700.png";
+        }
+        else{
+          rowWithout64Img.CATIMAGE = "data:image/png;base64, " + response.data.imagedata;
+        }
+      }
+      else if (source == 'masterpage'){
+        if (response.data.imagedata == ''){
+          // rowWithout64Img.CATIMAGE = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+          rowWithout64Img.HOMELOGO = "/img/1339313133186.png";
+        }
+        else{
+          rowWithout64Img.HOMELOGO = "data:image/png;base64, " + response.data.imagedata;
+        }
+      }
+
+    })
+    .catch(function (data) {
+      console.log('Error 16');
+      console.log(data);
+      swal("Cube Service", "Unexpected error. Check console Error 16.");
+    });
+
+  }
+
+  $scope.ActiveProductCardsItem =JSON.parse(localStorage.ActiveProductCardsItem);
+
+  $scope.GetBase64Image($scope.ActiveProductCardsItem, 'productsType');
+  console.log($scope.ActiveProductCardsItem);
+
+  $scope.minimum = 0;
+  $scope.maximum = 0;
+
+  // S�lo para validar n�meros
+  $scope.options2 = {
+      aSign: '',
+      mDec: '2',
+      vMin: '0'
+  };
+
+  $scope.html = '<p>No results</p>';
+
+  localStorage.cnnData2 = '{ "DBNAME":"cube00000011"}';
+
+  var cnnData = JSON.parse(localStorage.cnnData2);
+
+  var headers = {"Authorization": ServerAuth};
+
+  $scope.ShowTable = false;
+
+  $scope.txtSearch = '';
+
+  $http.get(connServiceStringGateway + 'Get_EcomCustomerInformation?obj={"method":"Get_EcomCustomerInformation","conncode":"' + cnnData.DBNAME + '"}').then(function (response) {
+
+    var MasterData = response.data.CubeFlexIntegration.DATA;
+
+    var MasterInfo = {};
+
+    MasterInfo.Home = true;
+    MasterInfo.Products = true;
+    MasterInfo.Service = true;
+    MasterInfo.Apps = true;
+    MasterInfo.ID = 0;
+    MasterInfo.AboutCube = 'El SP no devuelve información de about la empresa que es la que está usando éste sistema. Está pendiente';
+    MasterInfo.CubeEmail = 'no@faltaenservice.com'
+
+    var MasterLocation = '';
+    var MasterCity = '';
+    var MasterState = '';
+
+    MasterData.forEach(function(el){
+      MasterInfo.ID = MasterInfo.ID + 1;
+      if (el.NAME == 'Logo'){MasterInfo.HOMELOGO = el.VALUE};
+      if (el.NAME == 'CompanyPhone'){MasterInfo.CubeLocalPhone = el.VALUE};
+      if (el.NAME == 'CompanyAddress'){MasterLocation = el.VALUE};
+      if (el.NAME == 'CompanyCity'){MasterCity = el.VALUE};
+      if (el.NAME == 'CompanyState'){MasterState = el.VALUE};
+      if (el.NAME == 'Color'){MasterInfo.BackColor = el.VALUE};
+    })
+
+
+    $scope.GetBase64Image(MasterInfo, 'masterpage');
+
+
+    MasterInfo.CubeLocation = MasterLocation + ', ' + MasterState + ', ' + MasterCity;
+
+    $scope.MasterInfo = [];
+    $scope.MasterInfo.push(MasterInfo);
+
+  })
+  .catch(function (data) {
+    console.log('Error 16');
+    console.log(data);
+    swal("Cube Service", "Unexpected error. Check console Error 16.");
+  });
+
 }])
 
 .controller('ctrlCubeShopHomeProductCart', ['$scope', '$http', '$loading', '$uibModal', function ($scope, $http, $loading, $uibModal) {
@@ -2880,7 +3056,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     if ($scope.SaveItemsCount == 0){
       $scope.CreditCardSelected.CreditCardNumber = $scope.PaymentsInfo[0].CreditCardNumber;
       $scope.ShippingSelected.Address1 = $scope.ShippingsInfo[0].Address1;
-      swal("Cube Shop", "EXAMPLE MESSAGE. Data of new credit card or billing address or shippring address was Saved. Her call a service to process real order");
+      swal("Cube Shop", "Order was created");
       $loading.finish('myloading');
     }
   }
@@ -2929,11 +3105,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     $http.get(connServiceStringGateway + 'Update_CustomerBAddress?obj={"method":"Update_CustomerBAddress","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "billingname": "NA", "billingaddress": "' + $scope.BillingAddress1 + '", "billingaddressline2": "' +
     $scope.BillingAddress2 + '", "billingcity": "' + $scope.BillingCity + '", "billingstate": "' + $scope.BillingState + '", "billingzip": "Changes", "billingcountry": "Changes"}' ).then(function (response) {
 
+      var shippingselected = $scope.ShippingsInfo.filter(function(eachshipping){ return eachshipping.Address1 == $scope.ShippingSelected.Address1 })[0];
+
       // Call Place order finish
-      $http.get(connServiceStringGateway + 'Insert_EcomOrder?obj={"method":"Insert_EcomOrder","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "shiptoid": "' + $scope.ShippingSelected.Address1 + '"}' ).then(function (response) {
+      $http.get(connServiceStringGateway + 'Insert_EcomOrder?obj={"method":"Insert_EcomOrder","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "shiptoid": "' + shippingselected.ID + '"}' ).then(function (response) {
+
         $scope.CreditCardSelected.CreditCardNumber = $scope.PaymentsInfo[0].CreditCardNumber;
         $scope.ShippingSelected.Address1 = $scope.ShippingsInfo[0].Address1;
-        swal("Cube Shop", "EXAMPLE MESSAGE. Data of new credit card or billing address or shippring address was Saved. Her call a service to process real order");
+        swal("Cube Shop", "Order was created");
         $loading.finish('myloading');
         // $scope.FinishSave();
       })
@@ -3014,7 +3193,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       $http.get(connServiceStringGateway + 'Save_Ecom_CustomerShipTo?obj={"method":"Save_Ecom_CustomerShipTo","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "address": "' + $scope.Address1 + '", "addressline2": "' +
       $scope.Address2 + '", "city": "' + $scope.City + '", "state": "' + $scope.State + '", "name": "NAME", "zip": "ZIP", "country": "COUNTRY"}').then(function (response) {
 
-        console.log(response);
+        // Agrega el ID a la shipping address
+        $scope.ShippingInfo.ID = response.data.CubeFlexIntegration.DATA.ID;
 
         $scope.Address1 = '';
         $scope.Address2 = '';

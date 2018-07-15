@@ -178,8 +178,8 @@
 														<td >
 														<input ng-change="CalcPrices()" ng-model="ProductCardsItem.QTY" type="text"  class="qty" placeholder="1"/>
 														</td>
-														<td class="cart_item_price">${{ProductCardsItem.PRICE | currency }}</td>
-														<td class="cart_item_tprice">${{ProductCardsItem.PRICE * ProductCardsItem.QTY | currency }}</td>
+														<td class="cart_item_price">{{ProductCardsItem.PRICE | currency }}</td>
+														<td class="cart_item_tprice">{{ProductCardsItem.PRICE * ProductCardsItem.QTY | currency }}</td>
 														<td><a ng-click="removeCart(ProductCardsItem.TEMPORDERID);" href="#" class="remove">x</a></td>
 													</tr>
 												</tbody>
@@ -373,7 +373,7 @@
 															</div>
 															<div class="form-group">
 																<label for="exampleInputPassword1">Street Address 2: </label>
-																<input ng-model="Address2" name="Address2" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address2.$invalid && newShipping.Address2.$dirty}" ng-required="true" >
+																<input ng-model="Address2" name="Address2" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address2.$invalid && newShipping.Address2.$dirty}" >
 															</div>
 															<div class="row">
 																<div class="col-md-6">
@@ -427,7 +427,7 @@
 															</div>
 															<div class="form-group">
 																<label for="exampleInputPassword1">Street Address 2: </label>
-																<input ng-model="BillingAddress2" name="Address2" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address2.$invalid && newShipping.Address2.$dirty}" ng-required="true" >
+																<input ng-model="BillingAddress2" name="Address2" type="text" class="form-control" placeholder="" ng-class="{'is-invalid':newShipping.Address2.$invalid && newShipping.Address2.$dirty}" >
 															</div>
 															<div class="row">
 																<div class="col-md-6">

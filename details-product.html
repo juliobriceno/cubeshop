@@ -43,6 +43,8 @@
 	<link rel="stylesheet" type="text/css" href="css/angular-loading.css" />
 	<!-- *****************************************Librería de angular tags inputs***************************************** -->
 	<script src="js/ng-tags-input.min.js"></script>
+	<!-- *****************************************Librería de lodash***************************************** -->
+	<script src="js/lodash.min.js"></script>
 	<!-- *****************************************Librería de file upload***************************************** -->
 	<script src="js/angular-file-upload.min.js"></script>
 	<!-- *****************************************Librería de boostrap toogle ***************************************** -->
@@ -55,9 +57,11 @@
 </head>
 
 <body ng-controller="ctrlCubeShopHomeProductDetail">
+
+
 	<div class="sticky-top">
 
-		<nav class="top-menu sticky-top">
+		<nav class="top-menu sticky-top" ng-style="{'background-color':1 == 1 ?  MasterInfo[0].BackColor: MasterInfo[0].BackColor}"/>
 			<div class="container-fluid">
 				<div class="row">
 
@@ -67,19 +71,21 @@
 								<li class="nav-text"> <i class="fas fa-phone" aria-hidden="true"></i>   {{MasterInfo[0].CubeLocalPhone}}</li>
 								<li><a href=""><i class="fas fa-question-circle"></i></a></li>
 
-								<li class="dropdown show">
-									<a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										<i class="fas fa-user" aria-hidden="true"></i> My Account
-									</a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<a class="dropdown-item" href="#" style="color:#5A6268;">Logout</a>
-									</div>
-								</li>
+								<li ng-show="UserName!=''" class="dropdown show">
+                  <a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user" aria-hidden="true"></i> {{ "Hello: " + UserName }}
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Logout</a>
+                  </div>
+                </li>
 
-								<li class="">
-									<a class="" href="login.html"> Login/Register</a>
-								</li>
-								<li class="carrito"><a  href="cart.html">
+                <li class="">
+                  <a class="" ng-show="UserName==''" href="login.html"> Login/Register</a>
+                </li>
+
+
+								<li class="carrito" ng-style="{'background-color':1 == 1 ?  MasterInfo[0].BackColor: MasterInfo[0].BackColor}"><a  href="shipping-address2.html">
 									<i class="fas fa-cart-plus"></i> My Cart
 									<span class="badge badge-cart "> {{myCart.length}}</span>
 								</a></li>
@@ -115,7 +121,7 @@
 											<a ng-show="MasterInfo[0].Home" class="nav-link " href="index.html">HOME <span class="sr-only">(current)</span></a>
 										</li>
 										<li class="nav-item">
-											<a ng-show="MasterInfo[0].Products" class="nav-link " href="products.html">PRODUCTS</a>
+											<a ng-show="MasterInfo[0].Products" class="nav-link active" href="products.html">PRODUCTS</a>
 										</li>
 										<li class="nav-item">
 											<a ng-show="MasterInfo[0].Apps" class="nav-link" href="#">APPLICATIONS</a>
@@ -160,7 +166,7 @@
 	            <div class="card bg-light mb-3">
 	                <div class="card-body">
 	                    <a href="" data-toggle="modal" data-target="#productModal">
-	                        <img class="img-fluid" src="img/iphone.png" />
+	                        <img class="img-fluid" ng-src="{{ActiveProductCardsItem.CATIMAGE}}" />
 	                        <p class="text-center"></p>
 	                    </a>
 	                </div>
@@ -171,18 +177,18 @@
 	        <div class="col-12 col-lg-6 add_to_cart_block">
 	            <div class="card bg-light mb-3">
 	                <div class="card-body">
-										  <h4>{{ProductCardsItem.NUM}}</h4>
+										  <h4>{{ActiveProductCardsItem.NUM}}</h4>
 											<hr>
-	                    <p class="price_discounted"><span>Price:</span><span style="color:#B23328"> {{ProductCardsItem.PRICE}} $</span></p>
+	                    <p class="price_discounted"><span>Price:</span><span style="color:#B23328"> {{ActiveProductCardsItem.PRICE}} $</span></p>
 
 <hr>
 <h6><strong>DESCRIPTION</strong></h6>
-<p>{{ProductCardsItem.DESCRIPTION}}.</p>
+<p>{{ActiveProductCardsItem.DESCRIPTION}}.</p>
 </div>
 <hr>
 	                    <div class=" p-3 mb-2 ">
 
-														<button ng-click="AddToCart(ProductCardsItem)" type="button" class="btn btn-secondary btn-green btn-block pull-right " style="border-radius:0;">
+														<button ng-click="AddToCart(ActiveProductCardsItem)" type="button" class="btn btn-secondary btn-green btn-block pull-right " style="border-radius:0;">
 															<i class="fas fa-cart-plus"></i>
 															Add to cart
 			                      </button>
