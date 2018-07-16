@@ -42,6 +42,7 @@ footer {
 .btn-green {
   background-color:#00BCD4;
   border-color:#00BCD4;
+  color: white;
 }
 
 .badge-green {

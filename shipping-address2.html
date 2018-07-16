@@ -76,6 +76,7 @@
 							</a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Close sesion</a>
+								<a  class="dropdown-item" href="your-order.html" style="color:#5A6268;">Your Orders</a>
 							</div>
 						</li>
 
@@ -166,7 +167,7 @@
 												<thead>
 
 													<th colspan="2">Product</th>
-													<th >Quantity</th>
+													<th>Qty</th>
 													<th class="cart_item_price">Unit price</th>
 													<th class="cart_item_tprice">Subtotal</th>
 													<th> </th>
@@ -176,7 +177,7 @@
 														<td class="cart_item_img"><img style="width:50px; height:50px" ng-src="{{ProductCardsItem.CATIMAGE}}" /></td>
 														<td>{{ProductCardsItem.NUM}}</td>
 														<td >
-														<input ng-change="CalcPrices()" ng-model="ProductCardsItem.QTY" type="text"  class="qty" placeholder="1"/>
+													<input ng-change="CalcPrices()" ng-model="ProductCardsItem.QTY" type="text"  class="" placeholder="1"/>
 														</td>
 														<td class="cart_item_price">{{ProductCardsItem.PRICE | currency }}</td>
 														<td class="cart_item_tprice">{{ProductCardsItem.PRICE * ProductCardsItem.QTY | currency }}</td>
@@ -199,7 +200,7 @@
 											<li class="totalRow"><span class="label">Subtotal</span><span class="value">{{AllPrice| currency}}</span></li>
 											<li class="totalRow"><span class="label">Tax</span><span class="value">$0</span></li>
 											<li class="totalRow final"><span class="label">Total</span><span class="value">{{AllPrice| currency}}</span></li>
-											<li class="totalRow"><a ng-click="PlaceOrder();" class="btn btn-secondary btn-green btn-block ">Place order</a></li>
+											<li class="totalRow"><a ng-click="PlaceOrder();" class="btn btn-secondary btn-green btn-block " style="color:white;">Place order</a></li>
 										</ul>
 									</div>
 								</div>
