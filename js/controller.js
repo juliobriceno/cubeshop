@@ -5,6 +5,7 @@
 var connServiceString = "https://cubeshop.herokuapp.com/";
 // var connServiceString = "http://cube-mia.com/api/";
 
+// var connServiceStringGateway = "http://localhost:61093/BodApp.asmx/";
 // var connServiceStringGateway = "http://biip.joka.com.ve/BodApp.asmx/";
 var connServiceStringGateway = "http://cubeshope.joka.com.ve/BodApp.asmx/";
 // var connServiceString = "https://portal.cube-usa.com/api/";
@@ -237,6 +238,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
           localStorage.myCart = JSON.stringify($scope.myCart);
           localStorage.ActiveUserID = lActiveUserID;
+          delete localStorage.productsparentid;
 
           // Get User Credit Cards
           $http.get(connServiceStringGateway + 'Get_Ecom_Temp?obj={"method":"Get_Ecom_Temp","conncode":"' + cnnData.DBNAME + '", "userid": "' + lActiveUserID + '", "datatype": "creditcard"}').then(function (response) {
@@ -557,6 +559,9 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         if (typeof response.data.CubeFlexIntegration.DATA.ID != 'undefined'){
           if (response.data.CubeFlexIntegration.DATA.ID != -1){
 
+            localStorage.ActiveUserID = response.data.CubeFlexIntegration.DATA.ID;
+            delete localStorage.productsparentid;
+
             $scope.CustomerName = '';
             $scope.StreetAddress1 = '';
             $scope.StreetAddress2 = '';
@@ -798,6 +803,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         localStorage.myPaymentsInfo = [];
         localStorage.myShippingsInfo = [];
         localStorage.myCart = [];
+        delete localStorage.productsparentid;
         window.location = 'index.html';
       })
     }
@@ -992,6 +998,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       localStorage.myPaymentsInfo = [];
       localStorage.myShippingsInfo = [];
       localStorage.myCart = [];
+      delete localStorage.productsparentid;
       window.location = 'index.html';
     })
   }
@@ -1424,12 +1431,6 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
         localStorage.HomeCardCategoryID = '';
       }
 
-      // If User was in a subcategory return to it Else Mail categories
-      if (typeof localStorage.productsparentid != 'undefined'){
-        $scope.FindSubcategories(localStorage.productsparentid, localStorage.productsHasChild, localStorage.productsName);
-        return 0;
-      }
-
       // Si viene de HOME con search
       if (typeof localStorage.HometxtSearch != 'undefined' && localStorage.HometxtSearch != ''){
         $scope.txtSearch = localStorage.HometxtSearch;
@@ -1445,7 +1446,14 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
     });
   }
 
-  $scope.FindMaincategories();
+  // If User was in a subcategory return to it Else Mail categories
+  if (typeof localStorage.productsparentid != 'undefined'){
+    $scope.FindSubcategories(localStorage.productsparentid, localStorage.productsHasChild, localStorage.productsName);
+    return 0;
+  }
+  else {
+    $scope.FindMaincategories();
+  }
 
   // Cosas de carousel
   $scope.myInterval = 5000;
@@ -1551,6 +1559,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       localStorage.myPaymentsInfo = [];
       localStorage.myShippingsInfo = [];
       localStorage.myCart = [];
+      delete localStorage.productsparentid;
       window.location = 'index.html';
     })
   }
@@ -1701,6 +1710,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       localStorage.myPaymentsInfo = [];
       localStorage.myShippingsInfo = [];
       localStorage.myCart = [];
+      delete localStorage.productsparentid;
       window.location = 'index.html';
     })
   }
@@ -1891,6 +1901,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       localStorage.myPaymentsInfo = [];
       localStorage.myShippingsInfo = [];
       localStorage.myCart = [];
+      delete localStorage.productsparentid;
       window.location = 'index.html';
     })
   }
@@ -2252,6 +2263,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       localStorage.myPaymentsInfo = [];
       localStorage.myShippingsInfo = [];
       localStorage.myCart = [];
+      delete localStorage.productsparentid;
       window.location = 'index.html';
     })
   }
@@ -2599,6 +2611,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       localStorage.myPaymentsInfo = [];
       localStorage.myShippingsInfo = [];
       localStorage.myCart = [];
+      delete localStorage.productsparentid;
       window.location = 'index.html';
     })
   }
@@ -2903,6 +2916,7 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
       localStorage.myPaymentsInfo = [];
       localStorage.myShippingsInfo = [];
       localStorage.myCart = [];
+      delete localStorage.productsparentid;
       window.location = 'index.html';
     })
   }
@@ -3109,6 +3123,8 @@ angular.module('CubeShopModule', ['angularFileUpload', 'darthwade.loading', 'ngT
 
       // Call Place order finish
       $http.get(connServiceStringGateway + 'Insert_EcomOrder?obj={"method":"Insert_EcomOrder","conncode":"' + cnnData.DBNAME + '", "userid": "' + localStorage.ActiveUserID + '", "shiptoid": "' + shippingselected.ID + '"}' ).then(function (response) {
+
+        console.log(response);
 
         $scope.CreditCardSelected.CreditCardNumber = $scope.PaymentsInfo[0].CreditCardNumber;
         $scope.ShippingSelected.Address1 = $scope.ShippingsInfo[0].Address1;
