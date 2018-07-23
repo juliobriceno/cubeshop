@@ -75,9 +75,11 @@
 								<i class="fas fa-user" aria-hidden="true"></i> {{ "Hello: " + UserName }}
 							</a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Close sesion</a>
 								<a  class="dropdown-item" href="your-order.html" style="color:#5A6268;">Your Orders</a>
+								<a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Logout</a>
 							</div>
+
+
 						</li>
 
 						<li class="">
@@ -98,7 +100,7 @@
 		<div class="container-fluid">
 			<!--logo -->
 
-			<a class="navbar-brand" href="index.html"><img ng-src="{{MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
+			<div class="parent"><a class="navbar-brand container2" href="index.html"><img ng-src="{{MasterInfo[0].HOMELOGO}}" width="80" height="80" /></a> </div>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -164,8 +166,7 @@
 									<div class="card">
 										<div class="table-responsive">
 											<table class="table">
-												<thead>
-
+												<thead class="card-header">
 													<th colspan="2">Product</th>
 													<th>Qty</th>
 													<th class="cart_item_price">Unit price</th>
@@ -191,6 +192,7 @@
 	</div>
 							</div>
 							<div class="col">
+							<div class="card">
 								<div class="subtotal2 heading-principalcard">
 									<div class="card-header">
 										<strong>Summary</strong>
@@ -204,6 +206,8 @@
 										</ul>
 									</div>
 								</div>
+							</div>
+								
 
 							</div>
 						</div>
@@ -253,7 +257,7 @@
 													</div>
 												</div>
 
-												<form name="newCreditCard" ng-show = "CreditCardSelected.CreditCardNumber == 'NA'" style="margin-top:30px;">
+												<form name="newCreditCard" ng-show = "CreditCardSelected.CreditCardNumber == 'NA'" >
 													<div class="row">
 														<div class="col-md-6">
 															<div class="form-group">
