@@ -97,7 +97,7 @@
 		<div class="container-fluid">
 			<!--logo -->
 
-			<a class="navbar-brand" href="index.html"><img ng-src="{{MasterInfo[0].HOMELOGO}}" style="max-width:130px;" /></a>
+			<div class="parent"><a class="navbar-brand container2" href="index.html"><img ng-src="{{MasterInfo[0].HOMELOGO}}" width="80" height="80" /></a> </div>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -148,7 +148,7 @@
 
 		<div>
 
-			<div class="col">
+			<div class="">
 				<div class="row">
 					<div class="col-md-5">
 						<form>
@@ -167,12 +167,13 @@
 						</form>
 					</div>
 				</div>
+				<br>
 				<div>
 					<div class="table-responsive">
 						<table class="table">
-							<thead>
+							<thead class="thead-light">
 
-								<th class="text-center">Ship To</th>
+								<th >Ship To</th>
 								<th class="cart_item_tprice text-center">Order Date</th>
 								<th class="text-center">Total</th>
 								<th class="text-center">Actions</th>
@@ -186,7 +187,7 @@
 									</td>
 
 									<td class="cart_item_tprice text-center">$ 222.35</td>
-	<td class="text-center"> <a href="order-details.html">Order details</a></td>
+									<td class="text-center"> <a href="order-details.html">Order details</a></td>
 								</tr>
 							</tbody>
 
