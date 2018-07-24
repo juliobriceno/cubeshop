@@ -73,9 +73,10 @@
                   <a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-user" aria-hidden="true"></i> {{ "Hello: " + UserName }}
                   </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Logout</a>
-                  </div>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<a  class="dropdown-item" href="your-order.html" style="color:#5A6268;">Your Orders</a>
+										<a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Logout</a>
+									</div>
                 </li>
 
                 <li class="">
@@ -213,14 +214,32 @@
 
 
   <div class="subtotal heading-principal">
-    <ul>
-      <li class="totalRow"><span class="label">Subtotal</span><span class="value">{{AllPrice| currency}}</span></li>
+		<div class="row totalRow">
+			<div class="col-md-6 text-left">
+				<span class="label">Subtotal</span>
+			</div>
+			<div class="col-md-6 text-right">
+			<span class="value">{{AllPrice| currency}}</span>
+			</div>
+		</div>
+		<div class="row totalRow">
+			<div class="col-md-6 text-left">
+				<span class="label">Tax</span>
+			</div>
+			<div class="col-md-6 text-right">
+				<span class="value">0</span>
+			</div>
+		</div>
+		<div class="row totalRow final">
+			<div class="col-md-6 text-left">
+				<span class="label">Total</span>
+			</div>
+			<div class="col-md-6 text-right">
+				<span class="value">{{AllPrice| currency}}</span>
+			</div>
+		</div>
+		<a href="payment-information.html" class="btn btn-secondary btn-green btn-block ">Checkout</a>
 
-            <li class="totalRow"><span class="label">Tax</span><span class="value">0</span></li>
-            <li class="totalRow final"><span class="label">Total</span><span class="value">{{AllPrice| currency}}</span></li>
-      <li class="totalRow"><a href="payment-information.html" class="btn btn-secondary btn-green btn-block ">Checkout</a></li>
-
-    </ul>
   </div>
 </div>
 </main>

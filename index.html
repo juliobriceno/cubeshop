@@ -112,7 +112,7 @@
                     </div>
                   </div>
                   <!-- Links -->
-                  <ul class="navbar-nav " >
+                  <ul class="navbar-nav " style="margin-bottom:-10px;" >
                     <li class="nav-item">
                       <a ng-show="MasterInfo[0].Home" class="nav-link active" href="index.html">HOME <span class="sr-only">(current)</span></a>
                     </li>
@@ -137,7 +137,7 @@
             <div class="col-md-12">
               <div uib-carousel template-url="/tpl.html"  active="autoseq.wizardStep" interval="myInterval" no-wrap="noWrapSlides" on-carousel-next="autoseq.onNext()" style="height: 395px;">
                 <div uib-slide ng-repeat="slide in slides track by slide.ID" index="slide.ID"  style="height: 395px; " index="0">
-                  <img ng-src="{{'/'+ slide.Image}}" height="700" style="width:100%; "  >
+                  <img ng-src="{{'/'+ slide.Image}}" height="350" style="width:100%; "  >
                   <div class="carousel-caption" style="top: 15%;">
                     <h4>{{slide.Title}}</h4>
                     <p>{{slide.Message}}</p>
@@ -150,10 +150,7 @@
       </section>
       <section >
         <div class="container">
-          <br> <br>
-          <div ><h3 class="text-center">PRODUCTS</h3></div>
-          <br>
-            <div class="card-group"  ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'" style="margin-bottom:20px;">
+            <div class="card-group"  ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'" style="margin-bottom:20px; margin-top:-40px;">
                 <div ng-repeat="ProductCardsItem in value" class=" col-xs-12 col-sm-12 col-md-4 col-lg-4 ">
                   <div class="card">
                     <img class="card-img-top" ng-src="{{ProductCardsItem.CATIMAGE}}" alt="Card image cap">

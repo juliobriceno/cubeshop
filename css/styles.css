@@ -52,6 +52,8 @@ footer {
 
 .breadcrumb{
   background-color: transparent;
+  margin-top: -20px;
+  margin-bottom: -3px;
 }
 
 .breadcrumb li a{
@@ -496,7 +498,7 @@ background-color: #33a1ea;
   height: 80px;
   position: relative;
   overflow: hidden;
- 
+
 }
 
 .container2 img {
@@ -509,4 +511,3 @@ background-color: #33a1ea;
   left: 0;
   right: 0;
 }
-
