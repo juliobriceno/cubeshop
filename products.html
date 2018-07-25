@@ -136,12 +136,11 @@
 
 
 		<main >
-			<section class="wrap" >
+			<section class="container wrap heading-principal" >
 
-				<div class="container">
-					<div class="">
+				<div class="">
+					<div class="heading heading-principal">
 						<h3>Products</h3>
-						<hr>
 					</div>
 					<div class="row">
 						<div class="col">
@@ -155,7 +154,7 @@
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-							<div class="card card-block bg-faded" style="padding-left:15px; padding-top:10px; padding-bottom:-60px;background-color:#e9ecef;">
+							<div class="card card-block bg-faded" style="padding-left:15px; padding-top:15px; padding-bottom:-60px;background-color:#e9ecef;">
 								<div ng-bind-html="html"></div>
 							</div>
 						</div>
@@ -165,8 +164,8 @@
 				<div class="container">
 					<div class="row">
 						<div class=" col-xs-12 col-sm-12 col-md-3 col-lg-3">
-							<div class="card card-body bg-light mb-4">
-								<div class="card-header bg-green text-white text-uppercase">Categories</div>
+							<div class="card block-prueba bg-light mb-4">
+								<div class="card-header bg-green"><strong>Categories</strong></div>
 								<ul class="list-group list-group-flush ">
 									<li ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD, ProductCardsItem.NAME);" class="list-group-item" ng-repeat="ProductCardsItem in ProductCardsMainMenu"><a href="#" class=" active">{{ProductCardsItem.NAME}}</a></li>
 								</ul>

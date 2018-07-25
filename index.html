@@ -72,8 +72,8 @@
                   <a class=" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-user" aria-hidden="true"></i> {{ "Hello: " + UserName }}
                   </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a  class="dropdown-item" href="your-order.html" style="color:#5A6268;">Your Orders</a>
+                  <div class="dropdown-menu menu-active" aria-labelledby="navbarDropdown">
+                    <a  class="dropdown-item menu-item" href="your-order.html" style="color:#5A6268;">Your Orders</a>
                     <a ng-click="CloseSession();" class="dropdown-item" href="#" style="color:#5A6268;">Logout</a>
                   </div>
                 </li>
@@ -150,12 +150,12 @@
       </section>
       <section >
         <div class="container">
-            <div class="card-group"  ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'" style="margin-bottom:20px; margin-top:-40px;">
+            <div class="card-group"  ng-repeat="(key, value) in ProductCards | groupBy: 'Fila'" style="margin-bottom:20px; margin-top:-25px;">
                 <div ng-repeat="ProductCardsItem in value" class=" col-xs-12 col-sm-12 col-md-4 col-lg-4 ">
-                  <div class="card">
+                  <div class="card " style="max-width: 20rem;border:none;">
                     <img class="card-img-top" ng-src="{{ProductCardsItem.CATIMAGE}}" alt="Card image cap">
-                    <div class="card-body">
-                      <a ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD, ProductCardsItem.NAME);" href="#"><h5 class="card-title">{{ProductCardsItem.NAME}}</h5></a>
+                    <div class="card-footer card-hover pie-card">
+                      <a ng-click="FindSubcategories(ProductCardsItem.ID, ProductCardsItem.HASCHILD, ProductCardsItem.NAME);" href="#" ><h5 class="card-title">{{ProductCardsItem.NAME}}</h5></a>
                     </div>
                   </div>
                 </div>

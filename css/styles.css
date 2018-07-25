@@ -52,7 +52,7 @@ footer {
 
 .breadcrumb{
   background-color: transparent;
-  margin-top: -20px;
+  margin-top: 0.2em;
   margin-bottom: -3px;
 }
 
@@ -121,7 +121,7 @@ ol, ul {
 }
 
 .heading {
-  padding: 1em 0;
+  padding: 0.5em 0;
   border-bottom: 1px solid #D0D0D0;
 }
 .heading h3 {
@@ -379,8 +379,21 @@ vertical-align: baseline;
 
 }
 
-.card:hover {
+.card-hover:hover {
     box-shadow: 5px 5px rgba(234, 234, 234, 0.9);
+    background-color: #006837;
+    border:none;
+
+  }
+  .card-hover:hover a{
+   color: white;
+   text-decoration: none;
+  }
+
+.pie-card{
+  border-top: none;
+  padding: 1rem 1rem 0.50rem 1.50rem;
+  border-bottom: 1px solid #eee
 }
 .card:after {
     content: ".";
@@ -486,6 +499,10 @@ background-color: #33a1ea;
   color:#212529;
 }
 
+.card-footer a{
+  color:black;
+}
+
 
 
 .parent {
@@ -510,4 +527,29 @@ background-color: #33a1ea;
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+
+
+.menu-item.active, .menu-item:active{
+
+  background-color: #006837;
+
+}
+
+.block-prueba {
+    border: 1px solid #ddd;
+    border-top: 3px solid#006837;
+    -moz-box-shadow: 0 0 3px 0 #ccc;
+    -webkit-box-shadow: 0 0 3px 0 #ccc;
+    box-shadow: 0 0 3px 0 #ccc;
+    margin-bottom: 20px;
+}
+
+.sombreado-card{
+    border: 1px solid #ddd;
+    -moz-box-shadow: 0 0 3px 0 #ccc;
+    -webkit-box-shadow: 0 0 3px 0 #ccc;
+    box-shadow: 0 0 3px 0 #ccc;
+    margin-bottom: 20px;
 }
