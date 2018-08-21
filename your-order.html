@@ -57,7 +57,7 @@
 	<script src="js/lodash.min.js"></script>
 </head>
 
-<body ng-controller="ctrlCubeShopHomeCArdCheckOut">
+<body ng-controller="ctrlYourOrder">
 	<div class="sticky-top">
 
 		<nav class="top-menu sticky-top" ng-style="{'background-color':1 == 1 ?  MasterInfo[0].BackColor: MasterInfo[0].BackColor}"/>
@@ -145,48 +145,34 @@
 			<h3>Your Orders</h3>
 
 		</div>
-		<br>
 
 		<div>
 
 			<div class="">
-				<div class="row">
-					<div class="col-md-5">
-						<form>
-							<div class="form-group row">
-								<label for="staticEmail" class="col-sm-2 col-form-label"><strong>Orders:</strong></label>
-								<div class="col-sm-4">
-									<select id="inputState" class="form-control">
-										<option selected>Choose...</option>
-										<option>2015</option>
-										<option>2016</option>
-										<option>2017</option>
-									</select>
-								</div>
-							</div>
 
-						</form>
-					</div>
-				</div>
+
+
 				<br>
 				<div class="card">
 					<div class="table-responsive">
 						<table class="table">
 							<thead class="card-header">
-								<th >Ship To</th>
+								<th >Order ID</th>
 								<th class="cart_item_tprice text-center">Order Date</th>
-								<th class="text-center">Total</th>
+								<th class="text-center">Order Status</th>
+								<th class="text-center">Order Total</th>
 								<th class="text-center">Actions</th>
 
 							</thead>
 							<tbody>
-								<tr>
-									<td>Miami yyy</td>
+								<tr ng-repeat="UserOrder in UserOrders">
+									<td>{{UserOrder.ORDERID}}</td>
 									<td class="text-center">
-									05/12/2018
+									{{UserOrder.OrderDate | date:'dd/MM/yyyy'}}
 									</td>
 
-									<td class="cart_item_tprice text-center">$ 222.35</td>
+									<td class="cart_item_tprice text-center">{{UserOrder.OrderStatus}}</td>
+									<td class="cart_item_tprice text-right">{{UserOrder.OrderTotal}}</td>
 									<td class="text-center"> <a href="order-details.html">Order details</a></td>
 								</tr>
 							</tbody>
