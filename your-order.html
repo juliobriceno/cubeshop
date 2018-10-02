@@ -173,7 +173,7 @@
 
 									<td class="cart_item_tprice text-center">{{UserOrder.OrderStatus}}</td>
 									<td class="cart_item_tprice text-right">{{UserOrder.OrderTotal}}</td>
-									<td class="text-center"> <a href="order-details.html">Order details</a></td>
+									<td class="text-center"> <a ng-click="ShowOrderDetail(UserOrder.ORDERID);" href="#">Order details</a></td>
 								</tr>
 							</tbody>
 

@@ -57,7 +57,7 @@
 	<script src="js/lodash.min.js"></script>
 </head>
 
-<body ng-controller="ctrlCubeShopHomeCArdCheckOut">
+<body ng-controller="ctrlOrderDetail">
 	<div class="sticky-top">
 
 		<nav class="top-menu sticky-top" ng-style="{'background-color':1 == 1 ?  MasterInfo[0].BackColor: MasterInfo[0].BackColor}"/>
@@ -162,11 +162,7 @@
 							<div class="col-md-6">
 								<p>
 									<strong>Shipping Address</strong><br>
-									LIB 29876 JULIO CESAR BRICENO RONDON
-									LIBERTY EXPRESS C A
-									11800 NW 101ST RD MEDLEY FLORIDA 33178-1044
-									MEDLEY, FL 33198-1044
-									United States
+									{{UserOrderShip[0].address + ' ' + UserOrderShip[0].addressline2 + ' ' + UserOrderShip[0].city + ' ' + UserOrderShip[0].country + ' ' + UserOrderShip[0].name + ' ' + UserOrderShip[0].state + ' ' + UserOrderShip[0].zip }}
 								</p>
 						</div>
 						<div class="col-md-3">
@@ -230,14 +226,12 @@
 
 											</thead>
 											<tbody>
-												<tr ng-repeat="ProductCardsItem in myCart">
+												<tr ng-repeat="UserOrder in UserOrders">
 													<td class="cart_item_img"><img style="width:50px; height:50px" ng-src="{{ProductCardsItem.CATIMAGE}}" /></td>
-													<td>{{ProductCardsItem.NUM}}</td>
-													<td >
-													1
-													</td>
-													<td class="cart_item_price">{{ProductCardsItem.PRICE | currency }}</td>
-													<td class="cart_item_tprice">{{ProductCardsItem.PRICE * ProductCardsItem.QTY | currency }}</td>
+													<td>{{UserOrder.NUM}}</td>
+													<td >{{UserOrder.QTY }} </td>
+													<td class="cart_item_price">Falta Precio</td>
+													<td class="cart_item_tprice">Falta Precio</td>
 
 												</tr>
 											</tbody>

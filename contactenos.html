@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>ConBox::..</title>
+	<link href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/styles.css"/> <!--enlace de hoja de estilos -->
+	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+
+	<!--Boostrap JQuery -->
+	<script src="js/jquery.js"></script>
+
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+	<script src="js/ui-bootstrap-tpls.js"></script>
+
+	<!--Boostrap JS Para animaciones-->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- font Awesome -->
+	<link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<!-- *****************************************Angular Librerías***************************************** -->
+	<!-- *****************************************Boostrap Angular Librerías***************************************** -->
+	<script src="js/ui-bootstrap-tpls.js"></script>
+	<!-- *****************************************Código de Select Boostrap Angular***************************************** -->
+	<!-- *****************************************Librería de angular loading***************************************** -->
+	<script src="js/spin.min.js"></script>
+	<script src="js/angular-loading.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/angular-loading.css" />
+	<script src="js/ng-pattern-restrict.js"></script>
+	<!-- *****************************************Alertas***************************************** -->
+	<link rel="stylesheet" type="text/css" href="http://ptreesys.mx/sharedfiles/src/sweetalert.css">
+	<script src="http://ptreesys.mx/sharedfiles/src/sweetalert.min.js"></script>
+</head>
+
+<body ng-controller="ctrlInsertCmmment">
+	<div class="sticky-top">
+
+	</div>
+	<main class="wrap">
+		<div class="container">
+			<br>
+			<div class="row justify-content-md-center">
+				<div class="col-md-8">
+					<nav>
+						<div class="nav nav-tabs" id="nav-tab" role="tablist">
+							<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">My company has an existing Account</a>
+						</div>
+					</nav>
+				</div>
+			</div>
+			<div class="tab-content" id="nav-tabContent">
+				<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+					<div class="row justify-content-md-center">
+						<div class="col-md-8">
+							<div class="card card-body bg-light">
+								<form name="newAccount">
+									<hr>
+									<div class="form-group">
+										<label for="exampleInputEmail1">Nombre Apellido: </label>
+										<input ng-model="MsgNombre" name="MsgNombre" type="text" class="form-control" ng-class="{'is-invalid':newAccount.MsgNombre.$invalid && newAccount.MsgNombre.$dirty}" placeholder="Nombre y apellido" ng-required="true">
+									</div>
+									<div class="form-group">
+										<label for="exampleInputPassword1">Correo: </label>
+										<input ng-model="MsgCorreo" name="MsgCorreo" type="email" class="form-control" ng-class="{'is-invalid':newAccount.MsgCorreo.$invalid && newAccount.MsgCorreo.$dirty}" placeholder="Correo" ng-required="true">
+									</div>
+									<div class="form-group">
+										<label for="exampleInputPassword1">Mensaje: </label>
+										<input ng-model="MsgMensaje" name="MsgMensaje" type="text" class="form-control" ng-class="{'is-invalid':newAccount.MsgMensaje.$invalid && newAccount.MsgMensaje.$dirty}" placeholder="Mensaje" ng-required="true">
+									</div>
+								</form>
+							</div>
+						</div>
+						<button ng-click="SaveComments();" type="submit" class="btn btn-secondary btn-green btn-block">Crear comentario</button>
+					</div>
+				</div>
+
+
+
+</div>
+<br>
+</div>
+</div>
+</div>
+</main>
+</body>
+
+</div>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<!-- Librería de controlador principal -->
+<script src="js/controller2.js"></script>
+<div dw-loading="myloading" dw-loading-options="{text: 'Working...'}">
+</div><!-- ./loading -->
+
+</body>
+</html>
